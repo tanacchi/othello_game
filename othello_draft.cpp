@@ -39,12 +39,16 @@ void Board_Master::init_board() {
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
       board[i][j] = STONE::SPACE;
-  board[4][4] = board[5][5] = STONE::WHITE;
-  board[4][5] = board[5][4] = STONE::BLACK;
+  board[3][3] = board[4][4] = STONE::WHITE;
+  board[3][4] = board[4][3] = STONE::BLACK;
 }
 
 void Board_Master::show_board() {
+  std::cout << "  ";
+  for (int i = 0; i < BOARD_SIZE; i++) std::cout << i << ' ';
+  std::cout << std::endl;
   for (int i = 0; i < BOARD_SIZE; i++) {
+    std::cout << i << ' ';
     for (int j = 0; j < BOARD_SIZE; j++) std::cout << convert_num_to_char(board[i][j]) << ' ';
     std::cout << std::endl;
   }
