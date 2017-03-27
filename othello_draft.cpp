@@ -39,6 +39,8 @@ void Board_Master::init_board() {
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
       board[i][j] = STONE::SPACE;
+  board[4][4] = board[5][5] = STONE::WHITE;
+  board[4][5] = board[5][4] = STONE::BLACK;
 }
 
 void Board_Master::show_board() {
