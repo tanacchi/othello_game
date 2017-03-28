@@ -3,13 +3,10 @@
 
 #define BOARD_SIZE 8
 
-#define HAND_X 0
-#define HAND_Y 1
-
 enum class STONE {
-  SPACE,
-  BLACK,
   WHITE,
+  BLACK,
+  SPACE,
   DOT
 };
 
@@ -44,6 +41,7 @@ void Board_Master::init_board() {
 }
 
 void Board_Master::show_board() {
+  std::cout << "---------------------------" << std::endl;
   std::cout << "  ";
   for (int i = 0; i < BOARD_SIZE; i++) std::cout << i << ' ';
   std::cout << std::endl;
@@ -52,6 +50,7 @@ void Board_Master::show_board() {
     for (int j = 0; j < BOARD_SIZE; j++) std::cout << convert_num_to_char(board[i][j]) << ' ';
     std::cout << std::endl;
   }
+  std::cout << "---------------------------" << std::endl;
 }
 
 const char Board_Master::convert_num_to_char(STONE src) {
@@ -118,34 +117,24 @@ void Player::get_hand(int &x, int &y) {
   y = hand_y;
 }
 
-class Human_Player : public Player {
+class HumanPlayer : public Player {
 public:
-  Human_Player(STONE stone);
   void set_hand_console();
 };
 
-Human_Player::Human_Player(STONE stone) {
-  set_my_stone(stone);
-}
-
-void Human_Player::set_hand_console() {
+void HumanPlayer::set_hand_console() {
   int input_x, input_y;
   std::cout << "First, input 'x' !! \n> "; std::cin >> input_x;
   std::cout << "Next, input 'y' !! \n> ";  std::cin >> input_y;
   set_hand(input_x, input_y);
 }
 
-class Computer_Player : public Player {
+class ComputerPlayer : public Player {
 public:
-  Computer_Player(STONE stone);
   void set_hand_random();
 };
 
-Computer_Player::Computer_Player(STONE stone) {
-  set_my_stone(stone);
-}
-
-void Computer_Player::set_hand_random() {
+void ComputerPlayer::set_hand_random() {
   std::random_device rnd;
   std::mt19937 random_x(rnd()), random_y(rnd());
   std::uniform_int_distribution<> rand100(0, 9);
@@ -154,28 +143,41 @@ void Computer_Player::set_hand_random() {
   set_hand(input_x, input_y);
 }
 
+class GameMaster {
+  int turn;
+  int human_participant;
+  int cpu_participant;
+public:
+  BoardMaster board;
+  HumanPlayer human[2];
+  ComputerPlayer cpu[2];
+  GameMaster();
+  void set_participant(int human_num, int cpu_num);
+};
+
+GameMaster::GameMaster() {
+  turn = 0;
+  Player *p[4] = { &human[0], &human[1], &cpu[1], &cpu[0] };
+  for (int i = 0; i < 4; i++)
+    p[i]->set_my_stone((i % 2) ? STONE::BLACK : STONE::WHITE);
+}
+
+bool GameMaster::set_participant(int human_num, int cpu_num) {
+  if ((0 < human_num && human_num <= 2)
+      && (0 < cpu_num && cpu_num <= 2)
+      && (human_num + cpu_num == 4))
+    {
+    human_participant = human_num;
+    cpu_participant = cpu_num;
+    return true;
+    }
+  else {
+    std::cout << " Its wrong config \n" << std::endl;
+    return false;
+  }
+}
+
 int main() {
 
-  Board_Master board;
-  Human_Player human(STONE::BLACK);
-  Computer_Player cpu(STONE::WHITE);
-
-  Player *active_player = &human;
-  
-  int x, y;
-  int count = 0;
-  while (board.can_continue()) {
-    do {
-      if (count % 2) { active_player = &human; human.set_hand_console(); }
-      else { active_player = &cpu; cpu.set_hand_random(); }
-      active_player->get_hand(x, y);
-      board.set_active_stone(active_player->get_my_stone());
-    } while (!board.is_valid_hand(x, y));
-
-    board.insert_stone(x, y);
-    if(count % 2) board.show_board();
-    count++;
-  }
-  
   return 0;
 }
