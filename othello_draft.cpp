@@ -1,6 +1,9 @@
 #include <iostream>
 #include <random>
 
+#include <thread>
+#include <chrono>
+
 #define BOARD_SIZE 8
 
 enum class STONE {
@@ -10,11 +13,11 @@ enum class STONE {
   DOT
 };
 
-class Board_Master {
+class BoardMaster {
   STONE board[BOARD_SIZE][BOARD_SIZE];
   STONE active_stone;
 public:
-  Board_Master();
+  BoardMaster();
   void init_board();
   void show_board();
   const char convert_num_to_char(STONE stone);
@@ -26,13 +29,13 @@ public:
   bool can_continue();
 };
 
-Board_Master::Board_Master() {
+BoardMaster::BoardMaster() {
   init_board();
   active_stone = STONE::WHITE;
   show_board();
 }
 
-void Board_Master::init_board() {
+void BoardMaster::init_board() {
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
       board[i][j] = STONE::SPACE;
@@ -40,7 +43,7 @@ void Board_Master::init_board() {
   board[3][4] = board[4][3] = STONE::BLACK;
 }
 
-void Board_Master::show_board() {
+void BoardMaster::show_board() {
   std::cout << "---------------------------" << std::endl;
   std::cout << "  ";
   for (int i = 0; i < BOARD_SIZE; i++) std::cout << i << ' ';
@@ -53,7 +56,7 @@ void Board_Master::show_board() {
   std::cout << "---------------------------" << std::endl;
 }
 
-const char Board_Master::convert_num_to_char(STONE src) {
+const char BoardMaster::convert_num_to_char(STONE src) {
   switch (src) {
   case STONE::SPACE: return ' ';
   case STONE::BLACK: return 'O';
@@ -62,27 +65,27 @@ const char Board_Master::convert_num_to_char(STONE src) {
   }
 }
 
-void Board_Master::set_active_stone(STONE stone) {
+void BoardMaster::set_active_stone(STONE stone) {
   active_stone = stone;
 }
 
-bool Board_Master::is_inside_board(int x, int y) {
+bool BoardMaster::is_inside_board(int x, int y) {
   return (0 <= x && x < BOARD_SIZE) && (0 <= y && y < BOARD_SIZE);
 }
 
-bool Board_Master::is_stone_space(int x, int y) {
+bool BoardMaster::is_stone_space(int x, int y) {
   return (board[y][x] == STONE::SPACE);
 }
 
-bool Board_Master::is_valid_hand(int x, int y) {
+bool BoardMaster::is_valid_hand(int x, int y) {
   return is_inside_board(x, y) && is_stone_space(x, y);
 }
 
-void Board_Master::insert_stone(int x, int y) {
+void BoardMaster::insert_stone(int x, int y) {
   board[y][x] = active_stone;
 }
 
-bool Board_Master::can_continue() {
+bool BoardMaster::can_continue() {
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
       if (board[i][j] == STONE::SPACE) return true;
@@ -143,41 +146,29 @@ void ComputerPlayer::set_hand_random() {
   set_hand(input_x, input_y);
 }
 
-class GameMaster {
-  int turn;
-  int human_participant;
-  int cpu_participant;
-public:
-  BoardMaster board;
-  HumanPlayer human[2];
-  ComputerPlayer cpu[2];
-  GameMaster();
-  void set_participant(int human_num, int cpu_num);
-};
-
-GameMaster::GameMaster() {
-  turn = 0;
-  Player *p[4] = { &human[0], &human[1], &cpu[1], &cpu[0] };
-  for (int i = 0; i < 4; i++)
-    p[i]->set_my_stone((i % 2) ? STONE::BLACK : STONE::WHITE);
-}
-
-bool GameMaster::set_participant(int human_num, int cpu_num) {
-  if ((0 < human_num && human_num <= 2)
-      && (0 < cpu_num && cpu_num <= 2)
-      && (human_num + cpu_num == 4))
-    {
-    human_participant = human_num;
-    cpu_participant = cpu_num;
-    return true;
-    }
-  else {
-    std::cout << " Its wrong config \n" << std::endl;
-    return false;
-  }
-}
-
 int main() {
 
+  BoardMaster board;
+  ComputerPlayer cpu[2];
+  Player *active_player;
+
+  cpu[0].set_my_stone(STONE::WHITE);
+  cpu[1].set_my_stone(STONE::BLACK);
+    
+  int turn;
+  while (board.can_continue()) {
+    active_player = &cpu[turn % 2];
+    board.set_active_stone(active_player->get_my_stone());
+    int x, y;
+    do {
+      cpu[turn % 2].set_hand_random();
+      active_player->get_hand(x, y);
+    } while (!board.is_valid_hand(x, y));    
+    board.insert_stone(x, y);
+    board.show_board();
+    turn++;
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+  }
+  
   return 0;
 }
