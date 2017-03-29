@@ -20,7 +20,7 @@ public:
   BoardMaster();
   void init_board();
   void show_board();
-  const char convert_num_to_char(Stone stone);
+  const char convert_stone_to_char(Stone stone);
   bool is_stone_space(int x, int y);
   bool is_inside_board(int x, int y);
   bool is_valid_hand(int x, int y);
@@ -32,6 +32,7 @@ public:
   Stone get_enemy_stone();
   void put_dot_stone();
   void remove_dot_stone();
+  void reverse_stone(int x, int y);
 };
 
 BoardMaster::BoardMaster() {
@@ -55,13 +56,13 @@ void BoardMaster::show_board() {
   std::cout << std::endl;
   for (int i = 0; i < BOARD_SIZE; i++) {
     std::cout << i << ' ';
-    for (int j = 0; j < BOARD_SIZE; j++) std::cout << convert_num_to_char(board[i][j]) << ' ';
+    for (int j = 0; j < BOARD_SIZE; j++) std::cout << convert_stone_to_char(board[i][j]) << ' ';
     std::cout << std::endl;
   }
   std::cout << "---------------------------" << std::endl;
 }
 
-const char BoardMaster::convert_num_to_char(Stone src) {
+const char BoardMaster::convert_stone_to_char(Stone src) {
   switch (src) {
   case Stone::SPACE: return ' ';
   case Stone::BLACK: return 'O';
@@ -102,21 +103,37 @@ bool BoardMaster::can_continue() {
   return (count_space && count_black && count_white);
 }
 
-int BoardMaster::count_reversible_stone(int x, int y) {
+int BoardMaster::count_reversible_stone(int x, int y) { // FIX: 方向ごとの長さを別の関数で出させる
   Stone enemy_stone = get_enemy_stone();
   int reversible_stone_count = 0;
   int dx[8] = { 0, 1, 1, 1, 0,-1,-1,-1 };
   int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
   
-  for (int i = 0 ; i < 8; i++) {
+  for (int i = 0 ; i < 8; i++)
     for (int j = 1; is_inside_board(x + j*dx[i], y + j*dy[i]); j++) {
       Stone target = board[y + j*dy[i]][x + j*dx[i]];
       if (target == enemy_stone) continue; 
       else if (target == active_stone) { reversible_stone_count += (j-1); break; }
       else break;
     }
-  }
   return reversible_stone_count;
+}
+
+void BoardMaster::reverse_stone(int x, int y) { // like count_reversible_stone
+  Stone enemy_stone = get_enemy_stone();
+  int dx[8] = { 0, 1, 1, 1, 0,-1,-1,-1 };
+  int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
+  int reverse_length;
+  for (int i = 0; i < 8; i++) {
+    reverse_length = 0;
+    for (int j = 1; is_inside_board(x + j*dx[i], y + j*dy[i]); j++) {
+      Stone target = board[y + j*dy[i]][x + j*dx[i]];
+      if (target == enemy_stone) continue;
+      else if (target == active_stone) { reverse_length = (j-1); break; }
+      else break;
+    }
+    for (int j = 1; j <= reverse_length; j++) board[y + j*dy[i]][x + j*dx[i]] = active_stone;
+  }
 }
 
 Stone BoardMaster::get_enemy_stone() {
@@ -200,18 +217,20 @@ int main() {
   int turn;
   while (board.can_continue()) {
     board.set_active_stone(cpu[turn % 2].get_my_stone());
+    std::cout << "Now is " << board.convert_stone_to_char(cpu[turn % 2].get_my_stone()) << std::endl;
     board.put_dot_stone();
     board.show_board();
     board.remove_dot_stone();
     int x, y;
     do {
-      std::cout << "Thinking! " << std::endl;
       cpu[turn % 2].set_hand_random();
       cpu[turn % 2].get_hand(x, y);
     } while (!board.is_valid_hand(x, y));
     std::cout << "[reversible stone] = " << board.count_reversible_stone(x, y) << std::endl;
     board.insert_stone(x, y);
+    board.reverse_stone(x, y);
     board.show_board();
+    std::cout << "\n\n" << std::endl;
     turn++;
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
   }   
