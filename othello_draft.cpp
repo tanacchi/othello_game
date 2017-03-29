@@ -14,7 +14,7 @@ enum class Stone {
 };
 
 class BoardMaster {
-  Stone board[BOARD_SIZE][BOARD_SIZE]; // TODO: パス機能、座標記録
+  Stone board[BOARD_SIZE][BOARD_SIZE]; // TODO: 座標記録
   Stone active_stone;
 public:
   BoardMaster();
@@ -34,12 +34,14 @@ public:
   void remove_dot_stone();
   void reverse_stone(int x, int y);
   int count_stone(Stone target);
+  int get_reversible_length(int x, int y, int direction);
 };
 
 BoardMaster::BoardMaster() {
   init_board();
   active_stone = Stone::WHITE;
   show_board();
+  std::cout << std::endl;
 }
 
 void BoardMaster::init_board() {
@@ -81,11 +83,11 @@ inline bool BoardMaster::is_inside_board(int x, int y) {
 }
 
 bool BoardMaster::is_stone_space(int x, int y) {
-  return (board[y][x] == Stone::SPACE);
+  return (board[y][x] == Stone::SPACE || board[y][x] == Stone::DOT);           // !!!!!!!!!!!!!!!!!!!!!!!!!!
 }
 
 bool BoardMaster::is_valid_hand(int x, int y) {
-  return is_inside_board(x, y) && is_stone_space(x, y) && count_reversible_stone(x, y);;
+  return is_inside_board(x, y) && is_stone_space(x, y) && count_reversible_stone(x, y);
 }
 
 void BoardMaster::insert_stone(int x, int y) {
@@ -104,35 +106,29 @@ int BoardMaster::count_stone(Stone target) {
   return count;
 }
 
-int BoardMaster::count_reversible_stone(int x, int y) { // FIX: 方向ごとの長さを別の関数で出させる
-  Stone enemy_stone = get_enemy_stone();
+int BoardMaster::count_reversible_stone(int x, int y) {
   int reversible_stone_count = 0;
-  int dx[8] = { 0, 1, 1, 1, 0,-1,-1,-1 };
-  int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
-  
-  for (int i = 0 ; i < 8; i++)
-    for (int j = 1; is_inside_board(x + j*dx[i], y + j*dy[i]); j++) {
-      Stone target = board[y + j*dy[i]][x + j*dx[i]];
-      if (target == enemy_stone) continue; 
-      else if (target == active_stone) { reversible_stone_count += (j-1); break; }
-      else break;
-    }
+  for (int i = 0; i < 8; i++) reversible_stone_count += get_reversible_length(x, y, i);
   return reversible_stone_count;
 }
 
+int BoardMaster::get_reversible_length(int x, int y, int direction) {
+  static int dx[8] = { 0, 1, 1, 1, 0,-1,-1,-1 };
+  static int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
+
+  Stone enemy_stone = get_enemy_stone(); 
+  for (int i = 0; is_inside_board(x + i*dx[direction], y + i*dy[direction]); i++) {
+    Stone target = board[y + i*dy[direction]][x + i*dx[direction]];
+    if (target == enemy_stone) continue;
+    else if (target == active_stone) return i-1;
+    else return 0;
+  }
+}
+
 void BoardMaster::reverse_stone(int x, int y) { // like count_reversible_stone
-  Stone enemy_stone = get_enemy_stone();
-  int dx[8] = { 0, 1, 1, 1, 0,-1,-1,-1 };
-  int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
   int reverse_length;
   for (int i = 0; i < 8; i++) {
-    reverse_length = 0;
-    for (int j = 1; is_inside_board(x + j*dx[i], y + j*dy[i]); j++) {
-      Stone target = board[y + j*dy[i]][x + j*dx[i]];
-      if (target == enemy_stone) continue;
-      else if (target == active_stone) { reverse_length = (j-1); break; }
-      else break;
-    }
+    reverse_length = get_reversible_length(x, y, i);
     for (int j = 1; j <= reverse_length; j++) board[y + j*dy[i]][x + j*dx[i]] = active_stone;
   }
 }
@@ -221,20 +217,25 @@ int main() {
     std::cout << "Now is " << board.convert_stone_to_char(cpu[turn % 2].get_my_stone()) << std::endl;
     board.put_dot_stone();
     board.show_board();
-    board.remove_dot_stone();
     int x, y;
     do {
+      if (!board.count_stone(Stone::DOT)) {
+        std::cout << "//////////////////////////////////////////////////////////////////////////////////////////////////////////////////" << std::endl;
+        break;
+      }
       cpu[turn % 2].set_hand_random();
       cpu[turn % 2].get_hand(x, y);
     } while (!board.is_valid_hand(x, y));
     std::cout << "[reversible stone] = " << board.count_reversible_stone(x, y) << std::endl;
     board.insert_stone(x, y);
     board.reverse_stone(x, y);
+    board.remove_dot_stone();
     board.show_board();
     std::cout << "\n\n" << std::endl;
     turn++;
-    //    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
-  std::cout << board.count_stone(Stone::BLACK) << ' ' << board.count_stone(Stone::WHITE) << std::endl;
+  std::cout << "BLACK STONE : " << board.count_stone(Stone::BLACK) << '\n'
+            << "WHITE STONE : " << board.count_stone(Stone::WHITE) << std::endl;
   return 0;
 }
