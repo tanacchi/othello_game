@@ -14,7 +14,7 @@ enum class Stone {
 };
 
 class BoardMaster {
-  Stone board[BOARD_SIZE][BOARD_SIZE];
+  Stone board[BOARD_SIZE][BOARD_SIZE]; // TODO: パス機能、集計機能、座標記録
   Stone active_stone;
 public:
   BoardMaster();
