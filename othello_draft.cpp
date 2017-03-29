@@ -16,18 +16,6 @@ enum class Stone {
 const int dx[8] = { 0, 1, 1, 1, 0,-1,-1,-1 };
 const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
 
-/*
-
-　１．適切なポジかの判断
-
-　２．ドットを置く
-
-（３．ドットになってる部分の評価を行う）
-
-　４．入力がドットと一致していれば通す or 評価の高いドットに挿入
-
-*/
-
 class BoardMaster {
   Stone board[BOARD_SIZE][BOARD_SIZE]; // TODO: 座標記録
   Stone active_stone;
@@ -38,7 +26,9 @@ public:
   const char convert_stone_to_char(Stone stone);
   bool is_stone_space(int x, int y);
   bool is_inside_board(int x, int y);
-  bool is_valid_hand(int x, int y);
+  bool is_available_position(int x, int y);
+  bool is_valid_hand(int x, int y);                   // !!!!
+  bool stone_compare(int x, int y, Stone src);        // !!!!
   void insert_stone(int x, int y); 
   void set_active_stone(Stone stone);
   inline bool can_continue();
@@ -56,7 +46,7 @@ BoardMaster::BoardMaster() {
   init_board();
   active_stone = Stone::WHITE;
   show_board();
-  std::cout << std::endl;
+  std::cout << '\n' << std::endl;
 }
 
 void BoardMaster::init_board() {
@@ -98,10 +88,10 @@ inline bool BoardMaster::is_inside_board(int x, int y) {
 }
 
 bool BoardMaster::is_stone_space(int x, int y) {
-  return (board[y][x] == Stone::SPACE || board[y][x] == Stone::DOT);           // !!!!!!!!!!!!!!!!!!!!!!!!!!
+  return (board[y][x] == Stone::SPACE);
 }
 
-bool BoardMaster::is_valid_hand(int x, int y) {
+bool BoardMaster::is_available_position(int x, int y) {
   return is_inside_board(x, y) && is_stone_space(x, y) && count_reversible_stone(x, y);
 }
 
@@ -111,6 +101,14 @@ void BoardMaster::insert_stone(int x, int y) {
 
 inline bool BoardMaster::can_continue() {
   return count_stone(Stone::SPACE) && count_stone(Stone::BLACK) && count_stone(Stone::WHITE);
+}
+
+bool BoardMaster::stone_compare(int x, int y, Stone src) {
+  return board[y][x] == src;
+}
+
+bool BoardMaster::is_valid_hand(int x, int y) {
+  return board[y][x] == Stone::DOT;
 }
 
 int BoardMaster::count_stone(Stone target) {
@@ -152,7 +150,7 @@ Stone BoardMaster::get_enemy_stone() {
 void BoardMaster::put_dot_stone() {
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
-      if (is_valid_hand(j, i)) board[i][j] = Stone::DOT;
+      if (is_available_position(j, i)) board[i][j] = Stone::DOT;
 }
 
 void BoardMaster::remove_dot_stone() {
@@ -226,6 +224,7 @@ int main() {
   int turn;
   while (board.can_continue()) {
     board.set_active_stone(cpu[turn % 2].get_my_stone());
+    std::cout << "turn " << turn + 1 << std::endl;
     std::cout << "Now is " << board.convert_stone_to_char(cpu[turn % 2].get_my_stone()) << std::endl;
     board.put_dot_stone();
     board.show_board();
@@ -238,7 +237,7 @@ int main() {
       cpu[turn % 2].set_hand_random();
       cpu[turn % 2].get_hand(x, y);
     } while (!board.is_valid_hand(x, y));
-    std::cout << "[reversible stone] = " << board.count_reversible_stone(x, y) << std::endl;
+    std::cout << "[reversed stone] = " << board.count_reversible_stone(x, y) << std::endl;
     board.insert_stone(x, y);
     board.reverse_stone(x, y);
     board.remove_dot_stone();
