@@ -13,6 +13,9 @@ enum class Stone {
   DOT
 };
 
+const int dx[8] = { 0, 1, 1, 1, 0,-1,-1,-1 };
+const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
+
 class BoardMaster {
   Stone board[BOARD_SIZE][BOARD_SIZE]; // TODO: 座標記録
   Stone active_stone;
@@ -34,7 +37,7 @@ public:
   void remove_dot_stone();
   void reverse_stone(int x, int y);
   int count_stone(Stone target);
-  int get_reversible_length(int x, int y, int direction);
+  int get_reversible_length(int x, int y, int dx, int dy);
 };
 
 BoardMaster::BoardMaster() {
@@ -108,27 +111,24 @@ int BoardMaster::count_stone(Stone target) {
 
 int BoardMaster::count_reversible_stone(int x, int y) {
   int reversible_stone_count = 0;
-  for (int i = 0; i < 8; i++) reversible_stone_count += get_reversible_length(x, y, i);
+  for (int i = 0; i < 8; i++) reversible_stone_count += get_reversible_length(x, y, dx[i], dy[i]);
   return reversible_stone_count;
 }
 
-int BoardMaster::get_reversible_length(int x, int y, int direction) {
-  static int dx[8] = { 0, 1, 1, 1, 0,-1,-1,-1 };
-  static int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
-
+int BoardMaster::get_reversible_length(int x, int y, int dx, int dy) {
   Stone enemy_stone = get_enemy_stone(); 
-  for (int i = 0; is_inside_board(x + i*dx[direction], y + i*dy[direction]); i++) {
-    Stone target = board[y + i*dy[direction]][x + i*dx[direction]];
+  for (int i = 0; is_inside_board(x + i*dx, y + i*dy); i++) {
+    Stone target = board[y + i*dy][x + i*dx];
     if (target == enemy_stone) continue;
     else if (target == active_stone) return i-1;
     else return 0;
   }
 }
 
-void BoardMaster::reverse_stone(int x, int y) { // like count_reversible_stone
+void BoardMaster::reverse_stone(int x, int y) {
   int reverse_length;
   for (int i = 0; i < 8; i++) {
-    reverse_length = get_reversible_length(x, y, i);
+    reverse_length = get_reversible_length(x, y, dx[i], dy[i]);
     for (int j = 1; j <= reverse_length; j++) board[y + j*dy[i]][x + j*dx[i]] = active_stone;
   }
 }
