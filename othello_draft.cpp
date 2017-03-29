@@ -16,6 +16,18 @@ enum class Stone {
 const int dx[8] = { 0, 1, 1, 1, 0,-1,-1,-1 };
 const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
 
+/*
+
+　１．適切なポジかの判断
+
+　２．ドットを置く
+
+（３．ドットになってる部分の評価を行う）
+
+　４．入力がドットと一致していれば通す or 評価の高いドットに挿入
+
+*/
+
 class BoardMaster {
   Stone board[BOARD_SIZE][BOARD_SIZE]; // TODO: 座標記録
   Stone active_stone;
@@ -117,7 +129,7 @@ int BoardMaster::count_reversible_stone(int x, int y) {
 
 int BoardMaster::get_reversible_length(int x, int y, int dx, int dy) {
   Stone enemy_stone = get_enemy_stone(); 
-  for (int i = 0; is_inside_board(x + i*dx, y + i*dy); i++) {
+  for (int i = 1; is_inside_board(x + i*dx, y + i*dy); i++) {
     Stone target = board[y + i*dy][x + i*dx];
     if (target == enemy_stone) continue;
     else if (target == active_stone) return i-1;
@@ -220,7 +232,7 @@ int main() {
     int x, y;
     do {
       if (!board.count_stone(Stone::DOT)) {
-        std::cout << "//////////////////////////////////////////////////////////////////////////////////////////////////////////////////" << std::endl;
+        std::cout << "!!!!!!! " << board.convert_stone_to_char(cpu[turn % 2].get_my_stone()) <<" was passed !!!!!!!!!!!!" << std::endl;
         break;
       }
       cpu[turn % 2].set_hand_random();
