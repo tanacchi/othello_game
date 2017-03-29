@@ -14,7 +14,7 @@ enum class Stone {
 };
 
 class BoardMaster {
-  Stone board[BOARD_SIZE][BOARD_SIZE]; // TODO: パス機能、集計機能、座標記録
+  Stone board[BOARD_SIZE][BOARD_SIZE]; // TODO: パス機能、座標記録
   Stone active_stone;
 public:
   BoardMaster();
@@ -26,13 +26,14 @@ public:
   bool is_valid_hand(int x, int y);
   void insert_stone(int x, int y); 
   void set_active_stone(Stone stone);
-  bool can_continue();
+  inline bool can_continue();
   int count_reversible_stone(int x, int y);
   int get_reversible_length(int* direction);
   Stone get_enemy_stone();
   void put_dot_stone();
   void remove_dot_stone();
   void reverse_stone(int x, int y);
+  int count_stone(Stone target);
 };
 
 BoardMaster::BoardMaster() {
@@ -65,8 +66,8 @@ void BoardMaster::show_board() {
 const char BoardMaster::convert_stone_to_char(Stone src) {
   switch (src) {
   case Stone::SPACE: return ' ';
-  case Stone::BLACK: return 'O';
-  case Stone::WHITE: return 'X';
+  case Stone::BLACK: return 'X';
+  case Stone::WHITE: return 'O';
   case Stone::DOT:   return '*';
   }
 }
@@ -91,16 +92,16 @@ void BoardMaster::insert_stone(int x, int y) {
   board[y][x] = active_stone;
 }
 
-bool BoardMaster::can_continue() {
-  int count_space, count_black, count_white = 0;
+inline bool BoardMaster::can_continue() {
+  return count_stone(Stone::SPACE) && count_stone(Stone::BLACK) && count_stone(Stone::WHITE);
+}
+
+int BoardMaster::count_stone(Stone target) {
+  int count = 0;
   for (int i = 0; i < BOARD_SIZE; i++)
-    for (int j = 0; j < BOARD_SIZE; j++) 
-      switch (board[i][j]) {
-      case Stone::SPACE: count_space++; break;
-      case Stone::BLACK: count_black++; break;
-      case Stone::WHITE: count_white++; break;
-      }
-  return (count_space && count_black && count_white);
+    for (int j = 0; j < BOARD_SIZE; j++)
+      if (board[i][j] == target) count++;
+  return count;
 }
 
 int BoardMaster::count_reversible_stone(int x, int y) { // FIX: 方向ごとの長さを別の関数で出させる
@@ -232,7 +233,8 @@ int main() {
     board.show_board();
     std::cout << "\n\n" << std::endl;
     turn++;
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-  }   
+    //    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  }
+  std::cout << board.count_stone(Stone::BLACK) << ' ' << board.count_stone(Stone::WHITE) << std::endl;
   return 0;
 }
