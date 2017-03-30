@@ -195,16 +195,20 @@ void HumanPlayer::set_hand_console() {
 }
 
 class ComputerPlayer : public Player {
+  std::mt19937 rand_pos;
 public:
+  ComputerPlayer();
   void set_hand_random();
 };
 
+ComputerPlayer::ComputerPlayer() :  rand_pos { std::random_device{}() }
+{ 
+}
+
 void ComputerPlayer::set_hand_random() {
-  std::random_device rnd;
-  std::mt19937 random_x(rnd()), random_y(rnd());
-  std::uniform_int_distribution<> rand100(0, 9);
-  int input_x = rand100(random_x);
-  int input_y = rand100(random_y);
+  std::uniform_int_distribution<int> rand100(0, 9);
+  int input_x = rand100(rand_pos);
+  int input_y = rand100(rand_pos);
   set_hand(input_x, input_y);
 }
 
@@ -239,7 +243,7 @@ int main() {
     board.show_board();
     std::cout << "\n\n" << std::endl;
     turn++;
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
   }
   std::cout << "BLACK STONE : " << board.count_stone(Stone::BLACK) << '\n'
             << "WHITE STONE : " << board.count_stone(Stone::WHITE) << std::endl;
