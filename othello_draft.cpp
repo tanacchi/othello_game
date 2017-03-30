@@ -125,6 +125,7 @@ int BoardMaster::count_stone(Stone target) {
 int BoardMaster::count_reversible_stone(int x, int y) {
   int reversible_stone_count = 0;
   for (int i = 0; i < 8; i++) reversible_stone_count += get_reversible_length(x, y, dx[i], dy[i]);
+  std::cout << "[ x = " << x << ", y = " << y << ", reversible = " << reversible_stone_count << " ] " << std::endl;
   return reversible_stone_count;
 }
 
@@ -143,6 +144,8 @@ void BoardMaster::reverse_stone(int x, int y) {
   for (int i = 0; i < 8; i++) {
     reverse_length = get_reversible_length(x, y, dx[i], dy[i]);
     for (int j = 1; j <= reverse_length; j++) board[y + j*dy[i]][x + j*dx[i]] = active_stone;
+    std::cout << '[' << i << ']' << " now reverse stone = "<< reverse_length << std::endl;
+    show_board();
   }
 }
 
@@ -153,7 +156,10 @@ Stone BoardMaster::get_enemy_stone() {
 void BoardMaster::put_dot_stone() {
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
-      if (is_available_position(j, i)) board[i][j] = Stone::DOT;
+      if (is_available_position(j, i)) {
+        std::cout << "DOT !" << std::endl;
+        board[i][j] = Stone::DOT;
+      }
 }
 
 void BoardMaster::remove_dot_stone() {
@@ -241,13 +247,12 @@ int main() {
     std::cout << "turn " << turn + 1 << std::endl;
     std::cout << "Now is " << board.convert_stone_to_char(active_player->get_my_stone()) << std::endl;
     board.put_dot_stone();
+    std::cout << "/////////////////////////////////////////////////" << std::endl;
     board.show_board();
+    std::cout << "/////////////////////////////////////////////////" << std::endl;
     int x, y;
     do {
-      if (!board.count_stone(Stone::DOT)) {
-        std::cout << "!!!!!!! " << board.convert_stone_to_char(active_player->get_my_stone()) <<" was passed !!!!!!!!!!!!" << std::endl;
-        break;
-      }
+      if (!board.count_stone(Stone::DOT)) break;
       active_player->set_hand();
       active_player->get_hand(x, y);
     } while (!board.stone_compare(x, y, Stone::DOT));
@@ -255,7 +260,9 @@ int main() {
     board.insert_stone(x, y);
     board.reverse_stone(x, y);
     board.remove_dot_stone();
+    std::cout << "/////////////////////////////////////////////////" << std::endl;
     board.show_board();
+    std::cout << "/////////////////////////////////////////////////" << std::endl;
     std::cout << "\n\n" << std::endl;
     turn++;
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
