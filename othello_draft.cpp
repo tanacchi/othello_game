@@ -20,7 +20,7 @@ const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
 
 TODO : 座標記録と採点
 
-FIX : リバースされない時がある
+FIX : パスしたあと上書きしちゃう
 
 */
 
@@ -219,7 +219,7 @@ ComputerPlayer::ComputerPlayer() : rand_pos { std::random_device{}() }
 }
 
 void ComputerPlayer::set_hand() {
-  std::uniform_int_distribution<int> rand100(0, 9);
+  std::uniform_int_distribution<int> rand100(0, 7);
   int input_x = rand100(rand_pos);
   int input_y = rand100(rand_pos);
   input_position(input_x, input_y);
@@ -241,13 +241,10 @@ int main() {
     std::cout << "turn " << turn + 1 << std::endl;
     std::cout << "Now is " << board.convert_stone_to_char(active_player->get_my_stone()) << std::endl;
     board.put_dot_stone();
-    board.show_board();
+    //    board.show_board();
     int x, y;
     do {
-      if (!board.count_stone(Stone::DOT)) {
-        std::cout << "!!!!!!! " << board.convert_stone_to_char(active_player->get_my_stone()) <<" was passed !!!!!!!!!!!!" << std::endl;
-        break;
-      }
+      if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; break; }
       active_player->set_hand();
       active_player->get_hand(x, y);
     } while (!board.stone_compare(x, y, Stone::DOT));
@@ -258,7 +255,7 @@ int main() {
     board.show_board();
     std::cout << "\n\n" << std::endl;
     turn++;
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
   }
   std::cout << "BLACK STONE : " << board.count_stone(Stone::BLACK) << '\n'
             << "WHITE STONE : " << board.count_stone(Stone::WHITE) << std::endl;
