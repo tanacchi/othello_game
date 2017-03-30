@@ -1,7 +1,7 @@
+#include <chrono>
 #include <iostream>
 #include <random>
 #include <thread>
-#include <chrono>
 
 #define BOARD_SIZE 8
 
@@ -32,23 +32,23 @@ class BoardMaster {
   Stone active_stone;
 public:
   BoardMaster();
-  void init_board();
-  void show_board();
-  const char convert_stone_to_char(Stone stone);
-  bool is_inside_board(int x, int y);
-  bool is_available_position(int x, int y);
-  inline bool stone_compare(int x, int y, Stone src);
-  void insert_stone(int x, int y); 
-  void set_active_stone(Stone stone);
-  inline bool can_continue();
-  int count_reversible_stone(int x, int y);
-  int get_reversible_length(int* direction);
   Stone get_enemy_stone();
+  bool is_available_position(int x, int y);
+  bool is_inside_board(int x, int y);
+  const char convert_stone_to_char(Stone stone);
+  inline bool can_continue();
+  inline bool stone_compare(int x, int y, Stone src);
+  int count_reversible_stone(int x, int y);
+  int count_stone(Stone target);
+  int get_reversible_length(int x, int y, int dx, int dy);
+  int get_reversible_length(int* direction);
+  void init_board();
+  void insert_stone(int x, int y); 
   void put_dot_stone();
   void remove_dot_stone();
   void reverse_stone(int x, int y);
-  int count_stone(Stone target);
-  int get_reversible_length(int x, int y, int dx, int dy);
+  void set_active_stone(Stone stone);
+  void show_board();
 };
 
 BoardMaster::BoardMaster() {
