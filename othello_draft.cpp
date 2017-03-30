@@ -17,7 +17,9 @@ const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
 
 /*
 
-TODO : 座標記録と採点
+TODO : 座標記録
+TODO : プレイヤー管理の方法を検討
+TODO : turn を誰が扱うのか決める(GameMaster??)
 
 REFACT : 入力部分を設計しなおしてみる
 
@@ -241,7 +243,7 @@ int main() {
     int x, y;
     for (;;) {
       if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; break; }
-      if (board.stone_compare(x, y, Stone::DOT)) { board.insert_stone(x, y); board.reverse_stone(x, y); break;}
+      if (board.stone_compare(x, y, Stone::DOT)) { board.insert_stone(x, y); board.reverse_stone(x, y); break; }
       active_player->set_hand();
       active_player->get_hand(x, y);
     } 
