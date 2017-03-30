@@ -27,8 +27,7 @@ public:
   bool is_stone_space(int x, int y);
   bool is_inside_board(int x, int y);
   bool is_available_position(int x, int y);
-  bool is_valid_hand(int x, int y);                   // !!!!
-  bool stone_compare(int x, int y, Stone src);        // !!!!
+  bool stone_compare(int x, int y, Stone src);
   void insert_stone(int x, int y); 
   void set_active_stone(Stone stone);
   inline bool can_continue();
@@ -105,10 +104,6 @@ inline bool BoardMaster::can_continue() {
 
 bool BoardMaster::stone_compare(int x, int y, Stone src) {
   return board[y][x] == src;
-}
-
-bool BoardMaster::is_valid_hand(int x, int y) {
-  return board[y][x] == Stone::DOT;
 }
 
 int BoardMaster::count_stone(Stone target) {
@@ -236,7 +231,7 @@ int main() {
       }
       cpu[turn % 2].set_hand_random();
       cpu[turn % 2].get_hand(x, y);
-    } while (!board.is_valid_hand(x, y));
+    } while (!board.stone_compare(x, y, Stone::DOT));
     std::cout << "[reversed stone] = " << board.count_reversible_stone(x, y) << std::endl;
     board.insert_stone(x, y);
     board.reverse_stone(x, y);
