@@ -1,6 +1,5 @@
 #include <iostream>
 #include <random>
-
 #include <thread>
 #include <chrono>
 
@@ -20,8 +19,10 @@ const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
 
 TODO : 座標記録と採点
 
-FIX : パスしたあと上書きしちゃってる
-      入力部分を設計しなおしてみる
+REFACT : 入力部分を設計しなおしてみる
+
+REFACT : BoardMasterの仕事を分担
+
 */
 
 class BoardMaster {
@@ -32,10 +33,9 @@ public:
   void init_board();
   void show_board();
   const char convert_stone_to_char(Stone stone);
-  bool is_stone_space(int x, int y);
   bool is_inside_board(int x, int y);
   bool is_available_position(int x, int y);
-  bool stone_compare(int x, int y, Stone src);
+  inline bool stone_compare(int x, int y, Stone src);
   void insert_stone(int x, int y); 
   void set_active_stone(Stone stone);
   inline bool can_continue();
@@ -51,7 +51,7 @@ public:
 
 BoardMaster::BoardMaster() {
   init_board();
-  active_stone = Stone::WHITE;
+  active_stone = Stone::SPACE;
   show_board();
   std::cout << '\n' << std::endl;
 }
@@ -67,10 +67,10 @@ void BoardMaster::init_board() {
 void BoardMaster::show_board() {
   std::cout << "---------------------------" << std::endl;
   std::cout << "  ";
-  for (int i = 0; i < BOARD_SIZE; i++) std::cout << i << ' ';
+  for (int i = 0; i < BOARD_SIZE; i++) std::cout << i+1 << ' ';
   std::cout << std::endl;
   for (int i = 0; i < BOARD_SIZE; i++) {
-    std::cout << i << ' ';
+    std::cout << i+1 << ' ';
     for (int j = 0; j < BOARD_SIZE; j++) std::cout << convert_stone_to_char(board[i][j]) << ' ';
     std::cout << std::endl;
   }
@@ -91,15 +91,11 @@ void BoardMaster::set_active_stone(Stone stone) {
 }
 
 inline bool BoardMaster::is_inside_board(int x, int y) {
-  return (0 <= x && x < BOARD_SIZE) && (0 <= y && y < BOARD_SIZE);
-}
-
-bool BoardMaster::is_stone_space(int x, int y) {
-  return (board[y][x] == Stone::SPACE);
+  return (0 <= x && x <= BOARD_SIZE) && (0 <= y && y < BOARD_SIZE);
 }
 
 bool BoardMaster::is_available_position(int x, int y) {
-  return is_inside_board(x, y) && is_stone_space(x, y) && count_reversible_stone(x, y);
+  return is_inside_board(x, y) && stone_compare(x, y, Stone::SPACE) && count_reversible_stone(x, y);
 }
 
 void BoardMaster::insert_stone(int x, int y) {
@@ -163,7 +159,7 @@ void BoardMaster::remove_dot_stone() {
 }
 
 class Player {
-  Stone MY_Stone;
+  Stone my_stone;
   int hand_x, hand_y;
 public:
   void set_my_stone(Stone stone);
@@ -174,7 +170,7 @@ public:
 };
 
 void Player::set_my_stone(Stone stone) {
-  MY_Stone = stone;
+  my_stone = stone;
 }
 
 void Player::input_position(const int input_x, const int input_y) {
@@ -187,7 +183,7 @@ void Player::set_hand()
 }
 
 Stone Player::get_my_stone() {
-  return MY_Stone;
+  return my_stone;
 }
 
 void Player::get_hand(int &x, int &y) {
@@ -204,7 +200,7 @@ void HumanPlayer::set_hand() {
   int input_x, input_y;
   std::cout << "First, input 'x' !! \n> "; std::cin >> input_x;
   std::cout << "Next, input 'y' !! \n> ";  std::cin >> input_y;
-  input_position(input_x, input_y);
+  input_position(input_x - 1, input_y - 1);
 }
 
 class ComputerPlayer : public Player {
