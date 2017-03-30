@@ -16,8 +16,16 @@ enum class Stone {
 const int dx[8] = { 0, 1, 1, 1, 0,-1,-1,-1 };
 const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
 
+/*
+
+TODO : 座標記録と採点
+
+FIX : リバースされない時がある（Oの右方向）
+
+*/
+
 class BoardMaster {
-  Stone board[BOARD_SIZE][BOARD_SIZE]; // TODO: 座標記録
+  Stone board[BOARD_SIZE][BOARD_SIZE];
   Stone active_stone;
 public:
   BoardMaster();
@@ -131,7 +139,7 @@ int BoardMaster::get_reversible_length(int x, int y, int dx, int dy) {
 }
 
 void BoardMaster::reverse_stone(int x, int y) {
-  int reverse_length;
+  int reverse_length = 0;
   for (int i = 0; i < 8; i++) {
     reverse_length = get_reversible_length(x, y, dx[i], dy[i]);
     for (int j = 1; j <= reverse_length; j++) board[y + j*dy[i]][x + j*dx[i]] = active_stone;
@@ -243,7 +251,7 @@ int main() {
     board.show_board();
     std::cout << "\n\n" << std::endl;
     turn++;
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
   }
   std::cout << "BLACK STONE : " << board.count_stone(Stone::BLACK) << '\n'
             << "WHITE STONE : " << board.count_stone(Stone::WHITE) << std::endl;
