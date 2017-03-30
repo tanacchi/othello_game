@@ -20,7 +20,7 @@ const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
 
 TODO : 座標記録と採点
 
-FIX : リバースされない時がある（Oの右方向）
+FIX : リバースされない時がある
 
 */
 
@@ -167,7 +167,8 @@ class Player {
   int hand_x, hand_y;
 public:
   void set_my_stone(Stone stone);
-  void set_hand(const int input_x, const int input_y);
+  void input_position(const int input_x, const int input_y);
+  virtual void set_hand();
   Stone get_my_stone();
   void get_hand(int &x, int &y);
 };
@@ -176,9 +177,13 @@ void Player::set_my_stone(Stone stone) {
   MY_Stone = stone;
 }
 
-void Player::set_hand(const int input_x, const int input_y) {
+void Player::input_position(const int input_x, const int input_y) {
   hand_x = input_x;
   hand_y = input_y;
+}
+
+void Player::set_hand()
+{
 }
 
 Stone Player::get_my_stone() {
@@ -192,57 +197,59 @@ void Player::get_hand(int &x, int &y) {
 
 class HumanPlayer : public Player {
 public:
-  void set_hand_console();
+  void set_hand();
 };
 
-void HumanPlayer::set_hand_console() {
+void HumanPlayer::set_hand() {
   int input_x, input_y;
   std::cout << "First, input 'x' !! \n> "; std::cin >> input_x;
   std::cout << "Next, input 'y' !! \n> ";  std::cin >> input_y;
-  set_hand(input_x, input_y);
+  input_position(input_x, input_y);
 }
 
 class ComputerPlayer : public Player {
   std::mt19937 rand_pos;
 public:
   ComputerPlayer();
-  void set_hand_random();
+  void set_hand();
 };
 
-ComputerPlayer::ComputerPlayer() :  rand_pos { std::random_device{}() }
+ComputerPlayer::ComputerPlayer() : rand_pos { std::random_device{}() }
 { 
 }
 
-void ComputerPlayer::set_hand_random() {
+void ComputerPlayer::set_hand() {
   std::uniform_int_distribution<int> rand100(0, 9);
   int input_x = rand100(rand_pos);
   int input_y = rand100(rand_pos);
-  set_hand(input_x, input_y);
+  input_position(input_x, input_y);
 }
 
 int main() {
 
   BoardMaster board;
   ComputerPlayer cpu[2];
-
+  Player* active_player;
+  
   cpu[0].set_my_stone(Stone::WHITE);
   cpu[1].set_my_stone(Stone::BLACK);
     
   int turn;
   while (board.can_continue()) {
-    board.set_active_stone(cpu[turn % 2].get_my_stone());
+    active_player = &cpu[turn % 2];
+    board.set_active_stone(active_player->get_my_stone());
     std::cout << "turn " << turn + 1 << std::endl;
-    std::cout << "Now is " << board.convert_stone_to_char(cpu[turn % 2].get_my_stone()) << std::endl;
+    std::cout << "Now is " << board.convert_stone_to_char(active_player->get_my_stone()) << std::endl;
     board.put_dot_stone();
     board.show_board();
     int x, y;
     do {
       if (!board.count_stone(Stone::DOT)) {
-        std::cout << "!!!!!!! " << board.convert_stone_to_char(cpu[turn % 2].get_my_stone()) <<" was passed !!!!!!!!!!!!" << std::endl;
+        std::cout << "!!!!!!! " << board.convert_stone_to_char(active_player->get_my_stone()) <<" was passed !!!!!!!!!!!!" << std::endl;
         break;
       }
-      cpu[turn % 2].set_hand_random();
-      cpu[turn % 2].get_hand(x, y);
+      active_player->set_hand();
+      active_player->get_hand(x, y);
     } while (!board.stone_compare(x, y, Stone::DOT));
     std::cout << "[reversed stone] = " << board.count_reversible_stone(x, y) << std::endl;
     board.insert_stone(x, y);
@@ -251,7 +258,7 @@ int main() {
     board.show_board();
     std::cout << "\n\n" << std::endl;
     turn++;
-    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
   }
   std::cout << "BLACK STONE : " << board.count_stone(Stone::BLACK) << '\n'
             << "WHITE STONE : " << board.count_stone(Stone::WHITE) << std::endl;
