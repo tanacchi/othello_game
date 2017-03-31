@@ -2,6 +2,7 @@
 #include <iostream>
 #include <random>
 #include <thread>
+#include <vector>
 
 #define BOARD_SIZE 8
 
@@ -12,7 +13,7 @@ enum class Stone {
   DOT
 };
 
-enum class Mode {
+enum class Task {
   INIT,
   OP,
   SHOW,
@@ -29,10 +30,10 @@ const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
 
 /*
 
-TODO : 座標記録
 TODO : プレイヤー管理の方法を検討
-TODO : turn を誰が扱うのか決める(GameMaster??)
 TODO : 石自体を扱うクラスを作成
+TODO : パスされたときの後処理
+
 REFACT : 入力部分を設計しなおしてみる
 
 REFACT : BoardMasterの仕事を分担
@@ -66,8 +67,6 @@ public:
 BoardMaster::BoardMaster() {
   init_board();
   active_stone = Stone::SPACE;
-  show_board();
-  std::cout << '\n' << std::endl;
 }
 
 void BoardMaster::init_board() {
@@ -144,7 +143,7 @@ int BoardMaster::get_reversible_length(int x, int y, int dx, int dy) {
     Stone target = board[y + i*dy][x + i*dx];
     if (target == enemy_stone) continue;
     else if (target == active_stone) return i-1;
-    else break;;
+    else break;
   }
   return 0;
 }
@@ -249,115 +248,102 @@ class GameMaster {
   Player* active_player;
   int turn;
   int x, y;
-  HandList hand_list[63];
+  HandList hand_list[];
 public:
-  Mode run(Mode mode);
-  Mode mode_init();
-  Mode mode_op();
-  Mode mode_show();
-  Mode mode_set();
-  Mode mode_insert();
-  Mode mode_write();
-  Mode mode_judge();
-  Mode mode_switch();
-  Mode mode_ed();
-  void show_list();
+  Task run(Task mode);
+  Task task_init();
+  Task task_op();
+  Task task_set();
+  Task task_insert();
+  Task task_write();
+  Task task_judge();
+  Task task_switch();
+  Task task_ed();
+  void show_hand_list();
 };
 
-Mode GameMaster::run(Mode mode) {
+Task GameMaster::run(Task mode) {
   switch (mode) {
-  case Mode::INIT:   return mode_init();
-  case Mode::OP:     return mode_op();
-  case Mode::SHOW:   return mode_show();
-  case Mode::SET:    return mode_set();
-  case Mode::INSERT: return mode_insert();
-  case Mode::WRITE:  return mode_write();
-  case Mode::JUDGE:  return mode_judge();
-  case Mode::SWITCH: return mode_switch();
-  case Mode::ED:     return mode_ed();
+  case Task::INIT:   return task_init();
+  case Task::OP:     return task_op();
+  case Task::SET:    return task_set();
+  case Task::INSERT: return task_insert();
+  case Task::WRITE:  return task_write();
+  case Task::JUDGE:  return task_judge();
+  case Task::SWITCH: return task_switch();
+  case Task::ED:     return task_ed();
   }
 }
 
-Mode GameMaster::mode_init() {
+Task GameMaster::task_init() {
   turn = 0;
   cpu[0].set_my_stone(Stone::WHITE);
   cpu[1].set_my_stone(Stone::BLACK);
   active_player = &cpu[0];
-  return Mode::OP;
+  return Task::OP;
 }
 
-Mode GameMaster::mode_op() {
+Task GameMaster::task_op() {
   board.set_active_stone(active_player->get_my_stone());
   std::cout << "turn " << turn + 1 << std::endl;
   std::cout << "Now is " << board.convert_stone_to_char(active_player->get_my_stone()) << std::endl;
   board.put_dot_stone();
   board.show_board();
-  return Mode::SET;
+  return Task::SET;
 }
 
-Mode GameMaster::mode_show() {
-  return Mode::INIT;
-}
-
-Mode GameMaster::mode_set() {
+Task GameMaster::task_set() {
   active_player->set_hand();
   active_player->get_hand(x, y);
-  if (!board.count_stone(Stone::DOT)) {
-    std::cout << "PASS !!!" << std::endl;
-    return Mode::JUDGE;
-  }
-  if (board.stone_compare(x, y, Stone::DOT)) {
-    return Mode::INSERT;
-  }
-  else {
-    return Mode::SET;
-  }
+  if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; return Task::JUDGE; }
+  if (board.stone_compare(x, y, Stone::DOT)) return Task::INSERT;
+  else return Task::SET;
 }
 
-Mode GameMaster::mode_insert() {
+Task GameMaster::task_insert() {
   board.insert_stone(x, y);
   board.reverse_stone(x, y);
-  return Mode::WRITE;
+  return Task::WRITE;
 }
 
-Mode GameMaster::mode_write() {
+Task GameMaster::task_write() {
   hand_list[turn].turn = turn + 1;
   hand_list[turn].stone = active_player->get_my_stone();
   hand_list[turn].x = x + 1;
   hand_list[turn].y = y + 1;
-  return Mode::JUDGE;
+  return Task::JUDGE;
 }
 
-Mode GameMaster::mode_judge() {
+Task GameMaster::task_judge() {
   board.remove_dot_stone();
   board.show_board();
   std::cout << "\n\n" << std::endl;
-  return (board.can_continue()) ? Mode::SWITCH : Mode::ED;
+  return (board.can_continue()) ? Task::SWITCH : Task::ED;
 }
 
-Mode GameMaster::mode_switch() {
+Task GameMaster::task_switch() {
   active_player = &cpu[++turn % 2];
-  std::this_thread::sleep_for(std::chrono::milliseconds(100));
-  return Mode::OP;
+  std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+  return Task::OP;
 }
 
-Mode GameMaster::mode_ed() {
+Task GameMaster::task_ed() {
   std::cout << "BLACK STONE : " << board.count_stone(Stone::BLACK) << '\n'
             << "WHITE STONE : " << board.count_stone(Stone::WHITE) << std::endl;
-  show_list();
-  return Mode::SWITCH;
+  show_hand_list();
+  exit (0);
 }
 
 void GameMaster::show_list() {
-  for (int i = 0; i < 63; i++) {
-    std::cout << " [turn] " << hand_list[i].turn;
-    std::cout << "  Stone : " << board.convert_stone_to_char(hand_list[i].stone);
+  for (int i = 0; i <= turn; i++) {
+    std::cout << " [turn] " << hand_list[i].turn << '\t';
+    std::cout << "Stone : " << board.convert_stone_to_char(hand_list[i].stone);
     std::cout << "  x = " << hand_list[i].x << ", y = " << hand_list[i].y << std::endl;
   }
 }
 
 int main() {
-  Mode mode = Mode::INIT;
+  Task mode = Task::INIT;
   GameMaster master;
 
   while (1)
