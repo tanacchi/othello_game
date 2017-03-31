@@ -18,6 +18,7 @@ enum class Mode {
   SHOW,
   SET,
   INSERT,  
+  WRITE,
   JUDGE,
   SWITCH,
   ED
@@ -31,7 +32,7 @@ const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
 TODO : 座標記録
 TODO : プレイヤー管理の方法を検討
 TODO : turn を誰が扱うのか決める(GameMaster??)
-
+TODO : 石自体を扱うクラスを作成
 REFACT : 入力部分を設計しなおしてみる
 
 REFACT : BoardMasterの仕事を分担
@@ -235,13 +236,20 @@ void ComputerPlayer::set_hand() {
   input_position(input_x, input_y);
 }
 
+struct HandList {
+  int turn;
+  Stone stone;
+  int x;
+  int y;
+};
+
 class GameMaster {
   BoardMaster board;
   ComputerPlayer cpu[2];
   Player* active_player;
-  int hand_list[][3];
   int turn;
   int x, y;
+  HandList hand_list[63];
 public:
   Mode run(Mode mode);
   Mode mode_init();
@@ -249,9 +257,11 @@ public:
   Mode mode_show();
   Mode mode_set();
   Mode mode_insert();
+  Mode mode_write();
   Mode mode_judge();
   Mode mode_switch();
   Mode mode_ed();
+  void show_list();
 };
 
 Mode GameMaster::run(Mode mode) {
@@ -261,6 +271,7 @@ Mode GameMaster::run(Mode mode) {
   case Mode::SHOW:   return mode_show();
   case Mode::SET:    return mode_set();
   case Mode::INSERT: return mode_insert();
+  case Mode::WRITE:  return mode_write();
   case Mode::JUDGE:  return mode_judge();
   case Mode::SWITCH: return mode_switch();
   case Mode::ED:     return mode_ed();
@@ -306,6 +317,14 @@ Mode GameMaster::mode_set() {
 Mode GameMaster::mode_insert() {
   board.insert_stone(x, y);
   board.reverse_stone(x, y);
+  return Mode::WRITE;
+}
+
+Mode GameMaster::mode_write() {
+  hand_list[turn].turn = turn + 1;
+  hand_list[turn].stone = active_player->get_my_stone();
+  hand_list[turn].x = x + 1;
+  hand_list[turn].y = y + 1;
   return Mode::JUDGE;
 }
 
@@ -325,7 +344,16 @@ Mode GameMaster::mode_switch() {
 Mode GameMaster::mode_ed() {
   std::cout << "BLACK STONE : " << board.count_stone(Stone::BLACK) << '\n'
             << "WHITE STONE : " << board.count_stone(Stone::WHITE) << std::endl;
+  show_list();
   return Mode::SWITCH;
+}
+
+void GameMaster::show_list() {
+  for (int i = 0; i < 63; i++) {
+    std::cout << " [turn] " << hand_list[i].turn;
+    std::cout << "  Stone : " << board.convert_stone_to_char(hand_list[i].stone);
+    std::cout << "  x = " << hand_list[i].x << ", y = " << hand_list[i].y << std::endl;
+  }
 }
 
 int main() {
