@@ -40,31 +40,24 @@ REFACT : BoardMasterの仕事を分担
 
 */
 
-class BoardMaster {
+class BoardBase {
   Stone board[BOARD_SIZE][BOARD_SIZE];
   Stone active_stone;
 public:
-  Stone get_enemy_stone();
-  bool is_available_position(int x, int y);
-  bool is_inside_board(int x, int y);
-  const char convert_stone_to_char(Stone stone);
-  inline bool can_continue();
-  inline bool stone_compare(int x, int y, Stone src);
-  int count_reversible_stone(int x, int y);
+  void init_board();
+  inline bool is_inside_board(int x, int y);
+  void show_board();
+  void set_active_stone(Stone stone);
+  void insert_stone(int x, int y); 
+  char convert_stone_to_char(Stone stone);
+  void insert_stone(int x, int y, Stone stone); 
+  bool stone_compare(int x, int y, Stone src);
   int count_stone(Stone target);
   int get_reversible_length(int x, int y, int dx, int dy);
-  int get_reversible_length(int* direction);
-  void init_board();
-  void insert_stone(int x, int y); 
-  void insert_stone(int x, int y, Stone stone); 
-  void put_dot_stone();
-  void remove_dot_stone();
-  void reverse_stone(int x, int y);
-  void set_active_stone(Stone stone);
-  void show_board();
+  Stone get_enemy_stone();
 };
 
-void BoardMaster::init_board() {  // B
+void BoardBase::init_board() {
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
       board[i][j] = Stone::SPACE;
@@ -72,7 +65,7 @@ void BoardMaster::init_board() {  // B
   board[3][4] = board[4][3] = Stone::BLACK;
 }
 
-void BoardMaster::show_board() {  //B
+void BoardBase::show_board() {
   std::cout << "---------------------------" << std::endl;
   std::cout << "  ";
   for (int i = 0; i < BOARD_SIZE; i++) std::cout << i+1 << ' ';
@@ -85,7 +78,7 @@ void BoardMaster::show_board() {  //B
   std::cout << "---------------------------" << std::endl;
 }
 
-const char BoardMaster::convert_stone_to_char(Stone src) { //B
+char BoardBase::convert_stone_to_char(Stone src) {
   switch (src) {
   case Stone::SPACE: return ' ';
   case Stone::BLACK: return 'X';
@@ -94,60 +87,77 @@ const char BoardMaster::convert_stone_to_char(Stone src) { //B
   }
 }
 
-void BoardMaster::set_active_stone(Stone stone) { // B
+void BoardBase::set_active_stone(Stone stone) {
   active_stone = stone;
 }
 
-inline bool BoardMaster::is_inside_board(int x, int y) {  // M
-  return (0 <= x && x <= BOARD_SIZE) && (0 <= y && y < BOARD_SIZE);
-}
-
-bool BoardMaster::is_available_position(int x, int y) {  // M
-  return is_inside_board(x, y) && stone_compare(x, y, Stone::SPACE) && count_reversible_stone(x, y);
-}
-
-void BoardMaster::insert_stone(int x, int y) {  // B
+void BoardBase::insert_stone(int x, int y) {
   board[y][x] = active_stone;
 }
 
-void BoardMaster::insert_stone(int x, int y, Stone stone) {  // B
+void BoardBase::insert_stone(int x, int y, Stone stone) {
   board[y][x] = stone;
 }
 
-inline bool BoardMaster::can_continue() {  // M
-  return count_stone(Stone::SPACE) && count_stone(Stone::BLACK) && count_stone(Stone::WHITE);
-}
-
-bool BoardMaster::stone_compare(int x, int y, Stone src) {  // B
+bool BoardBase::stone_compare(int x, int y, Stone src) {
   return board[y][x] == src;
 }
 
-int BoardMaster::count_stone(Stone target) {  // B
-  int count = 0;
-  for (int i = 0; i < BOARD_SIZE; i++)
-    for (int j = 0; j < BOARD_SIZE; j++)
-      if (board[i][j] == target) count++;
-  return count;
-}
-
-int BoardMaster::count_reversible_stone(int x, int y) {  // M
-  int reversible_stone_count = 0;
-  for (int i = 0; i < 8; i++) reversible_stone_count += get_reversible_length(x, y, dx[i], dy[i]);
-  return reversible_stone_count;
-}
-
-int BoardMaster::get_reversible_length(int x, int y, int dx, int dy) {  // B
+int BoardBase::get_reversible_length(int x, int y, int dx, int dy) {
   Stone enemy_stone = get_enemy_stone(); 
   for (int i = 1; is_inside_board(x + i*dx, y + i*dy); i++) {
     Stone target = board[y + i*dy][x + i*dx];
-    if (target == enemy_stone) continue;
-    else if (target == active_stone) return i-1;
+    if (target == active_stone) return i-1;
+    else if (target == enemy_stone) continue;
     else break;
   }
   return 0;
 }
 
-void BoardMaster::reverse_stone(int x, int y) { // M
+inline bool BoardBase::is_inside_board(int x, int y) {
+  return (0 <= x && x <= BOARD_SIZE) && (0 <= y && y < BOARD_SIZE);
+}
+
+Stone BoardBase::get_enemy_stone() {
+  return (active_stone == Stone::WHITE) ? Stone::BLACK : Stone::WHITE;
+}
+
+class BoardMaster : public BoardBase {
+public:
+  inline bool is_available_position(int x, int y);
+  inline bool can_continue();
+  int count_reversible_stone(int x, int y);
+  void put_dot_stone();
+  void remove_dot_stone();
+  void reverse_stone(int x, int y);
+  int count_stone(Stone target);
+};
+
+bool BoardMaster::is_available_position(int x, int y) {
+  return is_inside_board(x, y) && stone_compare(x, y, Stone::SPACE) && count_reversible_stone(x, y);
+}
+
+inline bool BoardMaster::can_continue() {
+  return count_stone(Stone::SPACE) && count_stone(Stone::BLACK) && count_stone(Stone::WHITE);
+}
+
+
+int BoardMaster::count_stone(Stone target) {
+  int count = 0;
+  for (int i = 0; i < BOARD_SIZE; i++)
+    for (int j = 0; j < BOARD_SIZE; j++)
+      if (stone_compare(j, i, target)) count++;
+  return count;
+}
+
+
+int BoardMaster::count_reversible_stone(int x, int y) {
+  int reversible_stone_count = 0;
+  for (int i = 0; i < 8; i++) reversible_stone_count += get_reversible_length(x, y, dx[i], dy[i]);
+  return reversible_stone_count;
+}
+
+void BoardMaster::reverse_stone(int x, int y) {
   int reverse_length = 0;
   for (int i = 0; i < 8; i++) {
     reverse_length = get_reversible_length(x, y, dx[i], dy[i]);
@@ -155,20 +165,16 @@ void BoardMaster::reverse_stone(int x, int y) { // M
   }
 }
 
-Stone BoardMaster::get_enemy_stone() {  // M
-  return (active_stone == Stone::WHITE) ? Stone::BLACK : Stone::WHITE;
-}
-
-void BoardMaster::put_dot_stone() { // M
+void BoardMaster::put_dot_stone() {
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
       if (is_available_position(j, i)) insert_stone(j, i, Stone::DOT);
 }
 
-void BoardMaster::remove_dot_stone() {  // M
+void BoardMaster::remove_dot_stone() {
   for (int i = 0; i< BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
-      if (board[i][j] == Stone::DOT) insert_stone(j, i, Stone::SPACE);
+      if (stone_compare(j, i, Stone::DOT)) insert_stone(j, i, Stone::SPACE);
 }
 
 class Player {
