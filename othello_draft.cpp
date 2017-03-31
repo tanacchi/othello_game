@@ -143,8 +143,9 @@ int BoardMaster::get_reversible_length(int x, int y, int dx, int dy) {
     Stone target = board[y + i*dy][x + i*dx];
     if (target == enemy_stone) continue;
     else if (target == active_stone) return i-1;
-    else return 0;
+    else break;;
   }
+  return 0;
 }
 
 void BoardMaster::reverse_stone(int x, int y) {
