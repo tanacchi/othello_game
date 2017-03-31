@@ -1,7 +1,7 @@
+#include <chrono>
 #include <iostream>
 #include <random>
 #include <thread>
-#include <chrono>
 
 #define BOARD_SIZE 8
 
@@ -12,6 +12,18 @@ enum class Stone {
   DOT
 };
 
+enum class Mode {
+  INIT,
+  OP,
+  SHOW,
+  SET,
+  INSERT,  
+  WRITE,
+  JUDGE,
+  SWITCH,
+  ED
+};
+
 const int dx[8] = { 0, 1, 1, 1, 0,-1,-1,-1 };
 const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
 
@@ -20,7 +32,7 @@ const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
 TODO : 座標記録
 TODO : プレイヤー管理の方法を検討
 TODO : turn を誰が扱うのか決める(GameMaster??)
-
+TODO : 石自体を扱うクラスを作成
 REFACT : 入力部分を設計しなおしてみる
 
 REFACT : BoardMasterの仕事を分担
@@ -32,23 +44,23 @@ class BoardMaster {
   Stone active_stone;
 public:
   BoardMaster();
-  void init_board();
-  void show_board();
-  const char convert_stone_to_char(Stone stone);
-  bool is_inside_board(int x, int y);
-  bool is_available_position(int x, int y);
-  inline bool stone_compare(int x, int y, Stone src);
-  void insert_stone(int x, int y); 
-  void set_active_stone(Stone stone);
-  inline bool can_continue();
-  int count_reversible_stone(int x, int y);
-  int get_reversible_length(int* direction);
   Stone get_enemy_stone();
+  bool is_available_position(int x, int y);
+  bool is_inside_board(int x, int y);
+  const char convert_stone_to_char(Stone stone);
+  inline bool can_continue();
+  inline bool stone_compare(int x, int y, Stone src);
+  int count_reversible_stone(int x, int y);
+  int count_stone(Stone target);
+  int get_reversible_length(int x, int y, int dx, int dy);
+  int get_reversible_length(int* direction);
+  void init_board();
+  void insert_stone(int x, int y); 
   void put_dot_stone();
   void remove_dot_stone();
   void reverse_stone(int x, int y);
-  int count_stone(Stone target);
-  int get_reversible_length(int x, int y, int dx, int dy);
+  void set_active_stone(Stone stone);
+  void show_board();
 };
 
 BoardMaster::BoardMaster() {
@@ -132,8 +144,9 @@ int BoardMaster::get_reversible_length(int x, int y, int dx, int dy) {
     Stone target = board[y + i*dy][x + i*dx];
     if (target == enemy_stone) continue;
     else if (target == active_stone) return i-1;
-    else return 0;
+    else break;;
   }
+  return 0;
 }
 
 void BoardMaster::reverse_stone(int x, int y) {
@@ -223,37 +236,132 @@ void ComputerPlayer::set_hand() {
   input_position(input_x, input_y);
 }
 
-int main() {
+struct HandList {
+  int turn;
+  Stone stone;
+  int x;
+  int y;
+};
 
+class GameMaster {
   BoardMaster board;
   ComputerPlayer cpu[2];
   Player* active_player;
-  
+  int turn;
+  int x, y;
+  HandList hand_list[63];
+public:
+  Mode run(Mode mode);
+  Mode mode_init();
+  Mode mode_op();
+  Mode mode_show();
+  Mode mode_set();
+  Mode mode_insert();
+  Mode mode_write();
+  Mode mode_judge();
+  Mode mode_switch();
+  Mode mode_ed();
+  void show_list();
+};
+
+Mode GameMaster::run(Mode mode) {
+  switch (mode) {
+  case Mode::INIT:   return mode_init();
+  case Mode::OP:     return mode_op();
+  case Mode::SHOW:   return mode_show();
+  case Mode::SET:    return mode_set();
+  case Mode::INSERT: return mode_insert();
+  case Mode::WRITE:  return mode_write();
+  case Mode::JUDGE:  return mode_judge();
+  case Mode::SWITCH: return mode_switch();
+  case Mode::ED:     return mode_ed();
+  }
+}
+
+Mode GameMaster::mode_init() {
+  turn = 0;
   cpu[0].set_my_stone(Stone::WHITE);
   cpu[1].set_my_stone(Stone::BLACK);
-    
-  int turn;
-  while (board.can_continue()) {
-    active_player = &cpu[turn % 2];
-    board.set_active_stone(active_player->get_my_stone());
-    std::cout << "turn " << turn + 1 << std::endl;
-    std::cout << "Now is " << board.convert_stone_to_char(active_player->get_my_stone()) << std::endl;
-    board.put_dot_stone();
-    board.show_board();
-    int x, y;
-    for (;;) {
-      if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; break; }
-      if (board.stone_compare(x, y, Stone::DOT)) { board.insert_stone(x, y); board.reverse_stone(x, y); break; }
-      active_player->set_hand();
-      active_player->get_hand(x, y);
-    } 
-    board.remove_dot_stone();
-    board.show_board();
-    std::cout << "\n\n" << std::endl;
-    turn++;
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  active_player = &cpu[0];
+  return Mode::OP;
+}
+
+Mode GameMaster::mode_op() {
+  board.set_active_stone(active_player->get_my_stone());
+  std::cout << "turn " << turn + 1 << std::endl;
+  std::cout << "Now is " << board.convert_stone_to_char(active_player->get_my_stone()) << std::endl;
+  board.put_dot_stone();
+  board.show_board();
+  return Mode::SET;
+}
+
+Mode GameMaster::mode_show() {
+  return Mode::INIT;
+}
+
+Mode GameMaster::mode_set() {
+  active_player->set_hand();
+  active_player->get_hand(x, y);
+  if (!board.count_stone(Stone::DOT)) {
+    std::cout << "PASS !!!" << std::endl;
+    return Mode::JUDGE;
   }
+  if (board.stone_compare(x, y, Stone::DOT)) {
+    return Mode::INSERT;
+  }
+  else {
+    return Mode::SET;
+  }
+}
+
+Mode GameMaster::mode_insert() {
+  board.insert_stone(x, y);
+  board.reverse_stone(x, y);
+  return Mode::WRITE;
+}
+
+Mode GameMaster::mode_write() {
+  hand_list[turn].turn = turn + 1;
+  hand_list[turn].stone = active_player->get_my_stone();
+  hand_list[turn].x = x + 1;
+  hand_list[turn].y = y + 1;
+  return Mode::JUDGE;
+}
+
+Mode GameMaster::mode_judge() {
+  board.remove_dot_stone();
+  board.show_board();
+  std::cout << "\n\n" << std::endl;
+  return (board.can_continue()) ? Mode::SWITCH : Mode::ED;
+}
+
+Mode GameMaster::mode_switch() {
+  active_player = &cpu[++turn % 2];
+  std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  return Mode::OP;
+}
+
+Mode GameMaster::mode_ed() {
   std::cout << "BLACK STONE : " << board.count_stone(Stone::BLACK) << '\n'
             << "WHITE STONE : " << board.count_stone(Stone::WHITE) << std::endl;
+  show_list();
+  return Mode::SWITCH;
+}
+
+void GameMaster::show_list() {
+  for (int i = 0; i < 63; i++) {
+    std::cout << " [turn] " << hand_list[i].turn;
+    std::cout << "  Stone : " << board.convert_stone_to_char(hand_list[i].stone);
+    std::cout << "  x = " << hand_list[i].x << ", y = " << hand_list[i].y << std::endl;
+  }
+}
+
+int main() {
+  Mode mode = Mode::INIT;
+  GameMaster master;
+
+  while (1)
+    mode = master.run(mode);
+  
   return 0;
 }
