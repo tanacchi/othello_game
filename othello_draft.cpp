@@ -44,7 +44,6 @@ class BoardMaster {
   Stone board[BOARD_SIZE][BOARD_SIZE];
   Stone active_stone;
 public:
-  BoardMaster();
   Stone get_enemy_stone();
   bool is_available_position(int x, int y);
   bool is_inside_board(int x, int y);
@@ -57,6 +56,7 @@ public:
   int get_reversible_length(int* direction);
   void init_board();
   void insert_stone(int x, int y); 
+  void insert_stone(int x, int y, Stone stone); 
   void put_dot_stone();
   void remove_dot_stone();
   void reverse_stone(int x, int y);
@@ -64,12 +64,7 @@ public:
   void show_board();
 };
 
-BoardMaster::BoardMaster() {
-  init_board();
-  active_stone = Stone::SPACE;
-}
-
-void BoardMaster::init_board() {
+void BoardMaster::init_board() {  // B
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
       board[i][j] = Stone::SPACE;
@@ -77,7 +72,7 @@ void BoardMaster::init_board() {
   board[3][4] = board[4][3] = Stone::BLACK;
 }
 
-void BoardMaster::show_board() {
+void BoardMaster::show_board() {  //B
   std::cout << "---------------------------" << std::endl;
   std::cout << "  ";
   for (int i = 0; i < BOARD_SIZE; i++) std::cout << i+1 << ' ';
@@ -90,7 +85,7 @@ void BoardMaster::show_board() {
   std::cout << "---------------------------" << std::endl;
 }
 
-const char BoardMaster::convert_stone_to_char(Stone src) {
+const char BoardMaster::convert_stone_to_char(Stone src) { //B
   switch (src) {
   case Stone::SPACE: return ' ';
   case Stone::BLACK: return 'X';
@@ -99,31 +94,35 @@ const char BoardMaster::convert_stone_to_char(Stone src) {
   }
 }
 
-void BoardMaster::set_active_stone(Stone stone) {
+void BoardMaster::set_active_stone(Stone stone) { // B
   active_stone = stone;
 }
 
-inline bool BoardMaster::is_inside_board(int x, int y) {
+inline bool BoardMaster::is_inside_board(int x, int y) {  // M
   return (0 <= x && x <= BOARD_SIZE) && (0 <= y && y < BOARD_SIZE);
 }
 
-bool BoardMaster::is_available_position(int x, int y) {
+bool BoardMaster::is_available_position(int x, int y) {  // M
   return is_inside_board(x, y) && stone_compare(x, y, Stone::SPACE) && count_reversible_stone(x, y);
 }
 
-void BoardMaster::insert_stone(int x, int y) {
+void BoardMaster::insert_stone(int x, int y) {  // B
   board[y][x] = active_stone;
 }
 
-inline bool BoardMaster::can_continue() {
+void BoardMaster::insert_stone(int x, int y, Stone stone) {  // B
+  board[y][x] = stone;
+}
+
+inline bool BoardMaster::can_continue() {  // M
   return count_stone(Stone::SPACE) && count_stone(Stone::BLACK) && count_stone(Stone::WHITE);
 }
 
-bool BoardMaster::stone_compare(int x, int y, Stone src) {
+bool BoardMaster::stone_compare(int x, int y, Stone src) {  // B
   return board[y][x] == src;
 }
 
-int BoardMaster::count_stone(Stone target) {
+int BoardMaster::count_stone(Stone target) {  // B
   int count = 0;
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
@@ -131,13 +130,13 @@ int BoardMaster::count_stone(Stone target) {
   return count;
 }
 
-int BoardMaster::count_reversible_stone(int x, int y) {
+int BoardMaster::count_reversible_stone(int x, int y) {  // M
   int reversible_stone_count = 0;
   for (int i = 0; i < 8; i++) reversible_stone_count += get_reversible_length(x, y, dx[i], dy[i]);
   return reversible_stone_count;
 }
 
-int BoardMaster::get_reversible_length(int x, int y, int dx, int dy) {
+int BoardMaster::get_reversible_length(int x, int y, int dx, int dy) {  // B
   Stone enemy_stone = get_enemy_stone(); 
   for (int i = 1; is_inside_board(x + i*dx, y + i*dy); i++) {
     Stone target = board[y + i*dy][x + i*dx];
@@ -148,28 +147,28 @@ int BoardMaster::get_reversible_length(int x, int y, int dx, int dy) {
   return 0;
 }
 
-void BoardMaster::reverse_stone(int x, int y) {
+void BoardMaster::reverse_stone(int x, int y) { // M
   int reverse_length = 0;
   for (int i = 0; i < 8; i++) {
     reverse_length = get_reversible_length(x, y, dx[i], dy[i]);
-    for (int j = 1; j <= reverse_length; j++) board[y + j*dy[i]][x + j*dx[i]] = active_stone;
+    for (int j = 1; j <= reverse_length; j++) insert_stone(x + j*dx[i], y + j*dy[i]);
   }
 }
 
-Stone BoardMaster::get_enemy_stone() {
+Stone BoardMaster::get_enemy_stone() {  // M
   return (active_stone == Stone::WHITE) ? Stone::BLACK : Stone::WHITE;
 }
 
-void BoardMaster::put_dot_stone() {
+void BoardMaster::put_dot_stone() { // M
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
-      if (is_available_position(j, i)) board[i][j] = Stone::DOT;
+      if (is_available_position(j, i)) insert_stone(j, i, Stone::DOT);
 }
 
-void BoardMaster::remove_dot_stone() {
+void BoardMaster::remove_dot_stone() {  // M
   for (int i = 0; i< BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
-      if (board[i][j] == Stone::DOT) board[i][j] = Stone::SPACE;
+      if (board[i][j] == Stone::DOT) insert_stone(j, i, Stone::SPACE);
 }
 
 class Player {
@@ -277,6 +276,7 @@ Task GameMaster::run(Task mode) {
 
 Task GameMaster::task_init() {
   turn = 0;
+  board.init_board();
   cpu[0].set_my_stone(Stone::WHITE);
   cpu[1].set_my_stone(Stone::BLACK);
   active_player = &cpu[0];
@@ -334,7 +334,7 @@ Task GameMaster::task_ed() {
   exit (0);
 }
 
-void GameMaster::show_list() {
+void GameMaster::show_hand_list() {
   for (int i = 0; i <= turn; i++) {
     std::cout << " [turn] " << hand_list[i].turn << '\t';
     std::cout << "Stone : " << board.convert_stone_to_char(hand_list[i].stone);
