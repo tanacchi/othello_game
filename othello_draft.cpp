@@ -12,6 +12,17 @@ enum class Stone {
   DOT
 };
 
+enum class Mode {
+  INIT,
+  OP,
+  SHOW,
+  SET,
+  INSERT,  
+  JUDGE,
+  SWITCH,
+  ED
+};
+
 const int dx[8] = { 0, 1, 1, 1, 0,-1,-1,-1 };
 const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
 
@@ -132,8 +143,9 @@ int BoardMaster::get_reversible_length(int x, int y, int dx, int dy) {
     Stone target = board[y + i*dy][x + i*dx];
     if (target == enemy_stone) continue;
     else if (target == active_stone) return i-1;
-    else return 0;
+    else break;;
   }
+  return 0;
 }
 
 void BoardMaster::reverse_stone(int x, int y) {
@@ -223,37 +235,105 @@ void ComputerPlayer::set_hand() {
   input_position(input_x, input_y);
 }
 
-int main() {
-
+class GameMaster {
   BoardMaster board;
   ComputerPlayer cpu[2];
   Player* active_player;
-  
+  int hand_list[][3];
+  int turn;
+  int x, y;
+public:
+  Mode run(Mode mode);
+  Mode mode_init();
+  Mode mode_op();
+  Mode mode_show();
+  Mode mode_set();
+  Mode mode_insert();
+  Mode mode_judge();
+  Mode mode_switch();
+  Mode mode_ed();
+};
+
+Mode GameMaster::run(Mode mode) {
+  switch (mode) {
+  case Mode::INIT:   return mode_init();
+  case Mode::OP:     return mode_op();
+  case Mode::SHOW:   return mode_show();
+  case Mode::SET:    return mode_set();
+  case Mode::INSERT: return mode_insert();
+  case Mode::JUDGE:  return mode_judge();
+  case Mode::SWITCH: return mode_switch();
+  case Mode::ED:     return mode_ed();
+  }
+}
+
+Mode GameMaster::mode_init() {
+  turn = 0;
   cpu[0].set_my_stone(Stone::WHITE);
   cpu[1].set_my_stone(Stone::BLACK);
-    
-  int turn;
-  while (board.can_continue()) {
-    active_player = &cpu[turn % 2];
-    board.set_active_stone(active_player->get_my_stone());
-    std::cout << "turn " << turn + 1 << std::endl;
-    std::cout << "Now is " << board.convert_stone_to_char(active_player->get_my_stone()) << std::endl;
-    board.put_dot_stone();
-    board.show_board();
-    int x, y;
-    for (;;) {
-      if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; break; }
-      if (board.stone_compare(x, y, Stone::DOT)) { board.insert_stone(x, y); board.reverse_stone(x, y); break; }
-      active_player->set_hand();
-      active_player->get_hand(x, y);
-    } 
-    board.remove_dot_stone();
-    board.show_board();
-    std::cout << "\n\n" << std::endl;
-    turn++;
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  active_player = &cpu[0];
+  return Mode::OP;
+}
+
+Mode GameMaster::mode_op() {
+  board.set_active_stone(active_player->get_my_stone());
+  std::cout << "turn " << turn + 1 << std::endl;
+  std::cout << "Now is " << board.convert_stone_to_char(active_player->get_my_stone()) << std::endl;
+  board.put_dot_stone();
+  board.show_board();
+  return Mode::SET;
+}
+
+Mode GameMaster::mode_show() {
+  return Mode::INIT;
+}
+
+Mode GameMaster::mode_set() {
+  active_player->set_hand();
+  active_player->get_hand(x, y);
+  if (!board.count_stone(Stone::DOT)) {
+    std::cout << "PASS !!!" << std::endl;
+    return Mode::JUDGE;
   }
+  if (board.stone_compare(x, y, Stone::DOT)) {
+    return Mode::INSERT;
+  }
+  else {
+    return Mode::SET;
+  }
+}
+
+Mode GameMaster::mode_insert() {
+  board.insert_stone(x, y);
+  board.reverse_stone(x, y);
+  return Mode::JUDGE;
+}
+
+Mode GameMaster::mode_judge() {
+  board.remove_dot_stone();
+  board.show_board();
+  std::cout << "\n\n" << std::endl;
+  return (board.can_continue()) ? Mode::SWITCH : Mode::ED;
+}
+
+Mode GameMaster::mode_switch() {
+  active_player = &cpu[++turn % 2];
+  std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  return Mode::OP;
+}
+
+Mode GameMaster::mode_ed() {
   std::cout << "BLACK STONE : " << board.count_stone(Stone::BLACK) << '\n'
             << "WHITE STONE : " << board.count_stone(Stone::WHITE) << std::endl;
+  return Mode::SWITCH;
+}
+
+int main() {
+  Mode mode = Mode::INIT;
+  GameMaster master;
+
+  while (1)
+    mode = master.run(mode);
+  
   return 0;
 }
