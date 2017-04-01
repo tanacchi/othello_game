@@ -58,11 +58,11 @@ Dotの座標とスコアを格納するリストを用意
 また図でもかきながら考えてみよう
 
 [AIが必要とするもの]
-現時点でのボード
-評価用リスト
-評価回数管理
+現時点でのボード <- private
+評価用リスト <- private
+評価回数管理 <- private
 ボードをMasterからコピる関数
-active_stoneもしくはmy_stone
+active_stoneもしくはmy_stone 
 評価関数
 ｛ポジションによる評価
 裏返す個数による評価｝
@@ -287,6 +287,25 @@ void ComputerPlayer::set_hand() {
   int input_y = rand100(rand_pos);
   input_position(input_x, input_y);
 }
+
+class StoneScoreList {
+  int x;
+  int y;
+  int score[3];
+  int total_score;
+public:
+  void set_total_score();
+};
+
+voi StoneScoreList::set_total_score() {
+  for (int i = 0; i < 3; i++) total_score += score[i];
+}
+
+class OthelloAI {
+  Stone virtual_board[BOARD_SIZE][BOARD_SIZE];
+  StoneScoreList score_list[60];
+public:
+};
 
 struct HandList {
   int turn;
