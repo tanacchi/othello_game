@@ -284,23 +284,7 @@ void HumanPlayer::set_hand() {
   input_position(input_x - 1, input_y - 1);
 }
 
-class ComputerPlayer : public Player {
-  std::mt19937 rand_pos;
-public:
-  ComputerPlayer();
-  void set_hand();
-};
 
-ComputerPlayer::ComputerPlayer() : rand_pos { std::random_device{}() }
-{ 
-}
-
-void ComputerPlayer::set_hand() {
-  std::uniform_int_distribution<int> rand100(0, 7);
-  int input_x = rand100(rand_pos);
-  int input_y = rand100(rand_pos);
-  input_position(input_x, input_y);
-}
 
 class StoneScoreList {
   int x;
@@ -316,15 +300,56 @@ void StoneScoreList::set_total_score() {
 }
 
 class OthelloAI : public BoardMaster {
+  int dist_x, dist_y;
+  std::mt19937 rand_pos;
   StoneScoreList score_list[60];
 public:
+  OthelloAI();
   void get_current_board(BoardMaster game_board);
+  void get_conclusion(int &x, int &y);
+  void random_maker();
 };
-  
+
+void OthelloAI::get_conclusion(int &x, int &y) { 
+  x = dist_x;
+  y = dist_y;
+}
+
+
+OthelloAI::OthelloAI() : rand_pos { std::random_device{}() }
+{
+}
+
+void OthelloAI::random_maker() {
+  std::uniform_int_distribution<int> rand100(0, 7);
+  dist_x = rand100(rand_pos);
+  dist_y = rand100(rand_pos);
+}
+
+
 void OthelloAI::get_current_board(BoardMaster game_board) {
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
       insert_stone(j, i, game_board.get_stone(j, i));
+}
+
+class ComputerPlayer : public Player, public OthelloAI {
+public:
+  void set_hand();
+};
+
+// void ComputerPlayer::set_hand() {
+//   std::uniform_int_distribution<int> rand100(0, 7);
+//   int input_x = rand100(rand_pos);
+//   int input_y = rand100(rand_pos);
+//   input_position(input_x, input_y);
+// }
+
+void ComputerPlayer::set_hand() {
+  int dist_x, dist_y;
+  random_maker();
+  get_conclusion(dist_x, dist_y);
+  input_position(dist_x, dist_y);
 }
 
 struct HandList {
@@ -436,11 +461,11 @@ void GameMaster::show_hand_list() {
 }
 
 int main() {
-  // Task mode = Task::INIT;
-  // GameMaster master;
+  Task mode = Task::INIT;
+  GameMaster master;
 
-  // while (1)
-  //   mode = master.run(mode);
+  while (1)
+    mode = master.run(mode);
 
   BoardMaster board;
   OthelloAI AI;
@@ -448,7 +473,8 @@ int main() {
   board.init_board();
   AI.get_current_board(board);
   AI.show_board();
-  board.insert_stone(4, 1, Stone::DOT);
+
+  board.insert_stone(3, 4, Stone::WHITE);
   AI.get_current_board(board);
   AI.show_board();
 
