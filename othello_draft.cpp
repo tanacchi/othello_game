@@ -58,11 +58,7 @@ Dotの座標とスコアを格納するリストを用意
 また図でもかきながら考えてみよう
 
 [AIが必要とするもの]
-現時点でのボード <- private
-評価用リスト <- private
 評価回数管理 <- private
-ボードをMasterからコピる関数
-active_stoneもしくはmy_stone 
 評価関数
 ｛ポジションによる評価
 裏返す個数による評価｝
@@ -70,22 +66,9 @@ enemy_stoneを選んで置く操作
 評価を回数分実行するやつ
 結果をComputerPlayerに伝える関数
 
-AIの立ち位置は
-ComputerPlayer に x, y を渡すことができる
-Board の状態を再現できる
-
-BoardMaster から継承
-virtual_board が不用
-
-BoardMasterでボード複製の関数か演算子を用意
-
 */
 
 /*
-
-(set_hand)
-
-copy_board
 
 put_dot_stone
 
@@ -284,22 +267,18 @@ void HumanPlayer::set_hand() {
   input_position(input_x - 1, input_y - 1);
 }
 
-
-
 class StoneScoreList {
   int x;
   int y;
   int score[3];
   int total_score;
 public:
-  void set_total_score();
+  void set_total_score() {
+    for (int i = 0; i < 3; i++) total_score += score[i];
+  }
 };
 
-void StoneScoreList::set_total_score() {
-  for (int i = 0; i < 3; i++) total_score += score[i];
-}
-
-class OthelloAI : public BoardMaster {
+class OthelloAI : private BoardMaster {
   int dist_x, dist_y;
   std::mt19937 rand_pos;
   StoneScoreList score_list[60];
@@ -315,7 +294,6 @@ void OthelloAI::get_conclusion(int &x, int &y) {
   y = dist_y;
 }
 
-
 OthelloAI::OthelloAI() : rand_pos { std::random_device{}() }
 {
 }
@@ -326,28 +304,20 @@ void OthelloAI::random_maker() {
   dist_y = rand100(rand_pos);
 }
 
-
 void OthelloAI::get_current_board(BoardMaster game_board) {
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
       insert_stone(j, i, game_board.get_stone(j, i));
 }
 
-class ComputerPlayer : public Player, public OthelloAI {
+class ComputerPlayer : public Player, private OthelloAI {
 public:
   void set_hand();
 };
 
-// void ComputerPlayer::set_hand() {
-//   std::uniform_int_distribution<int> rand100(0, 7);
-//   int input_x = rand100(rand_pos);
-//   int input_y = rand100(rand_pos);
-//   input_position(input_x, input_y);
-// }
-
 void ComputerPlayer::set_hand() {
   int dist_x, dist_y;
-  random_maker();
+  random_maker();  //  !!!!!!!!!!!!!!!!!!!!
   get_conclusion(dist_x, dist_y);
   input_position(dist_x, dist_y);
 }
@@ -466,17 +436,6 @@ int main() {
 
   while (1)
     mode = master.run(mode);
-
-  BoardMaster board;
-  OthelloAI AI;
-
-  board.init_board();
-  AI.get_current_board(board);
-  AI.show_board();
-
-  board.insert_stone(3, 4, Stone::WHITE);
-  AI.get_current_board(board);
-  AI.show_board();
 
   return 0;
 }
