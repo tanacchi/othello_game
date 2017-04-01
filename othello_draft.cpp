@@ -72,6 +72,24 @@ enemy_stoneを選んで置く操作
 
 */
 
+/*
+
+(set_hand)
+
+copy_board
+
+put_dot_stone
+
+x, yを格納
+
+「Dot ごとに評価」
+
+？？enemyの設定がゲロむず
+
+最も評価の高いやつを選択して返す
+
+*/
+
 class BoardBase {
   Stone board[BOARD_SIZE][BOARD_SIZE];
   Stone active_stone;
@@ -173,7 +191,6 @@ inline bool BoardMaster::can_continue() {
   return count_stone(Stone::SPACE) && count_stone(Stone::BLACK) && count_stone(Stone::WHITE);
 }
 
-
 int BoardMaster::count_stone(Stone target) {
   int count = 0;
   for (int i = 0; i < BOARD_SIZE; i++)
@@ -181,7 +198,6 @@ int BoardMaster::count_stone(Stone target) {
       if (stone_compare(j, i, target)) count++;
   return count;
 }
-
 
 int BoardMaster::count_reversible_stone(int x, int y) {
   int reversible_stone_count = 0;
@@ -361,7 +377,7 @@ Task GameMaster::task_judge() {
 
 Task GameMaster::task_switch() {
   active_player = &cpu[++turn % 2];
-  std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+  std::this_thread::sleep_for(std::chrono::milliseconds(100));
   return Task::OP;
 }
 
