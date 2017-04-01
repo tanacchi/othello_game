@@ -70,6 +70,15 @@ enemy_stoneを選んで置く操作
 評価を回数分実行するやつ
 結果をComputerPlayerに伝える関数
 
+AIの立ち位置は
+ComputerPlayer に x, y を渡すことができる
+Board の状態を再現できる
+
+BoardMaster から継承
+virtual_board が不用
+
+BoardMasterでボード複製の関数か演算子を用意
+
 */
 
 /*
@@ -94,7 +103,7 @@ class BoardBase {
   Stone board[BOARD_SIZE][BOARD_SIZE];
   Stone active_stone;
 public:
-  Stone get_enemy_stone();
+  Stone get_enemy();
   bool stone_compare(int x, int y, Stone src);
   char convert_stone_to_char(Stone stone);
   inline bool is_inside_board(int x, int y);
@@ -105,6 +114,7 @@ public:
   void insert_stone(int x, int y, Stone stone); 
   void set_active_stone(Stone stone);
   void show_board();
+  Stone get_stone(int x, int y);
 };
 
 void BoardBase::init_board() {
@@ -113,6 +123,10 @@ void BoardBase::init_board() {
       board[i][j] = Stone::SPACE;
   board[3][3] = board[4][4] = Stone::WHITE;
   board[3][4] = board[4][3] = Stone::BLACK;
+}
+
+Stone BoardBase::get_stone(int x, int y) {
+  return board[y][x];
 }
 
 void BoardBase::show_board() {
@@ -154,7 +168,7 @@ bool BoardBase::stone_compare(int x, int y, Stone src) {
 }
 
 int BoardBase::get_reversible_length(int x, int y, int dx, int dy) {
-  Stone enemy_stone = get_enemy_stone(); 
+  Stone enemy_stone = get_enemy(); 
   for (int i = 1; is_inside_board(x + i*dx, y + i*dy); i++) {
     Stone target = board[y + i*dy][x + i*dx];
     if (target == active_stone) return i-1;
@@ -168,7 +182,7 @@ inline bool BoardBase::is_inside_board(int x, int y) {
   return (0 <= x && x <= BOARD_SIZE) && (0 <= y && y < BOARD_SIZE);
 }
 
-Stone BoardBase::get_enemy_stone() {
+Stone BoardBase::get_enemy() {
   return (active_stone == Stone::WHITE) ? Stone::BLACK : Stone::WHITE;
 }
 
@@ -297,15 +311,21 @@ public:
   void set_total_score();
 };
 
-voi StoneScoreList::set_total_score() {
+void StoneScoreList::set_total_score() {
   for (int i = 0; i < 3; i++) total_score += score[i];
 }
 
-class OthelloAI {
-  Stone virtual_board[BOARD_SIZE][BOARD_SIZE];
+class OthelloAI : public BoardMaster {
   StoneScoreList score_list[60];
 public:
+  void get_current_board(BoardMaster game_board);
 };
+  
+void OthelloAI::get_current_board(BoardMaster game_board) {
+  for (int i = 0; i < BOARD_SIZE; i++)
+    for (int j = 0; j < BOARD_SIZE; j++)
+      insert_stone(j, i, game_board.get_stone(j, i));
+}
 
 struct HandList {
   int turn;
@@ -416,11 +436,23 @@ void GameMaster::show_hand_list() {
 }
 
 int main() {
-  Task mode = Task::INIT;
-  GameMaster master;
+  // Task mode = Task::INIT;
+  // GameMaster master;
 
-  while (1)
-    mode = master.run(mode);
-  
+  // while (1)
+  //   mode = master.run(mode);
+
+  BoardMaster board;
+  OthelloAI AI;
+
+  board.init_board();
+  AI.get_current_board(board);
+  AI.show_board();
+  board.insert_stone(4, 1, Stone::DOT);
+  AI.get_current_board(board);
+  AI.show_board();
+
   return 0;
 }
+
+
