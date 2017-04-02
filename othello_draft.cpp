@@ -1,5 +1,6 @@
 #include <chrono>
 #include <iostream>
+#include <list>
 #include <random>
 #include <thread>
 #include <vector>
@@ -34,6 +35,7 @@ TODO : プレイヤー管理の方法を検討
 TODO : パスされたときの後処理
 
 REFACT : 入力部分を設計しなおしてみる
+REFACT : 高度な出力を使ってみる
 
 */
 
@@ -58,25 +60,16 @@ Dotの座標とスコアを格納するリストを用意
 また図でもかきながら考えてみよう
 
 [AIが必要とするもの]
-現時点でのボード <- private
-評価用リスト <- private
 評価回数管理 <- private
-ボードをMasterからコピる関数
-active_stoneもしくはmy_stone 
 評価関数
 ｛ポジションによる評価
 裏返す個数による評価｝
 enemy_stoneを選んで置く操作
 評価を回数分実行するやつ
-結果をComputerPlayerに伝える関数
 
 */
 
 /*
-
-(set_hand)
-
-copy_board
 
 put_dot_stone
 
@@ -91,12 +84,12 @@ x, yを格納
 */
 
 class BoardBase {
-  Stone board[BOARD_SIZE][BOARD_SIZE];
+  std::vector<std::vector<Stone> > board;
   Stone active_stone;
 public:
-  Stone get_enemy_stone();
+  BoardBase();
+  Stone get_enemy();
   bool stone_compare(int x, int y, Stone src);
-  char convert_stone_to_char(Stone stone);
   inline bool is_inside_board(int x, int y);
   int count_stone(Stone target);
   int get_reversible_length(int x, int y, int dx, int dy);
@@ -105,14 +98,32 @@ public:
   void insert_stone(int x, int y, Stone stone); 
   void set_active_stone(Stone stone);
   void show_board();
+  Stone get_stone(int x, int y);
 };
 
+BoardBase::BoardBase() {
+  board = std::vector<std::vector<Stone> >(BOARD_SIZE, std::vector<Stone>(BOARD_SIZE));
+}
+
 void BoardBase::init_board() {
-  for (int i = 0; i < BOARD_SIZE; i++)
-    for (int j = 0; j < BOARD_SIZE; j++)
+  for (int i = 0; i < board.size(); i++)
+    for (int j = 0; j < board.front().size(); j++)
       board[i][j] = Stone::SPACE;
   board[3][3] = board[4][4] = Stone::WHITE;
   board[3][4] = board[4][3] = Stone::BLACK;
+}
+
+Stone BoardBase::get_stone(int x, int y) {
+  return board[y][x];
+}
+
+char convert_stone_to_char(Stone src) {
+  switch (src) {
+  case Stone::SPACE: return ' ';
+  case Stone::BLACK: return 'X';
+  case Stone::WHITE: return 'O';
+  case Stone::DOT:   return '*';
+  }
 }
 
 void BoardBase::show_board() {
@@ -126,15 +137,6 @@ void BoardBase::show_board() {
     std::cout << std::endl;
   }
   std::cout << "---------------------------" << std::endl;
-}
-
-char BoardBase::convert_stone_to_char(Stone src) {
-  switch (src) {
-  case Stone::SPACE: return ' ';
-  case Stone::BLACK: return 'X';
-  case Stone::WHITE: return 'O';
-  case Stone::DOT:   return '*';
-  }
 }
 
 void BoardBase::set_active_stone(Stone stone) {
@@ -154,7 +156,7 @@ bool BoardBase::stone_compare(int x, int y, Stone src) {
 }
 
 int BoardBase::get_reversible_length(int x, int y, int dx, int dy) {
-  Stone enemy_stone = get_enemy_stone(); 
+  Stone enemy_stone = get_enemy(); 
   for (int i = 1; is_inside_board(x + i*dx, y + i*dy); i++) {
     Stone target = board[y + i*dy][x + i*dx];
     if (target == active_stone) return i-1;
@@ -168,7 +170,7 @@ inline bool BoardBase::is_inside_board(int x, int y) {
   return (0 <= x && x <= BOARD_SIZE) && (0 <= y && y < BOARD_SIZE);
 }
 
-Stone BoardBase::get_enemy_stone() {
+Stone BoardBase::get_enemy() {
   return (active_stone == Stone::WHITE) ? Stone::BLACK : Stone::WHITE;
 }
 
@@ -270,48 +272,75 @@ void HumanPlayer::set_hand() {
   input_position(input_x - 1, input_y - 1);
 }
 
-class ComputerPlayer : public Player {
-  std::mt19937 rand_pos;
-public:
-  ComputerPlayer();
-  void set_hand();
-};
-
-ComputerPlayer::ComputerPlayer() : rand_pos { std::random_device{}() }
-{ 
-}
-
-void ComputerPlayer::set_hand() {
-  std::uniform_int_distribution<int> rand100(0, 7);
-  int input_x = rand100(rand_pos);
-  int input_y = rand100(rand_pos);
-  input_position(input_x, input_y);
-}
-
 class StoneScoreList {
   int x;
   int y;
-  int score[3];
+  std::vector<int> score;
   int total_score;
 public:
-  void set_total_score();
+  void set_total_score() {
+    for (int i = 0; i < score.size(); i++) total_score += score[i];
+  }
 };
 
-voi StoneScoreList::set_total_score() {
-  for (int i = 0; i < 3; i++) total_score += score[i];
+class OthelloAI : private BoardMaster {
+  int dist_x, dist_y;
+  std::mt19937 rand_pos;
+  std::vector<StoneScoreList> score_list;
+public:
+  OthelloAI();
+  void get_current_board(BoardMaster game_board);
+  void get_conclusion(int &x, int &y);
+  void random_maker();
+};
+
+void OthelloAI::get_conclusion(int &x, int &y) { 
+  x = dist_x;
+  y = dist_y;
 }
 
-class OthelloAI {
-  Stone virtual_board[BOARD_SIZE][BOARD_SIZE];
-  StoneScoreList score_list[60];
+OthelloAI::OthelloAI() : rand_pos { std::random_device{}() }
+{
+}
+
+void OthelloAI::random_maker() {
+  std::uniform_int_distribution<int> rand100(0, 7);
+  dist_x = rand100(rand_pos);
+  dist_y = rand100(rand_pos);
+}
+
+void OthelloAI::get_current_board(BoardMaster game_board) {
+  for (int i = 0; i < BOARD_SIZE; i++)
+    for (int j = 0; j < BOARD_SIZE; j++)
+      insert_stone(j, i, game_board.get_stone(j, i));
+}
+
+class ComputerPlayer : public Player, private OthelloAI {
 public:
+  void set_hand();
 };
 
-struct HandList {
+void ComputerPlayer::set_hand() {
+  int dist_x, dist_y;
+  random_maker();  //  !!!!!!!!!!!!!!!!!!!!
+  get_conclusion(dist_x, dist_y);
+  input_position(dist_x, dist_y);
+}
+
+class HandList {
   int turn;
   Stone stone;
-  int x;
-  int y;
+  int hand_x;
+  int hand_y;
+public:
+  HandList(int t, Stone s, int x, int y) {
+    turn = t; stone = s; hand_x = x; hand_y = y;
+  }
+  void report() {
+    std::cout << "[turn] : " << turn << ' ';
+    std::cout << "Stone : " << convert_stone_to_char(stone) << ' ';
+    std::cout << "x = " << hand_x << ", y = " << hand_y << std::endl;
+  }
 };
 
 class GameMaster {
@@ -320,7 +349,7 @@ class GameMaster {
   Player* active_player;
   int turn;
   int x, y;
-  HandList hand_list[];
+  std::list<HandList> hand_list;
 public:
   Task run(Task mode);
   Task task_init();
@@ -359,7 +388,7 @@ Task GameMaster::task_init() {
 Task GameMaster::task_op() {
   board.set_active_stone(active_player->get_my_stone());
   std::cout << "turn " << turn + 1 << std::endl;
-  std::cout << "Now is " << board.convert_stone_to_char(active_player->get_my_stone()) << std::endl;
+  std::cout << "Now is " << convert_stone_to_char(active_player->get_my_stone()) << std::endl;
   board.put_dot_stone();
   board.show_board();
   return Task::SET;
@@ -380,10 +409,7 @@ Task GameMaster::task_insert() {
 }
 
 Task GameMaster::task_write() {
-  hand_list[turn].turn = turn + 1;
-  hand_list[turn].stone = active_player->get_my_stone();
-  hand_list[turn].x = x + 1;
-  hand_list[turn].y = y + 1;
+  hand_list.push_back(HandList(turn+1, active_player->get_my_stone(), x+1, y+1));
   return Task::JUDGE;
 }
 
@@ -408,10 +434,9 @@ Task GameMaster::task_ed() {
 }
 
 void GameMaster::show_hand_list() {
-  for (int i = 0; i <= turn; i++) {
-    std::cout << " [turn] " << hand_list[i].turn << '\t';
-    std::cout << "Stone : " << board.convert_stone_to_char(hand_list[i].stone);
-    std::cout << "  x = " << hand_list[i].x << ", y = " << hand_list[i].y << std::endl;
+  std::list<HandList>::iterator p = hand_list.begin();
+  while(p != hand_list.end()) {
+    p++->report();
   }
 }
 
@@ -421,6 +446,8 @@ int main() {
 
   while (1)
     mode = master.run(mode);
-  
+
   return 0;
 }
+
+
