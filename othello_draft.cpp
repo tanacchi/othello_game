@@ -33,7 +33,6 @@ const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
 
 TODO : プレイヤー管理の方法を検討
 TODO : パスされたときの後処理
-TODO : converter はフレンズ化？
 
 REFACT : 入力部分を設計しなおしてみる
 REFACT : 高度な出力を使ってみる
@@ -67,7 +66,6 @@ Dotの座標とスコアを格納するリストを用意
 裏返す個数による評価｝
 enemy_stoneを選んで置く操作
 評価を回数分実行するやつ
-結果をComputerPlayerに伝える関数
 
 */
 
@@ -277,11 +275,11 @@ void HumanPlayer::set_hand() {
 class StoneScoreList {
   int x;
   int y;
-  int score[3];
+  std::vector<int> score;
   int total_score;
 public:
   void set_total_score() {
-    for (int i = 0; i < 3; i++) total_score += score[i];
+    for (int i = 0; i < score.size(); i++) total_score += score[i];
   }
 };
 
