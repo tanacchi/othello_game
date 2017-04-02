@@ -1,5 +1,6 @@
 #include <chrono>
 #include <iostream>
+#include <list>
 #include <random>
 #include <thread>
 #include <vector>
@@ -32,9 +33,11 @@ const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
 
 TODO : プレイヤー管理の方法を検討
 TODO : パスされたときの後処理
+TODO : converter はフレンズ化？
 
 REFACT : 入力部分を設計しなおしてみる
 REFACT : 高度な出力を使ってみる
+
 */
 
 /*
@@ -322,11 +325,20 @@ void ComputerPlayer::set_hand() {
   input_position(dist_x, dist_y);
 }
 
-struct HandList {
+class HandList {
   int turn;
   Stone stone;
-  int x;
-  int y;
+  int hand_x;
+  int hand_y;
+public:
+  HandList(int t, Stone s, int x, int y) {
+    turn = t; stone = s; hand_x = x; hand_y = y;
+  }
+  void report() {
+    std::cout << "[turn]: " << turn << ' ';
+    std::cout << "Stone ??";
+    std::cout << "x = " << hand_x << ", y = " << hand_y << std::endl;
+  }
 };
 
 class GameMaster {
@@ -335,7 +347,7 @@ class GameMaster {
   Player* active_player;
   int turn;
   int x, y;
-  HandList hand_list[];
+  std::list<HandList> hand_list;
 public:
   Task run(Task mode);
   Task task_init();
@@ -395,10 +407,7 @@ Task GameMaster::task_insert() {
 }
 
 Task GameMaster::task_write() {
-  hand_list[turn].turn = turn + 1;
-  hand_list[turn].stone = active_player->get_my_stone();
-  hand_list[turn].x = x + 1;
-  hand_list[turn].y = y + 1;
+  hand_list.push_back(HandList(turn+1, active_player->get_my_stone(), x+1, y+1));
   return Task::JUDGE;
 }
 
@@ -423,10 +432,9 @@ Task GameMaster::task_ed() {
 }
 
 void GameMaster::show_hand_list() {
-  for (int i = 0; i <= turn; i++) {
-    std::cout << " [turn] " << hand_list[i].turn << '\t';
-    std::cout << "Stone : " << board.convert_stone_to_char(hand_list[i].stone);
-    std::cout << "  x = " << hand_list[i].x << ", y = " << hand_list[i].y << std::endl;
+  std::list<HandList>::iterator p = hand_list.begin();
+  while(p != hand_list.end()) {
+    p++->report();
   }
 }
 
