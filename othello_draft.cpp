@@ -89,9 +89,9 @@ class BoardBase {
   std::vector<std::vector<Stone> > board;
   Stone active_stone;
 public:
+  BoardBase();
   Stone get_enemy();
   bool stone_compare(int x, int y, Stone src);
-  char convert_stone_to_char(Stone stone);
   inline bool is_inside_board(int x, int y);
   int count_stone(Stone target);
   int get_reversible_length(int x, int y, int dx, int dy);
@@ -103,14 +103,29 @@ public:
   Stone get_stone(int x, int y);
 };
 
+BoardBase::BoardBase() {
+  board = std::vector<std::vector<Stone> >(BOARD_SIZE, std::vector<Stone>(BOARD_SIZE));
+}
+
 void BoardBase::init_board() {
-  board = std::vector<std::vector<Stone> >(BOARD_SIZE, std::vector<Stone>(BOARD_SIZE, Stone::SPACE));
+  for (int i = 0; i < board.size(); i++)
+    for (int j = 0; j < board.front().size(); j++)
+      board[i][j] = Stone::SPACE;
   board[3][3] = board[4][4] = Stone::WHITE;
   board[3][4] = board[4][3] = Stone::BLACK;
 }
 
 Stone BoardBase::get_stone(int x, int y) {
   return board[y][x];
+}
+
+char convert_stone_to_char(Stone src) {
+  switch (src) {
+  case Stone::SPACE: return ' ';
+  case Stone::BLACK: return 'X';
+  case Stone::WHITE: return 'O';
+  case Stone::DOT:   return '*';
+  }
 }
 
 void BoardBase::show_board() {
@@ -124,15 +139,6 @@ void BoardBase::show_board() {
     std::cout << std::endl;
   }
   std::cout << "---------------------------" << std::endl;
-}
-
-char BoardBase::convert_stone_to_char(Stone src) {
-  switch (src) {
-  case Stone::SPACE: return ' ';
-  case Stone::BLACK: return 'X';
-  case Stone::WHITE: return 'O';
-  case Stone::DOT:   return '*';
-  }
 }
 
 void BoardBase::set_active_stone(Stone stone) {
@@ -333,8 +339,8 @@ public:
     turn = t; stone = s; hand_x = x; hand_y = y;
   }
   void report() {
-    std::cout << "[turn]: " << turn << ' ';
-    std::cout << "Stone ??";
+    std::cout << "[turn] : " << turn << ' ';
+    std::cout << "Stone : " << convert_stone_to_char(stone) << ' ';
     std::cout << "x = " << hand_x << ", y = " << hand_y << std::endl;
   }
 };
@@ -384,7 +390,7 @@ Task GameMaster::task_init() {
 Task GameMaster::task_op() {
   board.set_active_stone(active_player->get_my_stone());
   std::cout << "turn " << turn + 1 << std::endl;
-  std::cout << "Now is " << board.convert_stone_to_char(active_player->get_my_stone()) << std::endl;
+  std::cout << "Now is " << convert_stone_to_char(active_player->get_my_stone()) << std::endl;
   board.put_dot_stone();
   board.show_board();
   return Task::SET;
