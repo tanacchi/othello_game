@@ -273,13 +273,30 @@ void HumanPlayer::set_hand() {
 }
 
 class StoneScoreList {
-  int x;
-  int y;
+  int hand_x;
+  int hand_y;
   std::vector<int> score;
   int total_score;
 public:
+  StoneScoreList(int x, int y) {
+    hand_x = x; hand_y = y;
+  }
   void set_total_score() {
     for (int i = 0; i < score.size(); i++) total_score += score[i];
+  }
+  void get_coordinate(int &x, int &y) {
+    x = hand_x; y = hand_y;
+  }
+  void set_score(int s) {
+    // score.push_back(s);
+    total_score = s;
+  }
+  int get_total_score() {
+    return total_score;
+  }
+  void show_score_list() {
+    std::cout << "x = " << hand_x << ", y = " << hand_y << ' ';
+    std::cout << "Score : " << total_score << std::endl;
   }
 };
 
@@ -290,6 +307,7 @@ class OthelloAI : private BoardMaster {
 public:
   OthelloAI();
   void get_current_board(BoardMaster game_board);
+  void seek_effective_hand();
   void get_conclusion(int &x, int &y);
   void random_maker();
 };
@@ -315,6 +333,24 @@ void OthelloAI::get_current_board(BoardMaster game_board) {
       insert_stone(j, i, game_board.get_stone(j, i));
 }
 
+void OthelloAI::seek_effective_hand() {  // !!!!!!!!!!!!!!!!!!!!!
+  put_dot_stone();
+  for (int i = 0; i < BOARD_SIZE; i++)
+    for (int j = 0; j < BOARD_SIZE; j++)
+      if (stone_compare(j, i, Stone::DOT)) {
+        score_list.push_back(StoneScoreList(j, i));
+      }
+  int x, y;  
+  for (int i = 0; i < score_list.size(); i++) {
+    score_list[i].get_coordinate(x, y);
+    score_list[i].set_score(count_reversible_stone(x, y));
+    score_list[i].set_total_score();
+    score_list[i].show_score_list();
+  }
+  dist_x = x; dist_y = y;
+  //  score_list.clear();
+}
+ 
 class ComputerPlayer : public Player, private OthelloAI {
 public:
   void set_hand();
@@ -322,8 +358,11 @@ public:
 
 void ComputerPlayer::set_hand() {
   int dist_x, dist_y;
-  random_maker();  //  !!!!!!!!!!!!!!!!!!!!
+  seek_effective_hand();
+  std::cout << "HELLO\n";
   get_conclusion(dist_x, dist_y);
+
+  std::cout << "HELLO\n";
   input_position(dist_x, dist_y);
 }
 
