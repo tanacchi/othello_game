@@ -86,7 +86,7 @@ x, yを格納
 */
 
 class BoardBase {
-  Stone board[BOARD_SIZE][BOARD_SIZE];
+  std::vector<std::vector<Stone> > board;
   Stone active_stone;
 public:
   Stone get_enemy();
@@ -104,9 +104,7 @@ public:
 };
 
 void BoardBase::init_board() {
-  for (int i = 0; i < BOARD_SIZE; i++)
-    for (int j = 0; j < BOARD_SIZE; j++)
-      board[i][j] = Stone::SPACE;
+  board = std::vector<std::vector<Stone> >(BOARD_SIZE, std::vector<Stone>(BOARD_SIZE, Stone::SPACE));
   board[3][3] = board[4][4] = Stone::WHITE;
   board[3][4] = board[4][3] = Stone::BLACK;
 }
