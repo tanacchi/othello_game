@@ -282,7 +282,7 @@ public:
 class OthelloAI : private BoardMaster {
   int dist_x, dist_y;
   std::mt19937 rand_pos;
-  StoneScoreList score_list[60];
+  std::vector<StoneScoreList> score_list;
 public:
   OthelloAI();
   void get_current_board(BoardMaster game_board);
