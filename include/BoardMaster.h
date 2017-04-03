@@ -1,4 +1,3 @@
-#include "othello_base.h"
 #include "BoardBase.h"
 
 class BoardMaster : public BoardBase {

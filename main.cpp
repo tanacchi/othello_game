@@ -1,5 +1,3 @@
-#include "include/othello_base.h"
-#include "include/BoardMaster.h"
 #include "include/Player_series.h"
 
 enum class Task {
@@ -68,90 +66,7 @@ x, yを格納
 最も評価の高いやつを選択して返す
 
 */
-
-
-
-
-
-
-class StoneScoreList {
-  int hand_x;
-  int hand_y;
-  std::vector<int> score;
-  int total_score;
-public:
-  StoneScoreList(int x, int y) {
-    hand_x = x; hand_y = y;
-  }
-  void set_total_score() {
-    for (int i = 0; i < score.size(); i++) total_score += score[i];
-  }
-  void get_coordinate(int &x, int &y) {
-    x = hand_x; y = hand_y;
-  }
-  void set_score(int s) {
-    // score.push_back(s);
-    total_score = s;
-  }
-  int get_total_score() {
-    return total_score;
-  }
-  void show_score_list() {
-    std::cout << "x = " << hand_x << ", y = " << hand_y << ' ';
-    std::cout << "Score : " << total_score << std::endl;
-  }
-};
-
-class OthelloAI : private BoardMaster {
-  int dist_x, dist_y;
-  std::mt19937 rand_pos;
-  std::vector<StoneScoreList> score_list;
-public:
-  OthelloAI();
-  void get_current_board(BoardMaster game_board);
-  void seek_effective_hand();
-  void get_conclusion(int &x, int &y);
-  void random_maker();
-};
-
-void OthelloAI::get_current_board(BoardMaster game_board) {
-  for (int i = 0; i < BOARD_SIZE; i++)
-    for (int j = 0; j < BOARD_SIZE; j++)
-      insert_stone(j, i, game_board.get_stone(j, i));
-}
-
-void OthelloAI::get_conclusion(int &x, int &y) { 
-  x = dist_x;
-  y = dist_y;
-}
-
-OthelloAI::OthelloAI() : rand_pos { std::random_device{}() }
-{
-}
-
-void OthelloAI::random_maker() {
-  std::uniform_int_distribution<int> rand100(0, 7);
-  dist_x = rand100(rand_pos);
-  dist_y = rand100(rand_pos);
-}
-
-void OthelloAI::seek_effective_hand() {  // !!!!!!!!!!!!!!!!!!!!!
-}
  
-class ComputerPlayer : public Player, private OthelloAI {
-public:
-  void set_hand();
-};
-
-void ComputerPlayer::set_hand() {
-  int dist_x, dist_y;
-
-  random_maker();
-  seek_effective_hand();
-  get_conclusion(dist_x, dist_y);
-  input_position(dist_x, dist_y);
-}
-
 class HandList {
   int turn;
   Stone stone;

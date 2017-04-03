@@ -1,4 +1,3 @@
-#include "include/othello_base.h"
 #include "include/Player_series.h"
 
 void Player::set_my_stone(Stone stone) {
@@ -28,4 +27,13 @@ void HumanPlayer::set_hand() {
   std::cout << "First, input 'x' !! \n> "; std::cin >> input_x;
   std::cout << "Next, input 'y' !! \n> ";  std::cin >> input_y;
   input_position(input_x - 1, input_y - 1);
+}
+
+void ComputerPlayer::set_hand() {
+  int dist_x, dist_y;
+
+  random_maker();
+  seek_effective_hand();
+  get_conclusion(dist_x, dist_y);
+  input_position(dist_x, dist_y);
 }

@@ -1,6 +1,3 @@
-#ifndef _HEADER_H_
-#define _HEADER_H_
-
 #include <iostream>
 #include <chrono>
 #include <iostream>
@@ -16,5 +13,3 @@ enum class Stone {
   SPACE,
   DOT
 };
-
-#endif _HEADER_H_

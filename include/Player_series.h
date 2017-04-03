@@ -1,4 +1,4 @@
-#include "othello_base.h"
+#include "OthelloAI.h"
 
 class Player {
   Stone my_stone;
@@ -12,6 +12,11 @@ public:
 };
 
 class HumanPlayer : public Player {
+public:
+  void set_hand();
+};
+
+class ComputerPlayer : public Player, private OthelloAI {
 public:
   void set_hand();
 };
