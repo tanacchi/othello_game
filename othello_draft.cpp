@@ -1,5 +1,5 @@
 #include "othello_base.h"
-#include "BoardBase.h"
+#include "BoardMaster.h"
 
 enum class Task {
   INIT,
@@ -13,8 +13,6 @@ enum class Task {
   ED
 };
 
-const int dx[8] = { 0, 1, 1, 1, 0,-1,-1,-1 };
-const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
 
 /*
 
@@ -70,58 +68,6 @@ x, yを格納
 
 */
 
-class BoardMaster : public BoardBase {
-public:
-  inline bool can_continue();
-  inline bool is_available_position(int x, int y);
-  int count_reversible_stone(int x, int y);
-  int count_stone(Stone target);
-  void put_dot_stone();
-  void remove_dot_stone();
-  void reverse_stone(int x, int y);
-};
-
-bool BoardMaster::is_available_position(int x, int y) {
-  return is_inside_board(x, y) && stone_compare(x, y, Stone::SPACE) && count_reversible_stone(x, y);
-}
-
-inline bool BoardMaster::can_continue() {
-  return count_stone(Stone::SPACE) && count_stone(Stone::BLACK) && count_stone(Stone::WHITE);
-}
-
-int BoardMaster::count_stone(Stone target) {
-  int count = 0;
-  for (int i = 0; i < BOARD_SIZE; i++)
-    for (int j = 0; j < BOARD_SIZE; j++)
-      if (stone_compare(j, i, target)) count++;
-  return count;
-}
-
-int BoardMaster::count_reversible_stone(int x, int y) {
-  int reversible_stone_count = 0;
-  for (int i = 0; i < 8; i++) reversible_stone_count += get_reversible_length(x, y, dx[i], dy[i]);
-  return reversible_stone_count;
-}
-
-void BoardMaster::reverse_stone(int x, int y) {
-  int reverse_length = 0;
-  for (int i = 0; i < 8; i++) {
-    reverse_length = get_reversible_length(x, y, dx[i], dy[i]);
-    for (int j = 1; j <= reverse_length; j++) insert_stone(x + j*dx[i], y + j*dy[i]);
-  }
-}
-
-void BoardMaster::put_dot_stone() {
-  for (int i = 0; i < BOARD_SIZE; i++)
-    for (int j = 0; j < BOARD_SIZE; j++)
-      if (is_available_position(j, i)) insert_stone(j, i, Stone::DOT);
-}
-
-void BoardMaster::remove_dot_stone() {
-  for (int i = 0; i< BOARD_SIZE; i++)
-    for (int j = 0; j < BOARD_SIZE; j++)
-      if (stone_compare(j, i, Stone::DOT)) insert_stone(j, i, Stone::SPACE);
-}
 
 class Player {
   Stone my_stone;
