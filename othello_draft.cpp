@@ -1,5 +1,5 @@
-#include "othello_base.h"
-#include "BoardMaster.h"
+#include "include/othello_base.h"
+#include "include/BoardMaster.h"
 
 enum class Task {
   INIT,
@@ -262,8 +262,6 @@ Task GameMaster::task_op() {
 Task GameMaster::task_set() {
   active_player->set_hand();
   active_player->get_hand(x, y);
-  std::cout << "HELLO\n";
-
   if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; return Task::JUDGE; }
   if (board.stone_compare(x, y, Stone::DOT)) return Task::INSERT;
   else return Task::SET;
