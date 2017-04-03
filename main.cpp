@@ -1,6 +1,6 @@
 #include "include/othello_base.h"
 #include "include/BoardMaster.h"
-#include "include/Player.h"
+#include "include/Player_series.h"
 
 enum class Task {
   INIT,
@@ -72,17 +72,7 @@ x, yを格納
 
 
 
-class HumanPlayer : public Player {
-public:
-  void set_hand();
-};
 
-void HumanPlayer::set_hand() {
-  int input_x, input_y;
-  std::cout << "First, input 'x' !! \n> "; std::cin >> input_x;
-  std::cout << "Next, input 'y' !! \n> ";  std::cin >> input_y;
-  input_position(input_x - 1, input_y - 1);
-}
 
 class StoneScoreList {
   int hand_x;
@@ -238,6 +228,7 @@ Task GameMaster::task_set() {
 }
 
 Task GameMaster::task_insert() {
+  std::cout << "UHO\n";
   board.insert_stone(x, y);
   board.reverse_stone(x, y);
   return Task::WRITE;

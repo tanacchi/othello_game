@@ -10,3 +10,8 @@ public:
   Stone get_my_stone();
   void get_hand(int &x, int &y);
 };
+
+class HumanPlayer : public Player {
+public:
+  void set_hand();
+};
