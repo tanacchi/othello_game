@@ -77,7 +77,7 @@ public:
     turn = t; stone = s; hand_x = x; hand_y = y;
   }
   void report() {
-    std::cout << "[turn] : " << turn << ' ';
+    std::cout << "[turn] : " << turn << '\t';
     std::cout << "Stone : " << convert_stone_to_char(stone) << ' ';
     std::cout << "x = " << hand_x << ", y = " << hand_y << std::endl;
   }

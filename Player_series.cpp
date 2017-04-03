@@ -31,7 +31,6 @@ void HumanPlayer::set_hand() {
 
 void ComputerPlayer::set_hand() {
   int dist_x, dist_y;
-
   random_maker();
   seek_effective_hand();
   get_conclusion(dist_x, dist_y);

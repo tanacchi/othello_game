@@ -23,8 +23,6 @@ void StoneScoreList::show_score_list() {
   std::cout << "Score : " << total_score << std::endl;
 }
 
-
-
 void OthelloAI::get_current_board(BoardMaster game_board) {
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
@@ -46,5 +44,7 @@ void OthelloAI::random_maker() {
   dist_y = rand100(rand_pos);
 }
 
-void OthelloAI::seek_effective_hand() {  // !!!!!!!!!!!!!!!!!!!!!
+void OthelloAI::seek_effective_hand() {
+  dist_x;
+  dist_y;
 }
