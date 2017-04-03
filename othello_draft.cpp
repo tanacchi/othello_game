@@ -312,6 +312,12 @@ public:
   void random_maker();
 };
 
+void OthelloAI::get_current_board(BoardMaster game_board) {
+  for (int i = 0; i < BOARD_SIZE; i++)
+    for (int j = 0; j < BOARD_SIZE; j++)
+      insert_stone(j, i, game_board.get_stone(j, i));
+}
+
 void OthelloAI::get_conclusion(int &x, int &y) { 
   x = dist_x;
   y = dist_y;
@@ -327,28 +333,7 @@ void OthelloAI::random_maker() {
   dist_y = rand100(rand_pos);
 }
 
-void OthelloAI::get_current_board(BoardMaster game_board) {
-  for (int i = 0; i < BOARD_SIZE; i++)
-    for (int j = 0; j < BOARD_SIZE; j++)
-      insert_stone(j, i, game_board.get_stone(j, i));
-}
-
 void OthelloAI::seek_effective_hand() {  // !!!!!!!!!!!!!!!!!!!!!
-  put_dot_stone();
-  for (int i = 0; i < BOARD_SIZE; i++)
-    for (int j = 0; j < BOARD_SIZE; j++)
-      if (stone_compare(j, i, Stone::DOT)) {
-        score_list.push_back(StoneScoreList(j, i));
-      }
-  int x, y;  
-  for (int i = 0; i < score_list.size(); i++) {
-    score_list[i].get_coordinate(x, y);
-    score_list[i].set_score(count_reversible_stone(x, y));
-    score_list[i].set_total_score();
-    score_list[i].show_score_list();
-  }
-  dist_x = x; dist_y = y;
-  //  score_list.clear();
 }
  
 class ComputerPlayer : public Player, private OthelloAI {
@@ -358,11 +343,10 @@ public:
 
 void ComputerPlayer::set_hand() {
   int dist_x, dist_y;
-  seek_effective_hand();
-  std::cout << "HELLO\n";
-  get_conclusion(dist_x, dist_y);
 
-  std::cout << "HELLO\n";
+  random_maker();
+  seek_effective_hand();
+  get_conclusion(dist_x, dist_y);
   input_position(dist_x, dist_y);
 }
 
@@ -436,6 +420,8 @@ Task GameMaster::task_op() {
 Task GameMaster::task_set() {
   active_player->set_hand();
   active_player->get_hand(x, y);
+  std::cout << "HELLO\n";
+
   if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; return Task::JUDGE; }
   if (board.stone_compare(x, y, Stone::DOT)) return Task::INSERT;
   else return Task::SET;
