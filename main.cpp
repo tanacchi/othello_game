@@ -51,6 +51,11 @@ Dotの座標とスコアを格納するリストを用意
 enemy_stoneを選んで置く操作
 評価を回数分実行するやつ
 
+
+ボードをset_hand時にｃｐｕ内に入れる
+set_hand(BoardMaster board)
+
+
 */
 
 /*
