@@ -51,24 +51,20 @@ Dotの座標とスコアを格納するリストを用意
 enemy_stoneを選んで置く操作
 評価を回数分実行するやつ
 
-
-ボードをset_hand時にｃｐｕ内に入れる
-set_hand(BoardMaster board)
-
-
 */
 
 /*
 
-put_dot_stone
+ボードをset_hand時にｃｐｕ内に入れる
+set_hand(BoardMaster board)
 
-x, yを格納
+アクセスできないそうなので設計しなおしましょう
 
-「Dot ごとに評価」
+Player型ポインタで扱いたいので
+set_handは仮想関数で書きたい
+* フレンド関数とやらを試してみる
+* そもそものPlayer系統、BoardMaster系統、OthelloAI系統の関係や設計を見なおしてみる
 
-？？enemyの設定がゲロむず
-
-最も評価の高いやつを選択して返す
 
 */
  
