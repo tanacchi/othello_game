@@ -83,7 +83,7 @@ public:
   }
   void report() {
     std::cout << "[turn] : " << turn << '\t';
-    std::cout << "Stone : " << convert_stone_to_char(stone) << ' ';
+    std::cout << "Stone : " << convert_stone_to_char(stone) << '\t';
     std::cout << "x = " << hand_x << ", y = " << hand_y << std::endl;
   }
 };
@@ -148,7 +148,6 @@ Task GameMaster::task_set() {
 }
 
 Task GameMaster::task_insert() {
-  std::cout << "UHO\n";
   board.insert_stone(x, y);
   board.reverse_stone(x, y);
   return Task::WRITE;
