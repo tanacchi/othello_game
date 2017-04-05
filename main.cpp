@@ -86,7 +86,7 @@ public:
 
 class GameMaster {
   BoardMaster board;
-  ComputerPlayer cpu[2];
+  HumanPlayer human[2];
   Player* active_player;
   int turn;
   int x, y;
@@ -120,9 +120,9 @@ Task GameMaster::run(Task mode) {
 Task GameMaster::task_init() {
   turn = 0;
   board.init_board();
-  cpu[0].set_my_stone(Stone::WHITE);
-  cpu[1].set_my_stone(Stone::BLACK);
-  active_player = &cpu[0];
+  human[0].set_my_stone(Stone::WHITE);
+  human[1].set_my_stone(Stone::BLACK);
+  active_player = &human[0];
   return Task::OP;
 }
 
@@ -140,7 +140,7 @@ Task GameMaster::task_set() {
   active_player->get_hand(x, y);
   if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; return Task::JUDGE; }
   if (board.stone_compare(x, y, Stone::DOT)) return Task::INSERT;
-  else return Task::SET;
+  else { std::cout << " ee \n"; return Task::SET; }
 }
 
 Task GameMaster::task_insert() {
@@ -162,7 +162,7 @@ Task GameMaster::task_judge() {
 }
 
 Task GameMaster::task_switch() {
-  active_player = &cpu[++turn % 2];
+  active_player = &human[++turn % 2];
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
   return Task::OP;
 }
