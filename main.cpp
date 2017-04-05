@@ -12,7 +12,6 @@ enum class Task {
   ED
 };
 
-
 /*
 
 TODO : プレイヤー管理の方法を検討
@@ -55,34 +54,41 @@ enemy_stoneを選んで置く操作
 
 /*
 
-ボードをset_hand時にｃｐｕ内に入れる
-set_hand(BoardMaster board)
-
-アクセスできないそうなので設計しなおしましょう
-
 Player型ポインタで扱いたいので
 set_handは仮想関数で書きたい
 * フレンド関数とやらを試してみる
 * そもそものPlayer系統、BoardMaster系統、OthelloAI系統の関係や設計を見なおしてみる
 
+*/
+
+/*
+
+[設定可能にする項目]
+--personal human vs human
+--normal   human vs cpu    --level  cpu's level
+--auto     cpu   vs cpu    --level  cpu's level
 
 */
- 
+
 class HandList {
   int turn;
   Stone stone;
   int hand_x;
   int hand_y;
 public:
-  HandList(int t, Stone s, int x, int y) {
-    turn = t; stone = s; hand_x = x; hand_y = y;
-  }
-  void report() {
-    std::cout << "[turn] : " << turn << '\t';
-    std::cout << "Stone : " << convert_stone_to_char(stone) << '\t';
-    std::cout << "x = " << hand_x << ", y = " << hand_y << std::endl;
-  }
+  HandList(int t, Stone s, int x, int y);
+  void report();
 };
+
+HandList::HandList(int t, Stone s, int x, int y) {
+    turn = t; stone = s; hand_x = x; hand_y = y;
+}
+
+void report() {
+  std::cout << "[turn] : " << turn << '\t';
+  std::cout << "Stone : " << convert_stone_to_char(stone) << '\t';
+  std::cout << "x = " << hand_x << ", y = " << hand_y << std::endl;
+}
 
 class GameMaster {
   BoardMaster board;
@@ -92,6 +98,7 @@ class GameMaster {
   int x, y;
   std::list<HandList> hand_list;
 public:
+  GameMaster();
   Task run(Task mode);
   Task task_init();
   Task task_op();
@@ -103,6 +110,10 @@ public:
   Task task_ed();
   void show_hand_list();
 };
+
+GameMaster::GameMaster() {
+
+}
 
 Task GameMaster::run(Task mode) {
   switch (mode) {
@@ -181,14 +192,11 @@ void GameMaster::show_hand_list() {
   }
 }
 
-int main() {
+int main(int argc, char ** argv) {
   Task mode = Task::INIT;
   GameMaster master;
+  while (1) mode = master.run(mode);
 
-  while (1)
-    mode = master.run(mode);
-
-  return 0;
 }
 
 
