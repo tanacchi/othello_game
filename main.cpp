@@ -84,7 +84,7 @@ HandList::HandList(int t, Stone s, int x, int y) {
     turn = t; stone = s; hand_x = x; hand_y = y;
 }
 
-void report() {
+void HandList::report() {
   std::cout << "[turn] : " << turn << '\t';
   std::cout << "Stone : " << convert_stone_to_char(stone) << '\t';
   std::cout << "x = " << hand_x << ", y = " << hand_y << std::endl;
