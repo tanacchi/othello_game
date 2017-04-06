@@ -1,5 +1,12 @@
 #include "include/Player_series.h"
 
+enum class Mode {
+  NORMAL_F,
+  NORMAL_B,
+  PERSONAL,
+  AUTO
+};
+
 enum class Task {
   INIT,
   OP,
@@ -93,12 +100,14 @@ void HandList::report() {
 class GameMaster {
   BoardMaster board;
   HumanPlayer human[2];
+  ComputerPlayer cpu[2];
+  Player* participant[];
   Player* active_player;
   int turn;
   int x, y;
   std::list<HandList> hand_list;
 public:
-  GameMaster();
+  GameMaster(Mode mode);
   Task run(Task mode);
   Task task_init();
   Task task_op();
@@ -111,13 +120,31 @@ public:
   void show_hand_list();
 };
 
-GameMaster::GameMaster() {
-
+GameMaster::GameMaster(Mode mode) {
+  switch (mode) {
+  case Mode::NORMAL_F:
+    participant[0] = &human[0];
+    participant[1] = &cpu[0];
+    break;
+  case Mode::NORMAL_B:
+    participant[0] = &cpu[0];
+    participant[1] = &human[0];
+    break;
+  case Mode::PERSONAL:
+    participant[0] = &human[0];
+    participant[1] = &human[1];
+    break;
+  case Mode::AUTO: break;
+    participant[0] = &cpu[0];
+    participant[1] = &cpu[1];
+    break;
+  }
+  participant[0]->set_my_stone(Stone::WHITE);
+  participant[1]->set_my_stone(Stone::BLACK);
 }
 
 Task GameMaster::run(Task mode) {
-  switch (mode) {
-  case Task::INIT:   return task_init();
+  switch (mode) {  case Task::INIT:   return task_init();
   case Task::OP:     return task_op();
   case Task::SET:    return task_set();
   case Task::INSERT: return task_insert();
@@ -131,9 +158,7 @@ Task GameMaster::run(Task mode) {
 Task GameMaster::task_init() {
   turn = 0;
   board.init_board();
-  human[0].set_my_stone(Stone::WHITE);
-  human[1].set_my_stone(Stone::BLACK);
-  active_player = &human[0];
+  active_player = participant[0];
   return Task::OP;
 }
 
@@ -173,7 +198,7 @@ Task GameMaster::task_judge() {
 }
 
 Task GameMaster::task_switch() {
-  active_player = &human[++turn % 2];
+  active_player = participant[++turn % 2];
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
   return Task::OP;
 }
@@ -193,10 +218,8 @@ void GameMaster::show_hand_list() {
 }
 
 int main(int argc, char ** argv) {
-  Task mode = Task::INIT;
-  GameMaster master;
-  while (1) mode = master.run(mode);
+  Task task = Task::INIT;
+  GameMaster master(Mode::PERSONAL);
+  while (1) task = master.run(task);
 
 }
-
-
