@@ -207,7 +207,7 @@ Task GameMaster::task_switch() {
 
 Task GameMaster::task_ed() {
   std::cout << "BLACK STONE : " << board.count_stone(Stone::BLACK) << '\n'
-            << "WHITE STONE : " << board.count_stone(Stone::WHITE) << std::endl;
+            << "WHITE STONE : " << board.count_stone(Stone::WHITE) << '\n' <<std::endl;
   show_hand_list();
   exit (0);
 }
@@ -220,26 +220,29 @@ void GameMaster::show_hand_list() {
 }
 
 void show_usage() {
-  std::cout << "[Usage] \n"
+  std::cout << '\n'
+            << "[Usage] \n"
             << "Options  : --normal <first player (human or cpu)>（通常のコンピューターとの対戦）\n"
             << "           --personal（２人での対人戦）\n"
-            << "           --auto（コンピューター同士での自動プレイ）" << std::endl;
+            << "           --auto（コンピューター同士での自動プレイ）\n" << std::endl;
 }
 
 int main(int argc, char ** argv) {
   
   Mode mode = Mode::NORMAL_F;
   if (argc > 1) {
-    if (!strcmp(argv[1], "--normal")) 
+    if (!strcmp(argv[1], "--normal")) { 
       if (argc > 2) {
         if (!strcmp(argv[2], "human")) mode = Mode::NORMAL_F;
         else if (!strcmp(argv[2], "cpu")) mode = Mode::NORMAL_B;
         else show_usage();
       }
+    }
     else if (!strcmp(argv[1], "--personal")) mode = Mode::PERSONAL;
     else if (!strcmp(argv[1], "--auto"))     mode = Mode::AUTO;
     else show_usage();
   }
+  else show_usage();
   
   Task task = Task::INIT;
   GameMaster master(mode);
