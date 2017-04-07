@@ -219,14 +219,22 @@ void GameMaster::show_hand_list() {
 }
 
 void show_usage() {
-  ;
+  std::cout << "[Usage] \n"
+            << "Options  : --normal <first player (human or cpu)>（通常のコンピューターとの対戦）\n"
+            << "           --personal（２人での対人戦）\n"
+            << "           --auto（コンピューター同士での自動プレイ）" << std::endl;
 }
 
 int main(int argc, char ** argv) {
   
   Mode mode = Mode::NORMAL_F;
   if (argc > 1) {
-    if (!strcmp(argv[1], "--normal"))        mode = Mode::NORMAL_F;
+    if (!strcmp(argv[1], "--normal")) 
+      if (argc > 2) {
+        if (!strcmp(argv[2], "human")) mode = Mode::NORMAL_F;
+        else if (!strcmp(argv[2], "cpu")) mode = Mode::NORMAL_B;
+        else show_usage();
+      }
     else if (!strcmp(argv[1], "--personal")) mode = Mode::PERSONAL;
     else if (!strcmp(argv[1], "--auto"))     mode = Mode::AUTO;
     else show_usage();
