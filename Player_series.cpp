@@ -24,8 +24,9 @@ void Player::get_hand(int &x, int &y) {
 
 void HumanPlayer::set_hand() {
   int input_x, input_y;
-  std::cout << "First, input 'x' !! \n> "; std::cin >> input_x;
-  std::cout << "Next, input 'y' !! \n> ";  std::cin >> input_y;
+  std::cout << "Set your hand !!" << std::endl;
+  std::cout << "x = "; std::cin >> input_x;
+  std::cout << "y = "; std::cin >> input_y;
   input_position(input_x - 1, input_y - 1);
 }
 

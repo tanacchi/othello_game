@@ -1,5 +1,12 @@
 #include "include/Player_series.h"
 
+enum class Mode {
+  NORMAL_F,
+  NORMAL_B,
+  PERSONAL,
+  AUTO
+};
+
 enum class Task {
   INIT,
   OP,
@@ -11,7 +18,6 @@ enum class Task {
   SWITCH,
   ED
 };
-
 
 /*
 
@@ -55,43 +61,53 @@ enemy_stoneを選んで置く操作
 
 /*
 
-ボードをset_hand時にｃｐｕ内に入れる
-set_hand(BoardMaster board)
-
-アクセスできないそうなので設計しなおしましょう
-
 Player型ポインタで扱いたいので
 set_handは仮想関数で書きたい
 * フレンド関数とやらを試してみる
 * そもそものPlayer系統、BoardMaster系統、OthelloAI系統の関係や設計を見なおしてみる
 
+*/
+
+/*
+
+[設定可能にする項目]
+--personal human vs human
+--normal   human vs cpu    --level  cpu's level
+--auto     cpu   vs cpu    --level  cpu's level
 
 */
- 
+
 class HandList {
   int turn;
   Stone stone;
   int hand_x;
   int hand_y;
 public:
-  HandList(int t, Stone s, int x, int y) {
-    turn = t; stone = s; hand_x = x; hand_y = y;
-  }
-  void report() {
-    std::cout << "[turn] : " << turn << '\t';
-    std::cout << "Stone : " << convert_stone_to_char(stone) << '\t';
-    std::cout << "x = " << hand_x << ", y = " << hand_y << std::endl;
-  }
+  HandList(int t, Stone s, int x, int y);
+  void report();
 };
+
+HandList::HandList(int t, Stone s, int x, int y) {
+    turn = t; stone = s; hand_x = x; hand_y = y;
+}
+
+void HandList::report() {
+  std::cout << "[turn] : " << turn << '\t';
+  std::cout << "Stone : " << convert_stone_to_char(stone) << '\t';
+  std::cout << "x = " << hand_x << ", y = " << hand_y << std::endl;
+}
 
 class GameMaster {
   BoardMaster board;
+  HumanPlayer human[2];
   ComputerPlayer cpu[2];
-  Player* active_player;
+  Player *participant[2];
+  Player *active_player;
   int turn;
   int x, y;
   std::list<HandList> hand_list;
 public:
+  GameMaster(Mode mode);
   Task run(Task mode);
   Task task_init();
   Task task_op();
@@ -103,6 +119,29 @@ public:
   Task task_ed();
   void show_hand_list();
 };
+
+GameMaster::GameMaster(Mode mode) {
+  switch (mode) {
+  case Mode::NORMAL_F:
+    participant[0] = &human[0];
+    participant[1] = &cpu[0];
+    break;
+  case Mode::NORMAL_B:
+    participant[0] = &cpu[0];
+    participant[1] = &human[0];
+    break;
+  case Mode::PERSONAL:
+    participant[0] = &human[0];
+    participant[1] = &human[1];
+    break;
+  case Mode::AUTO:
+    participant[0] = &cpu[0];
+    participant[1] = &cpu[1];
+    break;
+  }
+  participant[0]->set_my_stone(Stone::WHITE);
+  participant[1]->set_my_stone(Stone::BLACK);
+}
 
 Task GameMaster::run(Task mode) {
   switch (mode) {
@@ -120,14 +159,13 @@ Task GameMaster::run(Task mode) {
 Task GameMaster::task_init() {
   turn = 0;
   board.init_board();
-  cpu[0].set_my_stone(Stone::WHITE);
-  cpu[1].set_my_stone(Stone::BLACK);
-  active_player = &cpu[0];
+  active_player = participant[0];
   return Task::OP;
 }
 
 Task GameMaster::task_op() {
-  board.set_active_stone(active_player->get_my_stone());
+  Stone active_stone = active_player->get_my_stone();
+  board.set_active_stone(active_stone);
   std::cout << "turn " << turn + 1 << std::endl;
   std::cout << "Now is " << convert_stone_to_char(active_player->get_my_stone()) << std::endl;
   board.put_dot_stone();
@@ -162,7 +200,7 @@ Task GameMaster::task_judge() {
 }
 
 Task GameMaster::task_switch() {
-  active_player = &cpu[++turn % 2];
+  active_player = participant[++turn % 2];
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
   return Task::OP;
 }
@@ -181,14 +219,30 @@ void GameMaster::show_hand_list() {
   }
 }
 
-int main() {
-  Task mode = Task::INIT;
-  GameMaster master;
-
-  while (1)
-    mode = master.run(mode);
-
-  return 0;
+void show_usage() {
+  std::cout << "[Usage] \n"
+            << "Options  : --normal <first player (human or cpu)>（通常のコンピューターとの対戦）\n"
+            << "           --personal（２人での対人戦）\n"
+            << "           --auto（コンピューター同士での自動プレイ）" << std::endl;
 }
 
+int main(int argc, char ** argv) {
+  
+  Mode mode = Mode::NORMAL_F;
+  if (argc > 1) {
+    if (!strcmp(argv[1], "--normal")) 
+      if (argc > 2) {
+        if (!strcmp(argv[2], "human")) mode = Mode::NORMAL_F;
+        else if (!strcmp(argv[2], "cpu")) mode = Mode::NORMAL_B;
+        else show_usage();
+      }
+    else if (!strcmp(argv[1], "--personal")) mode = Mode::PERSONAL;
+    else if (!strcmp(argv[1], "--auto"))     mode = Mode::AUTO;
+    else show_usage();
+  }
+  
+  Task task = Task::INIT;
+  GameMaster master(mode);
+  while (1) task = master.run(task);
 
+}
