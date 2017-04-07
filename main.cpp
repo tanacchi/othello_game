@@ -144,7 +144,8 @@ GameMaster::GameMaster(Mode mode) {
 }
 
 Task GameMaster::run(Task mode) {
-  switch (mode) {  case Task::INIT:   return task_init();
+  switch (mode) {
+  case Task::INIT:   return task_init();
   case Task::OP:     return task_op();
   case Task::SET:    return task_set();
   case Task::INSERT: return task_insert();
