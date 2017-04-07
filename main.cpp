@@ -101,8 +101,8 @@ class GameMaster {
   BoardMaster board;
   HumanPlayer human[2];
   ComputerPlayer cpu[2];
-  Player* participant[];
-  Player* active_player;
+  Player *participant[2];
+  Player *active_player;
   int turn;
   int x, y;
   std::list<HandList> hand_list;
@@ -134,7 +134,7 @@ GameMaster::GameMaster(Mode mode) {
     participant[0] = &human[0];
     participant[1] = &human[1];
     break;
-  case Mode::AUTO: break;
+  case Mode::AUTO:
     participant[0] = &cpu[0];
     participant[1] = &cpu[1];
     break;
@@ -163,7 +163,8 @@ Task GameMaster::task_init() {
 }
 
 Task GameMaster::task_op() {
-  board.set_active_stone(active_player->get_my_stone());
+  Stone active_stone = active_player->get_my_stone();
+  board.set_active_stone(active_stone);
   std::cout << "turn " << turn + 1 << std::endl;
   std::cout << "Now is " << convert_stone_to_char(active_player->get_my_stone()) << std::endl;
   board.put_dot_stone();
@@ -176,7 +177,7 @@ Task GameMaster::task_set() {
   active_player->get_hand(x, y);
   if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; return Task::JUDGE; }
   if (board.stone_compare(x, y, Stone::DOT)) return Task::INSERT;
-  else { std::cout << " ee \n"; return Task::SET; }
+  else return Task::SET;
 }
 
 Task GameMaster::task_insert() {
@@ -217,9 +218,22 @@ void GameMaster::show_hand_list() {
   }
 }
 
+void show_usage() {
+  ;
+}
+
 int main(int argc, char ** argv) {
+  
+  Mode mode = Mode::NORMAL_F;
+  if (argc > 1) {
+    if (!strcmp(argv[1], "--normal"))        mode = Mode::NORMAL_F;
+    else if (!strcmp(argv[1], "--personal")) mode = Mode::PERSONAL;
+    else if (!strcmp(argv[1], "--auto"))     mode = Mode::AUTO;
+    else show_usage();
+  }
+  
   Task task = Task::INIT;
-  GameMaster master(Mode::PERSONAL);
+  GameMaster master(mode);
   while (1) task = master.run(task);
 
 }
