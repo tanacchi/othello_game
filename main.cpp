@@ -120,7 +120,7 @@ public:
   void show_hand_list();
 };
 
-GameMaster::GameMaster(Mode mode) {
+GameMaster::GameMaster(Mode mode) { // TODO : どうにかしましょう
   switch (mode) {
   case Mode::NORMAL_F:
     participant[0] = &human[0];
