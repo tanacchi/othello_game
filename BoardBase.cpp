@@ -66,7 +66,7 @@ int BoardBase::get_reversible_length(int x, int y, int dx, int dy) {
 }
 
 bool BoardBase::is_inside_board(int x, int y) {
-  return (0 <= x && x <= BOARD_SIZE) && (0 <= y && y < BOARD_SIZE);
+  return (0 <= x && x < BOARD_SIZE) && (0 <= y && y < BOARD_SIZE);
 }
 
 Stone BoardBase::get_enemy() {
