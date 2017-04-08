@@ -171,6 +171,8 @@ Task GameMaster::task_op() {
   Stone active_stone = active_player->get_my_stone();
   board.set_active_stone(active_stone);
   std::cout << "turn " << turn + 1 << std::endl;
+  std::cout << "WHITE STONE (" << convert_stone_to_char(Stone::WHITE) << ") : " << board.count_stone(Stone::WHITE) << '\n'
+            << "BLACK STONE (" << convert_stone_to_char(Stone::BLACK) << ") : " << board.count_stone(Stone::BLACK) << '\n' <<std::endl;
   std::cout << "Now is " << convert_stone_to_char(active_player->get_my_stone()) << std::endl;
   board.put_dot_stone();
   board.show_board();
@@ -210,9 +212,8 @@ Task GameMaster::task_switch() {
 }
 
 Task GameMaster::task_ed() {
-  std::cout << "WHITE STONE : " << board.count_stone(Stone::WHITE) << '\n'
-            << "BLACK STONE : " << board.count_stone(Stone::BLACK) << '\n'
-            <<std::endl;
+  std::cout << "WHITE STONE (" << convert_stone_to_char(Stone::WHITE) << ") : " << board.count_stone(Stone::WHITE) << '\n'
+            << "BLACK STONE (" << convert_stone_to_char(Stone::BLACK) << ") : " << board.count_stone(Stone::BLACK) << '\n' <<std::endl;
   show_hand_list();
   exit (0);
 }
@@ -231,8 +232,7 @@ void show_usage() {
             << "* Options  : --normal <first player (human or cpu)>（通常のコンピューターとの対戦）   *\n"
             << "*            --personal（２人での対人戦）                                             *\n" 
             << "*            --auto（コンピューター同士での自動プレイ）                               *\n"
-            << "***************************************************************************************\n"
-            << std::endl;
+            << "***************************************************************************************\n" << std::endl;
 }
 
 int main(int argc, char ** argv) {
