@@ -125,18 +125,22 @@ GameMaster::GameMaster(Mode mode) { // TODO : どうにかしましょう
   case Mode::NORMAL_F:
     participant[0] = &human[0];
     participant[1] = &cpu[0];
+    std::cout << "Normal mode !! First, your turn." << std::endl;
     break;
   case Mode::NORMAL_B:
     participant[0] = &cpu[0];
     participant[1] = &human[0];
+    std::cout << "Normal mode !! First, my turn." << std::endl;
     break;
   case Mode::PERSONAL:
     participant[0] = &human[0];
     participant[1] = &human[1];
+    std::cout << "Personal mode !!" << std::endl;
     break;
   case Mode::AUTO:
     participant[0] = &cpu[0];
     participant[1] = &cpu[1];
+    std::cout << "Auto mode !!" << std::endl;
     break;
   }
   participant[0]->set_my_stone(Stone::WHITE);
@@ -177,7 +181,7 @@ Task GameMaster::task_set() {
   active_player->set_hand();
   active_player->get_hand(x, y);
   if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; return Task::JUDGE; }
-  if (board.stone_compare(x, y, Stone::DOT)) return Task::INSERT;
+  if (board.is_available_position(x, y)) return Task::INSERT;
   else return Task::SET;
 }
 
@@ -201,13 +205,14 @@ Task GameMaster::task_judge() {
 
 Task GameMaster::task_switch() {
   active_player = participant[++turn % 2];
-  std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  std::this_thread::sleep_for(std::chrono::milliseconds(1000));
   return Task::OP;
 }
 
 Task GameMaster::task_ed() {
-  std::cout << "BLACK STONE : " << board.count_stone(Stone::BLACK) << '\n'
-            << "WHITE STONE : " << board.count_stone(Stone::WHITE) << '\n' <<std::endl;
+  std::cout << "WHITE STONE : " << board.count_stone(Stone::WHITE) << '\n'
+            << "BLACK STONE : " << board.count_stone(Stone::BLACK) << '\n'
+            <<std::endl;
   show_hand_list();
   exit (0);
 }
@@ -221,10 +226,13 @@ void GameMaster::show_hand_list() {
 
 void show_usage() {
   std::cout << '\n'
-            << "[Usage] \n"
-            << "Options  : --normal <first player (human or cpu)>（通常のコンピューターとの対戦）\n"
-            << "           --personal（２人での対人戦）\n"
-            << "           --auto（コンピューター同士での自動プレイ）\n" << std::endl;
+            << "***************************************************************************************\n"
+            << "* [Usage]                                                                             *\n"
+            << "* Options  : --normal <first player (human or cpu)>（通常のコンピューターとの対戦）   *\n"
+            << "*            --personal（２人での対人戦）                                             *\n" 
+            << "*            --auto（コンピューター同士での自動プレイ）                               *\n"
+            << "***************************************************************************************\n"
+            << std::endl;
 }
 
 int main(int argc, char ** argv) {
