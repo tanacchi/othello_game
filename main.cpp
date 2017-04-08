@@ -178,9 +178,9 @@ Task GameMaster::task_op() {
 }
 
 Task GameMaster::task_set() {
+  if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; return Task::JUDGE; }
   active_player->set_hand();
   active_player->get_hand(x, y);
-  if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; return Task::JUDGE; }
   if (board.is_available_position(x, y)) return Task::INSERT;
   else return Task::SET;
 }
