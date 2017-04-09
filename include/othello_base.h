@@ -5,6 +5,7 @@
 #include <random>
 #include <thread>
 #include <string.h>
+#include <algorithm>
 
 #define BOARD_SIZE 8
 

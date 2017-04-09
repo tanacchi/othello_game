@@ -12,6 +12,7 @@ public:
   void set_score(int s);
   int get_total_score();
   void show_score_list();
+  bool operator>(const StoneScoreList &right)const;
 };
 
 class OthelloAI : private BoardMaster {
