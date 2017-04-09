@@ -168,11 +168,7 @@ Task GameMaster::task_init() {
 }
 
 Task GameMaster::task_op() {
-<<<<<<< HEAD
   Stone active_stone = active_player->get_my_stone();
-=======
-  Stone active_stone {active_player->get_my_stone()};
->>>>>>> make/OthelloAI
   board.set_active_stone(active_stone);
   std::cout << "turn " << turn + 1 << std::endl;
   std::cout << "WHITE STONE (" << convert_stone_to_char(Stone::WHITE) << ") : " << board.count_stone(Stone::WHITE) << '\n'
@@ -185,17 +181,10 @@ Task GameMaster::task_op() {
 
 Task GameMaster::task_set() {
   if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; return Task::JUDGE; }
-<<<<<<< HEAD
-  active_player->set_hand();
-  active_player->get_hand(x, y);
-  if (board.is_available_position(x, y)) return Task::INSERT;
-  else return Task::SET;
-=======
-  active_player->set_hand(board);
+ active_player->set_hand(board);
   active_player->get_hand(x, y);
   if (board.is_available_position(x, y)) return Task::INSERT;
   else { std::cout << "It's wrong hand !! Try again." << std::endl; return Task::SET; }
->>>>>>> make/OthelloAI
 }
 
 Task GameMaster::task_insert() {
@@ -248,11 +237,7 @@ void show_usage() {
 
 int main(int argc, char ** argv) {
   
-<<<<<<< HEAD
-  Mode mode = Mode::NORMAL_F;
-=======
   Mode mode {Mode::NORMAL_F};
->>>>>>> make/OthelloAI
   if (argc > 1) {
     if (!strcmp(argv[1], "--normal")) { 
       if (argc > 2) {
@@ -267,11 +252,7 @@ int main(int argc, char ** argv) {
   }
   else show_usage();
   
-<<<<<<< HEAD
-  Task task = Task::INIT;
-=======
   Task task {Task::INIT};
->>>>>>> make/OthelloAI
   GameMaster master(mode);
   while (1) task = master.run(task);
 

@@ -5,10 +5,7 @@
 #include <random>
 #include <thread>
 #include <string.h>
-<<<<<<< HEAD
-=======
 #include <algorithm>
->>>>>>> make/OthelloAI
 
 #define BOARD_SIZE 8
 
