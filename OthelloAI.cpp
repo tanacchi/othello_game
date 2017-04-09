@@ -5,7 +5,7 @@ StoneScoreList::StoneScoreList(int x, int y) {
 }
  
 void StoneScoreList::set_total_score() {
-  for (int i = 0; i < score.size(); i++) total_score += score[i];
+  for (size_t i {0}; i < score.size(); i++) total_score += score[i];
 }
 
 void StoneScoreList::get_coordinate(int &x, int &y) {
@@ -24,8 +24,8 @@ void StoneScoreList::show_score_list() {
 }
 
 void OthelloAI::get_current_board(BoardMaster game_board) {
-  for (int i = 0; i < BOARD_SIZE; i++)
-    for (int j = 0; j < BOARD_SIZE; j++)
+  for (size_t i {0}; i < BOARD_SIZE; i++)
+    for (size_t j {0}; j < BOARD_SIZE; j++)
       insert_stone(j, i, game_board.get_stone(j, i));
 }
 
