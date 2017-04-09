@@ -16,7 +16,6 @@ public:
 
 class OthelloAI : private BoardMaster {
   int dist_x, dist_y;
-  Stone mystone;
   std::mt19937 rand_pos;
   std::vector<StoneScoreList> score_list;
 public:
@@ -24,4 +23,5 @@ public:
   ~OthelloAI();
   void get_conclusion(int &x, int &y);
   void random_maker();
+  void seek_effective_hand();
 };

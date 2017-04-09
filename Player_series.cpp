@@ -40,6 +40,7 @@ void ComputerPlayer::set_hand(BoardMaster game_board) {
   OthelloAI* p;
   p = new OthelloAI(game_board, get_my_stone());
   p->random_maker();
+  p->seek_effective_hand();
   p->get_conclusion(dist_x, dist_y);
   input_position(dist_x, dist_y);
   delete p;

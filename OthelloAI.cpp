@@ -21,7 +21,7 @@ int StoneScoreList::get_total_score() {
   return total_score;
 }
 void StoneScoreList::show_score_list() {
-  std::cout << "x = " << hand_x << ", y = " << hand_y << ' ';
+  std::cout << "x = " << hand_x+1 << ", y = " << hand_y+1 << ' ';
   std::cout << "Score : " << total_score << std::endl;
 }
 
@@ -31,7 +31,7 @@ OthelloAI::OthelloAI(BoardMaster game_board, Stone active_stone) : rand_pos { st
   for (size_t i {0}; i < BOARD_SIZE; i++)
     for (size_t j {0}; j < BOARD_SIZE; j++)
       insert_stone(j, i, game_board.get_stone(j, i));
-  mystone = active_stone;
+  set_active_stone(active_stone);
 }
 
 OthelloAI::~OthelloAI() {
@@ -46,4 +46,17 @@ void OthelloAI::random_maker() {
 void OthelloAI::get_conclusion(int &x, int &y) { 
   x = dist_x;
   y = dist_y;
+}
+
+void OthelloAI::seek_effective_hand() {
+  put_dot_stone();
+  for (int i = 0; i < BOARD_SIZE; i++)
+    for (int j = 0; j < BOARD_SIZE; j++)
+      if (stone_compare(j, i, Stone::DOT)) score_list.push_back(StoneScoreList(j, i));
+  for (int i = 0; i < score_list.size(); i++) {
+    int x, y;
+    score_list[i].get_coordinate(x, y);    
+    score_list[i].set_score(count_reversible_stone(x, y));
+  }
+  for (int i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
 }
