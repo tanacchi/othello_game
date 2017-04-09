@@ -6,17 +6,17 @@ class Player {
 public:
   void set_my_stone(Stone stone);
   void input_position(const int input_x, const int input_y);
-  virtual void set_hand();
+  virtual void set_hand(BoardMaster game_board);
   Stone get_my_stone();
   void get_hand(int &x, int &y);
 };
 
 class HumanPlayer : public Player {
 public:
-  void set_hand();
+  void set_hand(BoardMaster game_board);
 };
 
-class ComputerPlayer : public Player, private OthelloAI {
+class ComputerPlayer : public Player{
 public:
-  void set_hand();
+  void set_hand(BoardMaster game_board);
 };

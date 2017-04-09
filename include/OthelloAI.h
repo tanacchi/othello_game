@@ -12,6 +12,7 @@ public:
   void set_score(int s);
   int get_total_score();
   void show_score_list();
+  bool operator>(const StoneScoreList &right)const;
 };
 
 class OthelloAI : private BoardMaster {
@@ -19,9 +20,10 @@ class OthelloAI : private BoardMaster {
   std::mt19937 rand_pos;
   std::vector<StoneScoreList> score_list;
 public:
-  OthelloAI();
-  void get_current_board(BoardMaster game_board);
-  void seek_effective_hand();
+  OthelloAI(BoardMaster game_board, Stone mystone);
+  ~OthelloAI();
   void get_conclusion(int &x, int &y);
   void random_maker();
+  void seek_effective_hand();
+  bool is_edge(int x, int y);
 };
