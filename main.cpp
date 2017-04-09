@@ -32,7 +32,7 @@ REFACT : 高度な出力を使ってみる
 /*
 
 AI と他のクラスの関係とか整理
-
+x
 [AIのしごと]
 仮想のボードを用意する
 仮想ボードをMasterから同期する
@@ -181,7 +181,7 @@ Task GameMaster::task_op() {
 
 Task GameMaster::task_set() {
   if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; return Task::JUDGE; }
-  active_player->set_hand();
+  active_player->set_hand(board);
   active_player->get_hand(x, y);
   if (board.is_available_position(x, y)) return Task::INSERT;
   else { std::cout << "It's wrong hand !! Try again." << std::endl; return Task::SET; }

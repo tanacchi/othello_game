@@ -1,5 +1,7 @@
 #include "include/OthelloAI.h"
 
+// ------------------------- StoneList -----------------------------------------
+
 StoneScoreList::StoneScoreList(int x, int y) {
   hand_x = x; hand_y = y;
 }
@@ -23,19 +25,16 @@ void StoneScoreList::show_score_list() {
   std::cout << "Score : " << total_score << std::endl;
 }
 
-void OthelloAI::get_current_board(BoardMaster game_board) {
+// ------------------------- OthelloAI -----------------------------------------
+
+OthelloAI::OthelloAI(BoardMaster game_board, Stone active_stone) : rand_pos { std::random_device{}() } {
   for (size_t i {0}; i < BOARD_SIZE; i++)
     for (size_t j {0}; j < BOARD_SIZE; j++)
       insert_stone(j, i, game_board.get_stone(j, i));
+  mystone = active_stone;
 }
 
-void OthelloAI::get_conclusion(int &x, int &y) { 
-  x = dist_x;
-  y = dist_y;
-}
-
-OthelloAI::OthelloAI() : rand_pos { std::random_device{}() }
-{
+OthelloAI::~OthelloAI() {
 }
 
 void OthelloAI::random_maker() {
@@ -44,7 +43,7 @@ void OthelloAI::random_maker() {
   dist_y = rand100(rand_pos);
 }
 
-void OthelloAI::seek_effective_hand() {
-  dist_x;
-  dist_y;
+void OthelloAI::get_conclusion(int &x, int &y) { 
+  x = dist_x;
+  y = dist_y;
 }

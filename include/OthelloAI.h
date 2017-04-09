@@ -16,12 +16,12 @@ public:
 
 class OthelloAI : private BoardMaster {
   int dist_x, dist_y;
+  Stone mystone;
   std::mt19937 rand_pos;
   std::vector<StoneScoreList> score_list;
 public:
-  OthelloAI();
-  void get_current_board(BoardMaster game_board);
-  void seek_effective_hand();
+  OthelloAI(BoardMaster game_board, Stone mystone);
+  ~OthelloAI();
   void get_conclusion(int &x, int &y);
   void random_maker();
 };
