@@ -25,4 +25,5 @@ public:
   void get_conclusion(int &x, int &y);
   void random_maker();
   void seek_effective_hand();
+  bool is_edge(int x, int y);
 };
