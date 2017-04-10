@@ -26,4 +26,5 @@ public:
   void random_maker();
   void seek_effective_hand();
   bool is_edge(int x, int y);
+  void record_dot_stone();
 };

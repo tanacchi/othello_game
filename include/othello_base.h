@@ -6,6 +6,7 @@
 #include <thread>
 #include <string.h>
 #include <algorithm>
+#include <fstream>
 
 #define BOARD_SIZE 8
 

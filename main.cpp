@@ -16,6 +16,7 @@ enum class Task {
   WRITE,
   JUDGE,
   SWITCH,
+  ASK,
   ED
 };
 
@@ -94,13 +95,13 @@ HandList::HandList(int t, Stone s, int x, int y) {
 void HandList::report() {
   std::cout << "[turn] : " << turn << '\t';
   std::cout << "Stone : " << convert_stone_to_char(stone) << '\t';
-  std::cout << "x = " << hand_x << ", y = " << hand_y << std::endl;
+  std::cout << "x = " << hand_x << ", y = " << hand_y << std::endl;;
 }
 
 class GameMaster {
   BoardMaster board;
-  HumanPlayer human[2];
-  ComputerPlayer cpu[2];
+  // HumanPlayer human[2];
+  // ComputerPlayer cpu[2];
   Player *participant[2];
   Player *active_player;
   int turn;
@@ -116,33 +117,45 @@ public:
   Task task_write();
   Task task_judge();
   Task task_switch();
+  Task task_ask();
   Task task_ed();
   void show_hand_list();
+  void set_participant(Mode mode, Player* player[]);
 };
 
-GameMaster::GameMaster(Mode mode) { // TODO : どうにかしましょう
+void GameMaster::set_participant(Mode mode, Player* player[]) {
+  HumanPlayer* human[2];
+  ComputerPlayer* cpu[2];
+  human[0] = new HumanPlayer;
+  human[1] = new HumanPlayer;
+  cpu[0] = new ComputerPlayer;
+  cpu[1] = new ComputerPlayer;
   switch (mode) {
   case Mode::NORMAL_F:
-    participant[0] = &human[0];
-    participant[1] = &cpu[0];
+    player[0] = human[0];
+    player[1] = cpu[0];
     std::cout << "Normal mode !! First, your turn." << std::endl;
     break;
   case Mode::NORMAL_B:
-    participant[0] = &cpu[0];
-    participant[1] = &human[0];
+    player[0] = cpu[0];
+    player[1] = human[0];
     std::cout << "Normal mode !! First, my turn." << std::endl;
     break;
   case Mode::PERSONAL:
-    participant[0] = &human[0];
-    participant[1] = &human[1];
+    player[0] = human[0];
+    player[1] = human[1];
     std::cout << "Personal mode !!" << std::endl;
     break;
   case Mode::AUTO:
-    participant[0] = &cpu[0];
-    participant[1] = &cpu[1];
+    player[0] = cpu[0];
+    player[1] = cpu[1];
     std::cout << "Auto mode !!" << std::endl;
     break;
   }
+}
+
+GameMaster::GameMaster(Mode mode) { // TODO : どうにかしましょう
+  set_participant(mode, participant);
   participant[0]->set_my_stone(Stone::WHITE);
   participant[1]->set_my_stone(Stone::BLACK);
 }
@@ -156,6 +169,7 @@ Task GameMaster::run(Task mode) {
   case Task::WRITE:  return task_write();
   case Task::JUDGE:  return task_judge();
   case Task::SWITCH: return task_switch();
+  case Task::ASK:    return task_ask();
   case Task::ED:     return task_ed();
   }
 }
@@ -181,7 +195,7 @@ Task GameMaster::task_op() {
 
 Task GameMaster::task_set() {
   if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; return Task::JUDGE; }
- active_player->set_hand(board);
+  active_player->set_hand(board);
   active_player->get_hand(x, y);
   if (board.is_available_position(x, y)) return Task::INSERT;
   else { std::cout << "It's wrong hand !! Try again." << std::endl; return Task::SET; }
@@ -202,27 +216,39 @@ Task GameMaster::task_judge() {
   board.remove_dot_stone();
   board.show_board();
   std::cout << "\n\n" << std::endl;
-  return (board.can_continue()) ? Task::SWITCH : Task::ED;
+  return (board.can_continue()) ? Task::SWITCH : Task::ASK;
 }
 
 Task GameMaster::task_switch() {
   active_player = participant[++turn % 2];
-  std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+  std::this_thread::sleep_for(std::chrono::milliseconds(100));
   return Task::OP;
 }
 
-Task GameMaster::task_ed() {
+Task GameMaster::task_ask() {
   std::cout << "WHITE STONE (" << convert_stone_to_char(Stone::WHITE) << ") : " << board.count_stone(Stone::WHITE) << '\n'
             << "BLACK STONE (" << convert_stone_to_char(Stone::BLACK) << ") : " << board.count_stone(Stone::BLACK) << '\n' <<std::endl;
   show_hand_list();
+  std::string answer;
+  std::cout << "Continue ?? (yes/no)\n>"; 
+  std::cin >> answer;
+  if (answer == "yes") return Task::INIT;
+  else if (answer == "no") return Task::ED;
+  else return Task::ASK;
+}
+
+Task GameMaster::task_ed() {
   exit (0);
 }
 
 void GameMaster::show_hand_list() {
   std::list<HandList>::iterator p {hand_list.begin()};
+  // fout = std::ofstream("log.txt");
+  // if (!fout) return;
   while(p != hand_list.end()) {
     p++->report();
   }
+ //  fout.close();
 }
 
 void show_usage() {
@@ -255,5 +281,4 @@ int main(int argc, char ** argv) {
   Task task {Task::INIT};
   GameMaster master(mode);
   while (1) task = master.run(task);
-
 }

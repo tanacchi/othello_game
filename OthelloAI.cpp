@@ -19,6 +19,7 @@ void StoneScoreList::set_score(int s) {
 int StoneScoreList::get_total_score() {
   return total_score;
 }
+
 void StoneScoreList::show_score_list() {
   std::cout << "x = " << hand_x+1 << ", y = " << hand_y+1 << ' ';
   std::cout << "Score : " << total_score << std::endl;
@@ -52,10 +53,7 @@ void OthelloAI::get_conclusion(int &x, int &y) {
 }
 
 void OthelloAI::seek_effective_hand() {
-  put_dot_stone();
-  for (int i = 0; i < BOARD_SIZE; i++)
-    for (int j = 0; j < BOARD_SIZE; j++)
-      if (stone_compare(j, i, Stone::DOT)) score_list.push_back(StoneScoreList(j, i));
+  record_dot_stone();
   int x, y;
   for (int i = 0; i < score_list.size(); i++) {
     score_list[i].get_coordinate(x, y);
@@ -64,11 +62,18 @@ void OthelloAI::seek_effective_hand() {
     score_list[i].set_total_score();
   }
   std::sort(score_list.begin(), score_list.end(), std::greater<StoneScoreList>());  
-  for (int i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
   score_list[0].get_coordinate(x, y);
   dist_x = x; dist_y = y;
 }
 
 bool OthelloAI::is_edge(int x, int y) {
-  return (x == 0 && (y == 0 || y == 7)) || (x == 7 && (y == 0 || y == 7));
+  return (!x || x == 7) && (!y || y == 7);
+}
+
+void OthelloAI::record_dot_stone() {
+  put_dot_stone();
+  for (int i = 0; i < BOARD_SIZE; i++)
+    for (int j = 0; j < BOARD_SIZE; j++)
+      if (stone_compare(j, i, Stone::DOT)) score_list.push_back(StoneScoreList(j, i));
+  remove_dot_stone();
 }
