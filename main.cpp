@@ -62,15 +62,6 @@ enemy_stoneを選んで置く操作
 
 /*
 
-Player型ポインタで扱いたいので
-set_handは仮想関数で書きたい
-* フレンド関数とやらを試してみる
-* そもそものPlayer系統、BoardMaster系統、OthelloAI系統の関係や設計を見なおしてみる
-
-*/
-
-/*
-
 [設定可能にする項目]
 --personal human vs human
 --normal   human vs cpu    --level  cpu's level
@@ -100,15 +91,13 @@ void HandList::report() {
 
 class GameMaster {
   BoardMaster board;
-  // HumanPlayer human[2];
-  // ComputerPlayer cpu[2];
   Player *participant[2];
   Player *active_player;
   int turn;
   int x, y;
   std::list<HandList> hand_list;
 public:
-  GameMaster(Mode mode);
+  GameMaster(Player* player[]);
   Task run(Task mode);
   Task task_init();
   Task task_op();
@@ -120,42 +109,11 @@ public:
   Task task_ask();
   Task task_ed();
   void show_hand_list();
-  void set_participant(Mode mode, Player* player[]);
 };
 
-void GameMaster::set_participant(Mode mode, Player* player[]) {
-  HumanPlayer* human[2];
-  ComputerPlayer* cpu[2];
-  human[0] = new HumanPlayer;
-  human[1] = new HumanPlayer;
-  cpu[0] = new ComputerPlayer;
-  cpu[1] = new ComputerPlayer;
-  switch (mode) {
-  case Mode::NORMAL_F:
-    player[0] = human[0];
-    player[1] = cpu[0];
-    std::cout << "Normal mode !! First, your turn." << std::endl;
-    break;
-  case Mode::NORMAL_B:
-    player[0] = cpu[0];
-    player[1] = human[0];
-    std::cout << "Normal mode !! First, my turn." << std::endl;
-    break;
-  case Mode::PERSONAL:
-    player[0] = human[0];
-    player[1] = human[1];
-    std::cout << "Personal mode !!" << std::endl;
-    break;
-  case Mode::AUTO:
-    player[0] = cpu[0];
-    player[1] = cpu[1];
-    std::cout << "Auto mode !!" << std::endl;
-    break;
-  }
-}
-
-GameMaster::GameMaster(Mode mode) { // TODO : どうにかしましょう
-  set_participant(mode, participant);
+GameMaster::GameMaster(Player* player[]) {
+  participant[0] = player[0];
+  participant[1] = player[1];
   participant[0]->set_my_stone(Stone::WHITE);
   participant[1]->set_my_stone(Stone::BLACK);
 }
@@ -238,17 +196,14 @@ Task GameMaster::task_ask() {
 }
 
 Task GameMaster::task_ed() {
-  exit (0);
+  return Task::ED;
 }
 
 void GameMaster::show_hand_list() {
   std::list<HandList>::iterator p {hand_list.begin()};
-  // fout = std::ofstream("log.txt");
-  // if (!fout) return;
   while(p != hand_list.end()) {
     p++->report();
   }
- //  fout.close();
 }
 
 void show_usage() {
@@ -262,23 +217,15 @@ void show_usage() {
 }
 
 int main(int argc, char ** argv) {
-  
-  Mode mode {Mode::NORMAL_F};
-  if (argc > 1) {
-    if (!strcmp(argv[1], "--normal")) { 
-      if (argc > 2) {
-        if (!strcmp(argv[2], "human")) mode = Mode::NORMAL_F;
-        else if (!strcmp(argv[2], "cpu")) mode = Mode::NORMAL_B;
-        else show_usage();
-      }
-    }
-    else if (!strcmp(argv[1], "--personal")) mode = Mode::PERSONAL;
-    else if (!strcmp(argv[1], "--auto"))     mode = Mode::AUTO;
-    else show_usage();
-  }
-  else show_usage();
+
+  Player* player[2];
+
+  player[0] = new ComputerPlayer;
+  player[1] = new ComputerPlayer;
   
   Task task {Task::INIT};
-  GameMaster master(mode);
-  while (1) task = master.run(task);
+  GameMaster master(player);
+  while (task != Task::ED) task = master.run(task);
+  std::cout << "See you~~\n";
+  return 0;
 }
