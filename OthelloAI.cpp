@@ -62,8 +62,8 @@ void OthelloAI::seek_effective_hand() {
     score_list[i].set_total_score();
   }
   std::sort(score_list.begin(), score_list.end(), std::greater<StoneScoreList>());  
-  score_list[0].get_coordinate(x, y);
-  dist_x = x; dist_y = y;
+  for (int i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
+  score_list[0].get_coordinate(dist_x, dist_y);
 }
 
 bool OthelloAI::is_edge(int x, int y) {

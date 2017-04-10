@@ -22,41 +22,8 @@ enum class Task {
 
 /*
 
-TODO : プレイヤー管理の方法を検討
-TODO : パスされたときの後処理
-
 REFACT : 入力部分を設計しなおしてみる
 REFACT : 高度な出力を使ってみる
-
-*/
-
-/*
-
-AI と他のクラスの関係とか整理
-x
-[AIのしごと]
-仮想のボードを用意する
-仮想ボードをMasterから同期する
-自分でDotを配置する
-Dotの座標とスコアを格納するリストを用意
-メンバ関数でDotごとに評価をつける
-はじめはリバースできる石の個数で採点
-次に角の評価点を上げる
-また自らの評価でenemy_stoneを置き
-5手ぐらい先まですすめる
-最終的に評価点（の得失点差）が一番高い座標を返す
-各段階で評価してからの
-最終的な評価を合計する感じで
-先読みの際にenemy_stoneの置き方をどうしようかって感じではある
-また図でもかきながら考えてみよう
-
-[AIが必要とするもの]
-評価回数管理 <- private
-評価関数
-｛ポジションによる評価
-裏返す個数による評価｝
-enemy_stoneを選んで置く操作
-評価を回数分実行するやつ
 
 */
 
@@ -179,7 +146,7 @@ Task GameMaster::task_judge() {
 
 Task GameMaster::task_switch() {
   active_player = participant[++turn % 2];
-  std::this_thread::sleep_for(std::chrono::milliseconds(100));
+   std::this_thread::sleep_for(std::chrono::milliseconds(100));
   return Task::OP;
 }
 
