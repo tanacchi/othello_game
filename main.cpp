@@ -216,8 +216,10 @@ void show_usage() {
             << "***************************************************************************************\n" << std::endl;
 }
 
-int main(int argc, char ** argv) {
-
+int main(int argc, char** argv) {
+  std::vector<std::string> input_buff;
+  for (int i = 1; i < argc; i++) input_buff.push_back(argv[i]);
+  
   Player* player[2];
 
   player[0] = new ComputerPlayer;
@@ -227,5 +229,6 @@ int main(int argc, char ** argv) {
   GameMaster master(player);
   while (task != Task::ED) task = master.run(task);
   std::cout << "See you~~\n";
+
   return 0;
 }
