@@ -62,7 +62,7 @@ class GameMaster {
   Player *active_player;
   int turn;
   int x, y;
-  std::list<HandList> hand_list;
+  std::vector<HandList> hand_list;
 public:
   GameMaster(Player* player[]);
   Task run(Task mode);
@@ -167,7 +167,7 @@ Task GameMaster::task_ed() {
 }
 
 void GameMaster::show_hand_list() {
-  std::list<HandList>::iterator p {hand_list.begin()};
+  std::vector<HandList>::iterator p {hand_list.begin()};
   while(p != hand_list.end()) {
     p++->report();
   }
@@ -189,7 +189,7 @@ int main(int argc, char** argv) {
   
   Player* player[2];
 
-  player[0] = new ComputerPlayer;
+  player[0] = new HumanPlayer;
   player[1] = new ComputerPlayer;
   
   Task task {Task::INIT};
