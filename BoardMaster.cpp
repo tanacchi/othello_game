@@ -4,7 +4,7 @@ const int dx[8] = { 0, 1, 1, 1, 0,-1,-1,-1 };
 const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
 
 bool BoardMaster::is_available_position(int x, int y) {
-  return is_inside_board(x, y) && (stone_compare(x, y, Stone::SPACE) || stone_compare(x, y, Stone::DOT)) && count_reversible_stone(x, y);
+  return is_inside_board(x, y) && stone_compare(x, y, Stone::SPACE) && count_reversible_stone(x, y);
 }
 
 bool BoardMaster::can_continue() {

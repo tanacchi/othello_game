@@ -115,11 +115,12 @@ Task GameMaster::task_op() {
   std::cout << "Now is " << convert_stone_to_char(active_player->get_my_stone()) << std::endl;
   board.put_dot_stone();
   board.show_board();
+  if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; return Task::JUDGE; }
+  board.remove_dot_stone();
   return Task::SET;
 }
 
 Task GameMaster::task_set() {
-  if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; return Task::JUDGE; }
   active_player->set_hand(board);
   active_player->get_hand(x, y);
   if (board.is_available_position(x, y)) return Task::INSERT;
@@ -138,7 +139,6 @@ Task GameMaster::task_write() {
 }
 
 Task GameMaster::task_judge() {
-  board.remove_dot_stone();
   board.show_board();
   std::cout << "\n\n" << std::endl;
   return (board.can_continue()) ? Task::SWITCH : Task::ASK;

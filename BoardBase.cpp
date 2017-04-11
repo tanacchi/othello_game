@@ -72,4 +72,3 @@ bool BoardBase::is_inside_board(int x, int y) {
 Stone BoardBase::get_enemy() {
   return (active_stone == Stone::WHITE) ? Stone::BLACK : Stone::WHITE;
 }
-

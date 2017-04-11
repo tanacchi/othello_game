@@ -10,9 +10,9 @@ public:
   void set_total_score();
   void get_coordinate(int &x, int &y);
   void set_score(int s);
-  int get_total_score();
   void show_score_list();
   bool operator>(const StoneScoreList &right)const;
+  bool is_edge(int x, int y);
 };
 
 class OthelloAI : private BoardMaster {
@@ -25,6 +25,5 @@ public:
   void get_conclusion(int &x, int &y);
   void random_maker();
   void seek_effective_hand();
-  bool is_edge(int x, int y);
   void record_dot_stone();
 };
