@@ -10,11 +10,11 @@ public:
   bool is_inside_board(int x, int y);
   int count_stone(Stone target);
   int get_reversible_length(int x, int y, int dx, int dy);
-  void init_board();
+  void init();
   void insert_stone(int x, int y); 
   void insert_stone(int x, int y, Stone stone); 
   void set_active_stone(Stone stone);
-  void show_board();
+  void show();
   Stone get_stone(int x, int y);
 };
 

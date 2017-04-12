@@ -4,7 +4,7 @@ BoardBase::BoardBase() {
   board = std::vector<std::vector<Stone> >(BOARD_SIZE, std::vector<Stone>(BOARD_SIZE));
 }
 
-void BoardBase::init_board() {
+void BoardBase::init() {
   for (size_t i {0}; i < board.size(); i++)
     for (size_t j {0}; j < board.front().size(); j++)
       board[i][j] = Stone::SPACE;
@@ -25,7 +25,7 @@ char convert_stone_to_char(Stone src) {
   }
 }
 
-void BoardBase::show_board() {
+void BoardBase::show() {
   std::cout << "---------------------------" << std::endl;
   std::cout << "  ";
   for (size_t i {0}; i < BOARD_SIZE; i++) std::cout << i+1 << ' ';

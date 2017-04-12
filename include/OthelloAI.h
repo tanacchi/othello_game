@@ -12,7 +12,7 @@ public:
   void set_score(int s);
   void show_score_list();
   bool operator>(const StoneScoreList &right)const;
-  bool is_edge(int x, int y);
+  inline bool is_edge(int x, int y);
 };
 
 class OthelloAI : private BoardMaster {

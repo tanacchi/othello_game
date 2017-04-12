@@ -29,7 +29,7 @@ bool StoneScoreList::operator>(const StoneScoreList &right ) const {
   return total_score > right.total_score;
 }
 
-bool StoneScoreList::is_edge(int x, int y) {
+inline bool StoneScoreList::is_edge(int x, int y) {
   return (!x || x == 7) && (!y || y == 7);
 }
 

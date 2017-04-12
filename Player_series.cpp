@@ -2,12 +2,12 @@
 
 // ------------------------- Player --------------------------------------------
 
-void Player::set_my_stone(Stone stone) {
-  my_stone = stone;
+void Player::set_mystone(Stone stone) {
+  mystone = stone;
 }
 
-Stone Player::get_my_stone() {
-  return my_stone;
+Stone Player::get_mystone() {
+  return mystone;
 }
 
 void Player::get_hand(int &x, int &y) {
@@ -30,7 +30,7 @@ void HumanPlayer::set_hand(const BoardMaster game_board) {
 void ComputerPlayer::set_hand(const BoardMaster game_board) {
   int dist_x, dist_y;
   OthelloAI* p;
-  p = new OthelloAI(game_board, get_my_stone());
+  p = new OthelloAI(game_board, get_mystone());
   p->seek_effective_hand();
   p->get_conclusion(hand_x, hand_y);
   delete p;

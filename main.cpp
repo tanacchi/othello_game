@@ -83,8 +83,8 @@ public:
 GameMaster::GameMaster(Player* player[]) {
   participant[0] = player[0];
   participant[1] = player[1];
-  participant[0]->set_my_stone(Stone::WHITE);
-  participant[1]->set_my_stone(Stone::BLACK);
+  participant[0]->set_mystone(Stone::WHITE);
+  participant[1]->set_mystone(Stone::BLACK);
 }
 
 Task GameMaster::run(Task mode) {
@@ -103,20 +103,20 @@ Task GameMaster::run(Task mode) {
 
 Task GameMaster::task_init() {
   turn = 0;
-  board.init_board();
+  board.init();
   active_player = participant[0];
   return Task::OP;
 }
 
 Task GameMaster::task_op() {
-  Stone active_stone = active_player->get_my_stone();
+  Stone active_stone = active_player->get_mystone();
   board.set_active_stone(active_stone);
   std::cout << "turn " << turn + 1 << std::endl;
   std::cout << "WHITE STONE (" << convert_stone_to_char(Stone::WHITE) << ") : " << board.count_stone(Stone::WHITE) << '\n'
             << "BLACK STONE (" << convert_stone_to_char(Stone::BLACK) << ") : " << board.count_stone(Stone::BLACK) << '\n' <<std::endl;
-  std::cout << "Now is " << convert_stone_to_char(active_player->get_my_stone()) << std::endl;
+  std::cout << "Now is " << convert_stone_to_char(active_player->get_mystone()) << std::endl;
   board.put_dot_stone();
-  board.show_board();
+  board.show();
   if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; return Task::JUDGE; }
   board.remove_dot_stone();
   return Task::SET;
@@ -136,19 +136,19 @@ Task GameMaster::task_insert() {
 }
 
 Task GameMaster::task_write() {
-  hand_list.push_back(HandList(turn+1, active_player->get_my_stone(), x+1, y+1));
+  hand_list.push_back(HandList(turn+1, active_player->get_mystone(), x+1, y+1));
   return Task::JUDGE;
 }
 
 Task GameMaster::task_judge() {
-  board.show_board();
+  board.show();
   std::cout << "\n\n" << std::endl;
   return (board.can_continue()) ? Task::SWITCH : Task::ASK;
 }
 
 Task GameMaster::task_switch() {
   active_player = participant[++turn % 2];
-   std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  wait(100);
   return Task::OP;
 }
 
