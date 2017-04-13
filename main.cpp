@@ -1,12 +1,5 @@
 #include "include/Player_series.h"
 
-enum class Mode {
-  NORMAL_F,
-  NORMAL_B,
-  PERSONAL,
-  AUTO
-};
-
 enum class Task {
   INIT,
   OP,
@@ -27,9 +20,6 @@ REFACT : 高度な出力を使ってみる
 
 TODO : 繰り返し探索をするならAIはネスト構造にするべき？
 
-*/
-
-/*
 
 [設定可能にする項目]
 --personal human vs human
@@ -55,7 +45,7 @@ HandList::HandList(int t, Stone s, int x, int y) {
 void HandList::report() {
   std::cout << "[turn] : " << turn << '\t';
   std::cout << "Stone : " << convert_stone_to_char(stone) << '\t';
-  std::cout << "x = " << hand_x << ", y = " << hand_y << std::endl;;
+  std::cout << "x = " << hand_x << ",  y = " << hand_y << std::endl;;
 }
 
 class GameMaster {
@@ -191,13 +181,15 @@ int main(int argc, char** argv) {
   
   Player* player[2];
 
-  player[0] = new HumanPlayer;
+  player[0] = new ComputerPlayer;
   player[1] = new ComputerPlayer;
-  
-  Task task {Task::INIT};
+
   GameMaster master(player);
+  Task task {Task::INIT};
   while (task != Task::ED) task = master.run(task);
   std::cout << "See you~~\n";
 
+
+  
   return 0;
 }
