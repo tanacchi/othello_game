@@ -6,10 +6,9 @@ class BoardMaster {
 public:
   BoardMaster();
   Stone get_enemy();
-  bool stone_compare(int x, int y, Stone src);
   bool is_inside_board(int x, int y);
-  int count_stone(Stone target);
   int get_reversible_length(int x, int y, int dx, int dy);
+  int count_stone(Stone target);
   void init();
   void insert_stone(int x, int y); 
   void insert_stone(int x, int y, Stone stone); 

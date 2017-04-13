@@ -73,9 +73,7 @@ void OthelloAI::seek_effective_hand() {
 }
 
 void OthelloAI::record_dot_stone() {
-  put_dot_stone();
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
-      if (stone_compare(j, i, Stone::DOT)) score_list.push_back(StoneScoreList(j, i));
-  remove_dot_stone();
+      if (is_available_position(j, i)) score_list.push_back(StoneScoreList(j, i));
 }
