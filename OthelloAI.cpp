@@ -64,7 +64,10 @@ void OthelloAI::seek_effective_hand() {
     score_list[i].set_score(count_reversible_stone(x, y));
     score_list[i].set_total_score();
   }
-  std::sort(score_list.begin(), score_list.end(), std::greater<StoneScoreList>());  
+  std::sort(score_list.begin(), score_list.end(), std::greater<StoneScoreList>());
+  for (int i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
+  std::cout << "HELLO!!\n";
+  std::shuffle(score_list.begin(), score_list.end(), rand_pos);
   for (int i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
   score_list[0].get_coordinate(dist_x, dist_y);
 }
