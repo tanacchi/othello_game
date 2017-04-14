@@ -56,7 +56,7 @@ void OthelloAI::get_conclusion(int &x, int &y) {
   y = dist_y;
 }
 
-void OthelloAI::seek_effective_hand() {
+void OthelloAI::seek() {
   record_dot_stone();
   for (int i = 0; i < score_list.size(); i++) {
     int x, y;

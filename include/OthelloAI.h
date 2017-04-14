@@ -1,5 +1,22 @@
 #include "BoardMaster.h"
 
+/*
+
+1. 上の階層から階層番号とボード情報を受け取る
+2. 下の階層へ階層番号とボード情報を流す
+3. 上限階層orゲーム終了状態になるまで繰り返す
+
+
+
+
+
+
+
+
+
+
+*/
+
 class StoneScoreList {
   int hand_x;
   int hand_y;
@@ -24,6 +41,6 @@ public:
   ~OthelloAI();
   void get_conclusion(int &x, int &y);
   void random_maker();
-  void seek_effective_hand();
+  void seek();
   void record_dot_stone();
 };

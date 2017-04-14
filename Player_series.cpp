@@ -31,7 +31,7 @@ void ComputerPlayer::set_hand(const BoardMaster game_board) {
   int dist_x, dist_y;
   OthelloAI* p;
   p = new OthelloAI(game_board, get_mystone());
-  p->seek_effective_hand();
+  p->seek();
   p->get_conclusion(hand_x, hand_y);
   delete p;
 }
