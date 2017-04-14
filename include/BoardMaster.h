@@ -10,8 +10,8 @@ public:
   int get_reversible_length(int x, int y, int dx, int dy);
   int count_stone(Stone target);
   void init();
-  void insert_stone(int x, int y); 
-  void insert_stone(int x, int y, Stone stone); 
+  void insert(int x, int y); 
+  void insert(int x, int y, Stone stone); 
   void set_active_stone(Stone stone);
   void show();
   Stone get_stone(int x, int y);

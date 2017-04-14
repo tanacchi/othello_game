@@ -1,7 +1,7 @@
 #include "include/BoardMaster.h"
 
 BoardMaster::BoardMaster() {
-  board = std::vector<std::vector<Stone> >(BOARD_SIZE, std::vector<Stone>(BOARD_SIZE));
+  board = std::vector<std::vector<Stone> >(BOARD_SIZE, std::vector<Stone >(BOARD_SIZE));
 }
 
 void BoardMaster::init() {
@@ -42,11 +42,11 @@ void BoardMaster::set_active_stone(Stone stone) {
   active_stone = stone;
 }
 
-void BoardMaster::insert_stone(int x, int y) {
+void BoardMaster::insert(int x, int y) {
   board[y][x] = active_stone;
 }
 
-void BoardMaster::insert_stone(int x, int y, Stone stone) {
+void BoardMaster::insert(int x, int y, Stone stone) {
   board[y][x] = stone;
 }
 
@@ -98,18 +98,18 @@ void BoardMaster::reverse_stone(int x, int y) {
   int reverse_length {0};
   for (size_t i {0}; i < 8; i++) {
     reverse_length = get_reversible_length(x, y, dx[i], dy[i]);
-    for (size_t j {1}; j <= reverse_length; j++) insert_stone(x + j*dx[i], y + j*dy[i]);
+    for (size_t j {1}; j <= reverse_length; j++) insert(x + j*dx[i], y + j*dy[i]);
   }
 }
 
 void BoardMaster::put_dot_stone() {
   for (size_t i {0}; i < BOARD_SIZE; i++)
     for (size_t j {0}; j < BOARD_SIZE; j++)
-      if (is_available_position(j, i)) insert_stone(j, i, Stone::DOT);
+      if (is_available_position(j, i)) insert(j, i, Stone::DOT);
 }
 
 void BoardMaster::remove_dot_stone() {
   for (size_t i {0}; i< BOARD_SIZE; i++)
     for (size_t j {0}; j < BOARD_SIZE; j++)
-      if (board[i][j] == Stone::DOT) insert_stone(j, i, Stone::SPACE);
+      if (board[i][j] == Stone::DOT) insert(j, i, Stone::SPACE);
 }

@@ -38,7 +38,7 @@ inline bool StoneScoreList::is_edge(int x, int y) {
 OthelloAI::OthelloAI(BoardMaster game_board, Stone active_stone) : rand_pos { std::random_device{}() } {
   for (size_t i {0}; i < BOARD_SIZE; i++)
     for (size_t j {0}; j < BOARD_SIZE; j++)
-      insert_stone(j, i, game_board.get_stone(j, i));
+      insert(j, i, game_board.get_stone(j, i));
   set_active_stone(active_stone);
 }
 

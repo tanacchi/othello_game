@@ -120,7 +120,7 @@ Task GameMaster::task_set() {
 }
 
 Task GameMaster::task_insert() {
-  board.insert_stone(x, y);
+  board.insert(x, y);
   board.reverse_stone(x, y);
   return Task::WRITE;
 }
@@ -188,8 +188,6 @@ int main(int argc, char** argv) {
   Task task {Task::INIT};
   while (task != Task::ED) task = master.run(task);
   std::cout << "See you~~\n";
-
-
   
   return 0;
 }
