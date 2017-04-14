@@ -19,7 +19,7 @@ REFACT : 入力部分を設計しなおしてみる
 REFACT : 高度な出力を使ってみる
 
 TODO : 繰り返し探索をするならAIはネスト構造にするべき？
-
+TODO : OthelloAIもtask制にする？？
 
 [設定可能にする項目]
 --personal human vs human
