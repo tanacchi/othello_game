@@ -15,7 +15,22 @@ void Player::get_hand(int &x, int &y) {
   y = hand_y;
 }
 
+void Player::set_myname(std::string src) {
+  myname = src;
+}
+
+std::string Player::get_myname() {
+  return myname;
+}
+
 // ------------------------- HumanPlayer ---------------------------------------
+
+HumanPlayer::HumanPlayer() {
+  std::string name_buff;
+  std::cout << "What is your name ??\n> ";
+  std::cin >> name_buff;
+  set_myname(name_buff);
+}
 
 void HumanPlayer::set_hand(const BoardMaster game_board) {
   int input_x, input_y;
@@ -27,8 +42,11 @@ void HumanPlayer::set_hand(const BoardMaster game_board) {
 
 // ------------------------- ComputerPlayer ------------------------------------
 
+ComputerPlayer::ComputerPlayer() {
+  set_myname("Computer");
+}
+
 void ComputerPlayer::set_hand(const BoardMaster game_board) {
-  int dist_x, dist_y;
   OthelloAI* p;
   p = new OthelloAI(game_board, get_mystone());
   p->seek();

@@ -13,8 +13,8 @@
 
 
 enum class Stone {
-  WHITE,
-  BLACK,
   SPACE,
+  BLACK,
+  WHITE,
   DOT
 };

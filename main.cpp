@@ -102,9 +102,9 @@ Task GameMaster::task_op() {
   Stone active_stone = active_player->get_mystone();
   board.set_active_stone(active_stone);
   std::cout << "turn " << turn + 1 << std::endl;
-  std::cout << "WHITE STONE (" << convert_stone_to_char(Stone::WHITE) << ") : " << board.count_stone(Stone::WHITE) << '\n'
-            << "BLACK STONE (" << convert_stone_to_char(Stone::BLACK) << ") : " << board.count_stone(Stone::BLACK) << '\n' <<std::endl;
-  std::cout << "Now is " << convert_stone_to_char(active_player->get_mystone()) << std::endl;
+  std::cout << "WHITE STONE (O) : " << board.count_stone(Stone::WHITE) << '\n'
+            << "BLACK STONE (X) : " << board.count_stone(Stone::BLACK) << '\n' <<std::endl;
+  std::cout << "Now is " << active_player->get_myname() << std::endl;
   board.put_dot_stone();
   board.show();
   if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; return Task::JUDGE; }
@@ -149,7 +149,7 @@ Task GameMaster::task_ask() {
   std::string answer;
   std::cout << "Continue ?? (yes/no)\n>"; 
   std::cin >> answer;
-  if (answer == "yes") return Task::INIT;
+  if (answer == "yes")     return Task::INIT;
   else if (answer == "no") return Task::ED;
   else return Task::ASK;
 }
@@ -181,8 +181,8 @@ int main(int argc, char** argv) {
   
   Player* player[2];
 
-  player[0] = new ComputerPlayer;
-  player[1] = new ComputerPlayer;
+  player[0] = new HumanPlayer();
+  player[1] = new ComputerPlayer();
 
   GameMaster master(player);
   Task task {Task::INIT};
