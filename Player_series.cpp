@@ -29,6 +29,7 @@ HumanPlayer::HumanPlayer() {
   std::string name_buff;
   std::cout << "What is your name ??\n> ";
   std::cin >> name_buff;
+  std::cout << std::endl;
   set_myname(name_buff);
 }
 

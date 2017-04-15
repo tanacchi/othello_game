@@ -104,7 +104,7 @@ Task GameMaster::task_op() {
   std::cout << "turn " << turn + 1 << std::endl;
   std::cout << "WHITE STONE (O) : " << board.count_stone(Stone::WHITE) << '\n'
             << "BLACK STONE (X) : " << board.count_stone(Stone::BLACK) << '\n' <<std::endl;
-  std::cout << "Now is " << active_player->get_myname() << std::endl;
+  std::cout << "Now is [" << active_player->get_myname() << ']'<< std::endl;
   board.put_dot_stone();
   board.show();
   if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; return Task::JUDGE; }
@@ -143,8 +143,8 @@ Task GameMaster::task_switch() {
 }
 
 Task GameMaster::task_ask() {
-  std::cout << "WHITE STONE (" << convert_stone_to_char(Stone::WHITE) << ") : " << board.count_stone(Stone::WHITE) << '\n'
-            << "BLACK STONE (" << convert_stone_to_char(Stone::BLACK) << ") : " << board.count_stone(Stone::BLACK) << '\n' <<std::endl;
+  std::cout << "WHITE STONE (O) : " << board.count_stone(Stone::WHITE) << '\n'
+            << "BLACK STONE (X) : " << board.count_stone(Stone::BLACK) << '\n' <<std::endl;
   show_hand_list();
   std::string answer;
   std::cout << "Continue ?? (yes/no)\n>"; 

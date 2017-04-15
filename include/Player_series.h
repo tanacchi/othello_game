@@ -3,6 +3,7 @@
 class Player {
   Stone mystone;
   std::string myname;
+  std::vector<StoneScoreList> score_list;
 protected:
   int hand_x, hand_y;
 public:
