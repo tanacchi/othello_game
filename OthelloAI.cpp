@@ -15,6 +15,7 @@ void StoneScoreList::set_total_score() {
 void StoneScoreList::get_coordinate(int &x, int &y) {
   x = hand_x; y = hand_y;
 }
+
 void StoneScoreList::set_score(int s) {
   if (is_edge(hand_x, hand_y)) s += EDGE_SCORE;
   score.push_back(s);
