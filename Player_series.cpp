@@ -26,11 +26,12 @@ std::string Player::get_myname() {
 // ------------------------- HumanPlayer ---------------------------------------
 
 HumanPlayer::HumanPlayer() {
-  std::string name_buff;
-  std::cout << "What is your name ??\n> ";
-  std::cin >> name_buff;
+  std::string myname;
+  std::cout << "What is your name ?\n"
+            << "> ";
+  std::getline(std::cin, myname);
   std::cout << std::endl;
-  set_myname(name_buff);
+  set_myname(myname);
 }
 
 void HumanPlayer::set_hand(const BoardMaster game_board) {
