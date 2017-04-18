@@ -1,33 +1,38 @@
 #include <iostream>
 #include <vector>
 
+int global = 0;
+
 class NestClass {
   int num;
-  int array[10];
-  NestClass* sub;
+  int serial_num;
+  std::vector <NestClass> sub;
 public:
   NestClass(int dept) {
-    num = dept;
-    for (int i = 0; i < 10; i++) array[i] = num;
-    std::cout << "Hello !!" << dept << std::endl;
-    if (dept > 0) sub = new NestClass[5] { dept-1, dept-1, dept-1, dept-1, dept-1 };
+    num = 1;
+    serial_num = global;
+    std::cout << "Hello ! " << serial_num << ' ';
+    std::cout << global++ << std::endl;
+    for (int i = 0; i < dept-1; i++)
+      sub.push_back(NestClass(dept-1));
   }
   int sum() {
-    if (array[0] > 0)
-      for (int i = 0; i < 5; i++) num += (sub+i)->sum();
-    for (int i = 0; i < 10; i++) num += array[i];
+    if (!sub.empty()) {
+      for (int i = 0; i < sub.size(); i++) num += sub[i].sum();
+      std::cout << "Hi" << serial_num << std::endl;  
+    }
     return num;
   }
   ~NestClass() {
-    delete[] sub;
-    std::cout << "See you~~" << num << std::endl;
+    std::cout << "See you " << serial_num;
+    std::cout <<  global << std::endl;
   }
 };
 
 int main() {
 
-  NestClass nest(5);
-  std::cout << nest.sum() << std::endl;
+  NestClass nest(3);
+    std::cout << nest.sum() << std::endl;
 
   return 0;
 }
