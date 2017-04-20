@@ -8,12 +8,13 @@ class NestClass {
   int serial_num;
   std::vector <NestClass> sub;
 public:
-  NestClass(int dept) {
-    num = 1;
+  NestClass(int dept) : num{dept}
+  {
     serial_num = global++;
     std::cout << "Hello ! " << serial_num << std::endl;
-    for (int i = 0; i < dept-1; i++) sub.push_back(NestClass(dept-1));
+    for (int i = 0; i < dept-1; i++) sub.emplace_back(NestClass(dept-1));
   }
+  
   int sum() {
     if (!sub.empty()) {
       for (int i = 0; i < sub.size(); i++) num += sub[i].sum();
@@ -21,6 +22,7 @@ public:
     }
     return num;
   }
+  
   ~NestClass() {
     std::cout << "See you " << serial_num << std::endl;;
   }
