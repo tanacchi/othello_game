@@ -5,26 +5,40 @@ int global = 0;
 
 class NestClass {
   int num;
-  int serial_num;
-  std::vector <NestClass> sub;
+  NestClass* sub;
 public:
-  NestClass(int dept) : num{dept}
+  NestClass(int depth) : num {depth}
   {
-    serial_num = global++;
-    std::cout << "Hello ! " << serial_num << std::endl;
-    for (int i = 0; i < dept-1; i++) sub.emplace_back(NestClass(dept-1));
+    std::cout << "Hello !" << std::endl;
+    if (depth > 0) {
+      sub = new NestClass[depth-1];
+      for (int i=0; i < depth-1; i++) sub[i].init(depth-1);
+    }
+  }
+
+  NestClass()
+  {
+    std::cout << "Hello !" << std::endl;
+  }
+  
+  void init(int depth) {
+    num = depth;
+    if (depth > 0) {
+      sub = new NestClass[depth-1];
+      for (int i=0; i < depth-1; i++) sub[i].init(depth-1);
+    }    
   }
   
   int sum() {
-    if (!sub.empty()) {
-      for (int i = 0; i < sub.size(); i++) num += sub[i].sum();
-      std::cout << "Hi " << serial_num << std::endl;  
+    if (!sub) {
+      for (int i = 0; i < num-1; i++) num += sub[i].sum();
     }
     return num;
   }
   
   ~NestClass() {
-    std::cout << "See you " << serial_num << std::endl;;
+    if (num > 0) delete[] sub;
+    std::cout << "See you " << num << std::endl;;
   }
 };
 
