@@ -1,7 +1,9 @@
 #include "include/BoardMaster.h"
 
-BoardMaster::BoardMaster() {
-  board = std::vector<std::vector<Stone> >(BOARD_SIZE, std::vector<Stone >(BOARD_SIZE));
+BoardMaster::BoardMaster()
+  : board{std::vector<std::vector<Stone> >(BOARD_SIZE, std::vector<Stone >(BOARD_SIZE))}
+
+{
 }
 
 void BoardMaster::init() {

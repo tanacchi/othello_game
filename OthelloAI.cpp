@@ -46,6 +46,7 @@ OthelloAI::OthelloAI(BoardMaster game_board, int max_depth)
 OthelloAI::OthelloAI()
   : current_depth{0}
 {
+  std::cout << "Hello" << std::endl;
 }
 
 OthelloAI::~OthelloAI()
@@ -53,8 +54,9 @@ OthelloAI::~OthelloAI()
 }
 
 OthelloAI OthelloAI::operator=(OthelloAI src) {
-  virtual_board = src.virtual_board;
+  virtual_board = src.virtual_board;                     // XXX : なんかすごいエラー吐かれる
   current_depth = src.current_depth;
+  return *this;
 }
 
 void OthelloAI::set_subAI(int branch) {
@@ -79,6 +81,7 @@ void OthelloAI::seek() {
     int x, y;
     score_list[i].get_coordinate(x, y);
     score_list[i].set_score(virtual_board.count_reversible_stone(x, y));
+    //    set_subAI(virtual_board.count_reversible_stone(x, y));
     score_list[i].set_total_score();
   }
   std::sort(score_list.begin(), score_list.end(), std::greater<StoneScoreList>());
@@ -93,4 +96,8 @@ void OthelloAI::record_dot_stone() {
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
       if (virtual_board.is_available_position(j, i)) score_list.push_back(StoneScoreList(j, i));
+}
+
+void OthelloAI::get_board(BoardMaster &myboard) {
+  myboard = virtual_board;
 }
