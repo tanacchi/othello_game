@@ -16,7 +16,7 @@ void StoneScoreList::get_coordinate(int &x, int &y) {
   x = hand_x; y = hand_y;
 }
 
-void StoneScoreList::set_score(int s) {
+void StoneScoreList::set_score(double s) {
   if (is_edge(hand_x, hand_y)) s += EDGE_SCORE;
   score.push_back(s);
 }
@@ -36,13 +36,18 @@ inline bool StoneScoreList::is_edge(int x, int y) {
 
 // ------------------------- OthelloAI -----------------------------------------
 
-OthelloAI::OthelloAI(BoardMaster game_board)
+OthelloAI::OthelloAI(BoardMaster game_board, int max_depth)
   : rand_pos {std::random_device{}()},
-    virtual_board{game_board}
+    virtual_board{game_board},
+    current_depth{max_depth}
 {
 }
 
 OthelloAI::~OthelloAI() {
+}
+
+OthelloAI OthelloAI::operator=(OthelloAI src) {
+  virtual_board = src.virtual_board;
 }
 
 void OthelloAI::random_maker() {
@@ -51,7 +56,7 @@ void OthelloAI::random_maker() {
   dist_y = rand100(rand_pos);
 }
 
-void OthelloAI::get_conclusion(int &x, int &y) { 
+void OthelloAI::get_conclusion(int &x, int &y) {
   x = dist_x;
   y = dist_y;
 }

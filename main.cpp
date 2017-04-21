@@ -175,18 +175,25 @@ void show_usage() {
 }
 
 int main(int argc, char** argv) {
-  std::vector<std::string> input_buff;
-  for (int i = 1; i < argc; i++) input_buff.push_back(argv[i]);
+  // std::vector<std::string> input_buff;
+  // for (int i = 1; i < argc; i++) input_buff.push_back(argv[i]);
   
-  Player* player[2];
+  // Player* player[2];
 
-  player[0] = new HumanPlayer();
-  player[1] = new ComputerPlayer();
+  // player[0] = new HumanPlayer();
+  // player[1] = new ComputerPlayer();
 
-  GameMaster master(player);
-  Task task {Task::INIT};
-  while (task != Task::ED) task = master.run(task);
-  std::cout << "See you~~\n";
+  // GameMaster master(player);
+  // Task task {Task::INIT};
+  // while (task != Task::ED) task = master.run(task);
+  // std::cout << "See you~~\n";
+  BoardMaster board;
+  board.init();
+
+  OthelloAI ai(board, 3);
+  int x, y;
+  ai.get_conclusion(x, y);
+  std::cout << x << ' ' << y << std::endl;
   
   return 0;
 }
