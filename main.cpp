@@ -189,9 +189,10 @@ int main(int argc, char** argv) {
   // std::cout << "See you~~\n";
   BoardMaster board;
   board.init();
-
+  board.show();
   OthelloAI ai(board, 3);
   int x, y;
+  ai.seek();
   ai.get_conclusion(x, y);
   std::cout << x << ' ' << y << std::endl;
   
