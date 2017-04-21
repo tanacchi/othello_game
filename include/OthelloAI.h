@@ -30,5 +30,4 @@ class OthelloAI {
   void random_maker();
   void seek();
   void record_dot_stone();
-  void get_list(std::vector<StoneScoreList> &mylist);
 };

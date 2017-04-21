@@ -189,6 +189,7 @@ int main(int argc, char** argv) {
   // std::cout << "See you~~\n";
   BoardMaster board;
   board.init();
+  board.set_active_stone(Stone::WHITE);
   board.show();
   OthelloAI ai(board, 3);
   int x, y;

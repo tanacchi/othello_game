@@ -82,7 +82,3 @@ void OthelloAI::record_dot_stone() {
     for (int j = 0; j < BOARD_SIZE; j++)
       if (virtual_board.is_available_position(j, i)) score_list.push_back(StoneScoreList(j, i));
 }
-
-void OthelloAI::get_list(std::vector<StoneScoreList> &mylist) {
-  mylist = score_list;
-}
