@@ -21,13 +21,16 @@ class OthelloAI {
   std::vector<StoneScoreList> score_list;
   BoardMaster virtual_board;
   int current_depth;
+  OthelloAI* subAI;
  public:
   OthelloAI(BoardMaster game_board, int max_depth);
   OthelloAI();
   ~OthelloAI();
+  void init_sub();
   OthelloAI operator=(OthelloAI src);
   void get_conclusion(int &x, int &y);
   void random_maker();
   void seek();
   void record_dot_stone();
+  void set_subAI(int branch);
 };

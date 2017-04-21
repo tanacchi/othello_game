@@ -40,14 +40,26 @@ OthelloAI::OthelloAI(BoardMaster game_board, int max_depth)
   : rand_pos {std::random_device{}()},
     virtual_board{game_board},
     current_depth{max_depth}
+{ 
+}
+
+OthelloAI::OthelloAI()
+  : current_depth{0}
 {
 }
 
-OthelloAI::~OthelloAI() {
+OthelloAI::~OthelloAI()
+{
 }
 
 OthelloAI OthelloAI::operator=(OthelloAI src) {
   virtual_board = src.virtual_board;
+  current_depth = src.current_depth;
+}
+
+void OthelloAI::set_subAI(int branch) {
+  subAI = new OthelloAI[branch];
+  for (int i = 0; i < branch; i++) subAI[i] = *this;
 }
 
 void OthelloAI::random_maker() {
