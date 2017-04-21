@@ -113,3 +113,10 @@ void BoardMaster::remove_dot_stone() {
     for (size_t j {0}; j < BOARD_SIZE; j++)
       if (board[i][j] == Stone::DOT) insert(j, i, Stone::SPACE);
 }
+
+BoardMaster BoardMaster::operator=(BoardMaster src) {
+  for (int i = 0; i < BOARD_SIZE; i++)
+    for (int j = 0; j < BOARD_SIZE; j++)
+      board[i][j] = src.board[i][j];
+  active_stone = src.active_stone;
+}

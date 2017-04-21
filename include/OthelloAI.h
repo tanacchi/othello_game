@@ -29,12 +29,13 @@ public:
   inline bool is_edge(int x, int y);
 };
 
-class OthelloAI : private BoardMaster {
+class OthelloAI {
   int dist_x, dist_y;
   std::mt19937 rand_pos;
   std::vector<StoneScoreList> score_list;
-public:
-  OthelloAI(BoardMaster game_board, Stone mystone);
+  BoardMaster virtual_board;
+ public:
+  OthelloAI(BoardMaster game_board);
   ~OthelloAI();
   void get_conclusion(int &x, int &y);
   void random_maker();

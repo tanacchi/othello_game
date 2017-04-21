@@ -36,11 +36,10 @@ inline bool StoneScoreList::is_edge(int x, int y) {
 
 // ------------------------- OthelloAI -----------------------------------------
 
-OthelloAI::OthelloAI(BoardMaster game_board, Stone active_stone) : rand_pos { std::random_device{}() } {
-  for (size_t i {0}; i < BOARD_SIZE; i++)
-    for (size_t j {0}; j < BOARD_SIZE; j++)
-      insert(j, i, game_board.get_stone(j, i));
-  set_active_stone(active_stone);
+OthelloAI::OthelloAI(BoardMaster game_board)
+  : rand_pos {std::random_device{}()},
+    virtual_board{game_board}
+{
 }
 
 OthelloAI::~OthelloAI() {
@@ -62,7 +61,7 @@ void OthelloAI::seek() {
   for (int i = 0; i < score_list.size(); i++) {
     int x, y;
     score_list[i].get_coordinate(x, y);
-    score_list[i].set_score(count_reversible_stone(x, y));
+    score_list[i].set_score(virtual_board.count_reversible_stone(x, y));
     score_list[i].set_total_score();
   }
   std::sort(score_list.begin(), score_list.end(), std::greater<StoneScoreList>());
@@ -76,7 +75,7 @@ void OthelloAI::seek() {
 void OthelloAI::record_dot_stone() {
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
-      if (is_available_position(j, i)) score_list.push_back(StoneScoreList(j, i));
+      if (virtual_board.is_available_position(j, i)) score_list.push_back(StoneScoreList(j, i));
 }
 
 void OthelloAI::get_list(std::vector<StoneScoreList> &mylist) {
