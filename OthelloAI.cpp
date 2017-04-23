@@ -31,6 +31,7 @@ void StoneScoreList::show_score_list() {
 bool StoneScoreList::operator>(const StoneScoreList &right ) const {
   return total_score > right.total_score;
 }
+
 inline bool StoneScoreList::is_edge(int x, int y) {
   return (!x || x == 7) && (!y || y == 7);
 }
@@ -56,9 +57,9 @@ OthelloAI::OthelloAI()
 
 OthelloAI::~OthelloAI()
 {
+  delete[] subAI;
   std::cout << "See you " << serial_num << std::endl;
   std::cout << serial_num << std::endl;
-  delete[] subAI;
 }
 
 OthelloAI& OthelloAI::operator=(OthelloAI& src) {
@@ -72,13 +73,17 @@ OthelloAI OthelloAI::operator-(int num) {
   return *this;
 }
 
+int OthelloAI::get_mydepth() {
+  return current_depth;
+}
+
 void OthelloAI::set_subAI(int branch) {
   if (branch > 0) {
-    std::cout << "branch = " << branch << std::endl;
-    subAI = new OthelloAI[branch--];
+    std::cout << "current_branch = " << branch << std::endl;
+    subAI = new OthelloAI[branch];
     for (int i = 0; i < branch; i++)  {
       subAI[i] = *this;
-      subAI[i].set_subAI(branch);      
+      subAI[i].set_subAI(branch-1);      
     }
   }
 }

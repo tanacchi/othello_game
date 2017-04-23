@@ -190,7 +190,7 @@ int main(int argc, char** argv) {
 
   BoardMaster board;
   board.init();
-  OthelloAI ai(board, 3);
+  OthelloAI ai(board, 4);
   
   return 0;
 }

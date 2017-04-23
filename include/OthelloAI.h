@@ -35,4 +35,5 @@ class OthelloAI {
   void record_dot_stone();
   void set_subAI(int branch);
   void get_board(BoardMaster &myboard);
+  int get_mydepth();
 };
