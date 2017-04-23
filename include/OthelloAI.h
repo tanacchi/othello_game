@@ -21,14 +21,13 @@ class OthelloAI {
   std::mt19937 rand_pos;
   std::vector<StoneScoreList> score_list;
   BoardMaster virtual_board;
-  int current_depth;
+  int mydepth;
   OthelloAI* subAI;
  public:
   OthelloAI(BoardMaster game_board, int max_depth);
   OthelloAI();
   ~OthelloAI();
   OthelloAI& operator=(OthelloAI& src);
-  OthelloAI operator-(int num);
   void get_conclusion(int &x, int &y);
   void random_maker();
   void seek();

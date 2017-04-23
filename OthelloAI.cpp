@@ -41,15 +41,15 @@ inline bool StoneScoreList::is_edge(int x, int y) {
 OthelloAI::OthelloAI(BoardMaster game_board, int max_depth)
   : rand_pos {std::random_device{}()},
     virtual_board{game_board},
-    current_depth{max_depth},
+    mydepth{max_depth},
     serial_num{global++}
 {
   std::cout << "Hello ! " << serial_num << std::endl;
-  set_subAI(current_depth);
+  set_subAI(mydepth);
 }
 
 OthelloAI::OthelloAI()
-  : current_depth{0},
+  : mydepth{0},
     serial_num{global++}
 {
   std::cout << "Hello ! " << serial_num << std::endl;
@@ -64,26 +64,26 @@ OthelloAI::~OthelloAI()
 
 OthelloAI& OthelloAI::operator=(OthelloAI& src) {
   virtual_board = src.virtual_board;
-  current_depth = src.current_depth;
-  return *this;
-}
-
-OthelloAI OthelloAI::operator-(int num) {
-  current_depth - num;
+  mydepth = src.mydepth;
   return *this;
 }
 
 int OthelloAI::get_mydepth() {
-  return current_depth;
+  return mydepth;
 }
 
-void OthelloAI::set_subAI(int branch) {
-  if (branch > 0) {
-    std::cout << "current_branch = " << branch << std::endl;
-    subAI = new OthelloAI[branch];
-    for (int i = 0; i < branch; i++)  {
+void OthelloAI::set_subAI(int depth) {
+  record_dot_stone();
+  if (depth > 0) {
+    std::cout << "current_depth = " << depth << std::endl;
+    subAI = new OthelloAI[score_list.size()];
+    for (int i = 0; i < score_list.size(); i++)  {
       subAI[i] = *this;
-      subAI[i].set_subAI(branch-1);      
+      int x, y;
+      score_list[i].get_coordinate(x, y);
+      subAI[i].virtual_board.insert(x, y);
+      subAI[i].virtual_board.show();
+      //  subAI[i].set_subAI(branch-1);      
     }
   }
 }

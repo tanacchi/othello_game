@@ -12,6 +12,7 @@ void BoardMaster::init() {
       board[i][j] = Stone::SPACE;
   board[3][3] = board[4][4] = Stone::WHITE;
   board[3][4] = board[4][3] = Stone::BLACK;
+  show();
 }
 
 void BoardMaster::size() {
@@ -126,4 +127,8 @@ BoardMaster& BoardMaster::operator=(BoardMaster& src) {
     for (int j = 0; j < BOARD_SIZE; j++)
       board[i][j] = src.board[i][j];
   active_stone = src.active_stone;
+}
+
+BoardMaster::~BoardMaster() {
+  show();
 }

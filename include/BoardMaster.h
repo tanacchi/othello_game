@@ -5,6 +5,7 @@ class BoardMaster {
   Stone active_stone;
 public:
   BoardMaster();
+  ~BoardMaster();
   Stone get_enemy();
   bool is_inside_board(int x, int y);
   int get_reversible_length(int x, int y, int dx, int dy);
