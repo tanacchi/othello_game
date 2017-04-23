@@ -62,7 +62,7 @@ OthelloAI::~OthelloAI()
   std::cout << serial_num << std::endl;
 }
 
-OthelloAI OthelloAI::operator=(OthelloAI src) {
+OthelloAI& OthelloAI::operator=(OthelloAI& src) {
   virtual_board = src.virtual_board;                     // XXX : なんかすごいエラー吐かれる
   current_depth = src.current_depth;
   return *this;

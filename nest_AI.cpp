@@ -12,12 +12,12 @@ public:
   {
     std::cout << "Hello !" << std::endl;
     if (d > 0) {
-      sub = new NestClass[d-1];
-      for (int i=0; i < d-1; i++) sub[i].init(d-1);
+      // sub = new NestClass[d-1];
+      // for (int i=0; i < d-1; i++) sub[i].init(d-1);
     }
   }
 
-  NestClass()
+  NestClass() : num{-1}, d{-1}
   {
     std::cout << "Hello !" << std::endl;
   }
@@ -37,16 +37,31 @@ public:
     if (d> 0) delete[] sub;
     return num;
   }
+
+  void show() {
+    std::cout << num << std::endl;
+  }
   
   ~NestClass() {
     std::cout << "See you " << d << std::endl;;
+  }
+
+  NestClass& operator=(NestClass& src) {
+    num = src.num;
+    d = src.d;
   }
 };
 
 int main() {
 
   NestClass nest(4);
-  std::cout << nest.sum() << std::endl;
+  NestClass second;
+
+  nest.show();
+  second = nest;
+  second.show();
+  
+  //  std::cout << nest.sum() << std::endl;
 
   return 0;
 }

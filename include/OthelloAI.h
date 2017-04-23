@@ -27,7 +27,7 @@ class OthelloAI {
   OthelloAI(BoardMaster game_board, int max_depth);
   OthelloAI();
   ~OthelloAI();
-  OthelloAI operator=(OthelloAI src);
+  OthelloAI& operator=(OthelloAI& src);
   void get_conclusion(int &x, int &y);
   void random_maker();
   void seek();
