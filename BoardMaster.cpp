@@ -132,3 +132,7 @@ BoardMaster& BoardMaster::operator=(BoardMaster& src) {
 BoardMaster::~BoardMaster() {
   show();
 }
+
+void BoardMaster::switch_active_stone() {
+  active_stone = (active_stone == Stone::WHITE) ? Stone::BLACK : Stone::WHITE;
+}
