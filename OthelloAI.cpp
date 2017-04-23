@@ -57,7 +57,6 @@ OthelloAI::OthelloAI()
 
 OthelloAI::~OthelloAI()
 {
-  delete[] subAI;
   std::cout << "See you " << serial_num << std::endl;
   std::cout << serial_num << std::endl;
 }
@@ -83,10 +82,11 @@ void OthelloAI::set_subAI(int depth) {
       score_list[i].get_coordinate(x, y);
       subAI[i].virtual_board.insert(x, y);
       subAI[i].virtual_board.reverse_stone(x, y);
-      subAI[i].virtual_board.show();
+      //      subAI[i].virtual_board.show();
       subAI[i].virtual_board.switch_active_stone();
       subAI[i].set_subAI(depth-1);      
     }
+    delete[] subAI;
   }
   else { std::cout << "END !!!!!!!!!!!!! \n" << std::endl; }
 }
@@ -108,7 +108,6 @@ void OthelloAI::seek() {
     int x, y;
     score_list[i].get_coordinate(x, y);
     score_list[i].set_score(virtual_board.count_reversible_stone(x, y));
-    //  set_subAI(virtual_board.count_reversible_stone(x, y));
     score_list[i].set_total_score();
   }
   std::sort(score_list.begin(), score_list.end(), std::greater<StoneScoreList>());

@@ -2,7 +2,6 @@
 
 BoardMaster::BoardMaster()
   : board{std::vector<std::vector<Stone> >(BOARD_SIZE, std::vector<Stone >(BOARD_SIZE))}
-
 {
 }
 
@@ -12,12 +11,6 @@ void BoardMaster::init() {
       board[i][j] = Stone::SPACE;
   board[3][3] = board[4][4] = Stone::WHITE;
   board[3][4] = board[4][3] = Stone::BLACK;
-  show();
-}
-
-void BoardMaster::size() {
-  std::cout <<  " Hight = "<< board.size() << std::endl;
-  std::cout <<  " Width = "<< board.front().size() << std::endl;
 }
 
 Stone BoardMaster::get_stone(int x, int y) {
@@ -130,7 +123,6 @@ BoardMaster& BoardMaster::operator=(BoardMaster& src) {
 }
 
 BoardMaster::~BoardMaster() {
-  show();
 }
 
 void BoardMaster::switch_active_stone() {

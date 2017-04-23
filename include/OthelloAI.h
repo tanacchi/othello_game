@@ -17,12 +17,12 @@ public:
 
 class OthelloAI {
   int dist_x, dist_y;
-  int serial_num;
   std::mt19937 rand_pos;
   std::vector<StoneScoreList> score_list;
   BoardMaster virtual_board;
   int mydepth;
   OthelloAI* subAI;
+  int serial_num;
  public:
   OthelloAI(BoardMaster game_board, int max_depth);
   OthelloAI();

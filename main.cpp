@@ -137,7 +137,7 @@ Task GameMaster::task_judge() {
 
 Task GameMaster::task_switch() {
   active_player = participant[++turn % 2];
-  wait(100);
+  //wait(100);
   return Task::OP;
 }
 
@@ -175,23 +175,23 @@ void show_usage() {
 }
 
 int main(int argc, char** argv) {
-  // std::vector<std::string> input_buff;
-  // for (int i = 1; i < argc; i++) input_buff.push_back(argv[i]);
+  std::vector<std::string> input_buff;
+  for (int i = 1; i < argc; i++) input_buff.push_back(argv[i]);
   
-  // Player* player[2];
+  Player* player[2];
 
-  // player[0] = new HumanPlayer();
-  // player[1] = new ComputerPlayer();
+  player[0] = new ComputerPlayer();
+  player[1] = new ComputerPlayer();
 
-  // GameMaster master(player);
-  // Task task {Task::INIT};
-  // while (task != Task::ED) task = master.run(task);
-  // std::cout << "See you~~\n";
+  GameMaster master(player);
+  Task task {Task::INIT};
+  while (task != Task::ED) task = master.run(task);
+  std::cout << "See you~~\n";
 
-  BoardMaster board;
-  board.init();
-  board.set_active_stone(Stone::WHITE);
-  OthelloAI ai(board, 3);
+  // BoardMaster board;
+  // board.init();
+  // board.set_active_stone(Stone::WHITE);
+  // OthelloAI ai(board, 3);
   
   return 0;
 }
