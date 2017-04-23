@@ -4,7 +4,6 @@ BoardMaster::BoardMaster()
   : board{std::vector<std::vector<Stone> >(BOARD_SIZE, std::vector<Stone >(BOARD_SIZE))}
 
 {
-  size();
 }
 
 void BoardMaster::init() {

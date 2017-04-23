@@ -187,26 +187,10 @@ int main(int argc, char** argv) {
   // Task task {Task::INIT};
   // while (task != Task::ED) task = master.run(task);
   // std::cout << "See you~~\n";
-  std::cout << "board " << std::endl;
+
   BoardMaster board;
   board.init();
-  std::cout << "hoge " << std::endl;
-  BoardMaster hoge;
-  //board.init();
-  //board.set_active_stone(Stone::WHITE);
-  hoge.show();
-  std::cout << "ai " << std::endl;
   OthelloAI ai(board, 3);
-  std::cout << "sub " << std::endl;
-  OthelloAI sub;
-  sub = ai;
-  // OthelloAI* sub;
-  // sub = new OthelloAI[3];
-  //  ai = sub;
-  int x, y;
-  // sub.seek();
-  // sub.get_conclusion(x, y);
-  std::cout << x << ' ' << y << std::endl;
   
   return 0;
 }
