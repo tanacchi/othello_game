@@ -2,6 +2,8 @@
 
 #define EDGE_SCORE 10
 
+int global;
+
 // ------------------------- StoneList -----------------------------------------
 
 StoneScoreList::StoneScoreList(int x, int y) {
@@ -29,7 +31,6 @@ void StoneScoreList::show_score_list() {
 bool StoneScoreList::operator>(const StoneScoreList &right ) const {
   return total_score > right.total_score;
 }
-
 inline bool StoneScoreList::is_edge(int x, int y) {
   return (!x || x == 7) && (!y || y == 7);
 }
@@ -40,16 +41,25 @@ OthelloAI::OthelloAI(BoardMaster game_board, int max_depth)
   : rand_pos {std::random_device{}()},
     virtual_board{game_board},
     current_depth{max_depth}
-{ 
+{
+  serial_num = global++;
+  std::cout << serial_num << std::endl;
+  virtual_board.size();
+  virtual_board.show();
 }
 
 OthelloAI::OthelloAI()
   : current_depth{0}
 {
+  serial_num = global++;
+  std::cout << serial_num << std::endl;
+  virtual_board.size();
+  virtual_board.show();
 }
 
 OthelloAI::~OthelloAI()
 {
+  std::cout << serial_num << std::endl;
 }
 
 OthelloAI OthelloAI::operator=(OthelloAI src) {
@@ -59,8 +69,8 @@ OthelloAI OthelloAI::operator=(OthelloAI src) {
 }
 
 void OthelloAI::set_subAI(int branch) {
-  subAI = new OthelloAI[branch];
-  for (int i = 0; i < branch; i++) subAI[i] = *this;
+  // subAI = new OthelloAI[branch];
+  // for (int i = 0; i < branch; i++) subAI[i] = *this;
 }
 
 void OthelloAI::random_maker() {

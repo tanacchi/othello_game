@@ -22,6 +22,7 @@ public:
   void remove_dot_stone();
   void reverse_stone(int x, int y);
   BoardMaster operator=(BoardMaster src);
+  void size();
 };
 
 char convert_stone_to_char(Stone src);
