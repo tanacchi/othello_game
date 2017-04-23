@@ -9,8 +9,8 @@
 #include <fstream>
 
 #define BOARD_SIZE 8
-#define wait(num) std::this_thread::sleep_for(std::chrono::milliseconds(num))
 
+inline void wait(int num) { std::this_thread::sleep_for(std::chrono::milliseconds(num)); }
 
 enum class Stone {
   SPACE,

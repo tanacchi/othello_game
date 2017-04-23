@@ -46,7 +46,6 @@ OthelloAI::OthelloAI(BoardMaster game_board, int max_depth)
 OthelloAI::OthelloAI()
   : current_depth{0}
 {
-  std::cout << "Hello" << std::endl;
 }
 
 OthelloAI::~OthelloAI()
