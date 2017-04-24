@@ -34,5 +34,5 @@ class OthelloAI {
   void seek(int max_depth);
   void record_dot_stone();
   void set_subAI(int branch);
-  long long get_avarage_score();
+  double get_avarage_score();
 };
