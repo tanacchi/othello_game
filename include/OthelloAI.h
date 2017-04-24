@@ -24,15 +24,13 @@ class OthelloAI {
   OthelloAI* subAI;
   int serial_num;
  public:
-  OthelloAI(BoardMaster game_board, int max_depth);
+  OthelloAI(BoardMaster game_board);
   OthelloAI();
   ~OthelloAI();
   OthelloAI& operator=(OthelloAI& src);
   void get_conclusion(int &x, int &y);
   void random_maker();
-  void seek();
+  void seek(int max_depth);
   void record_dot_stone();
   void set_subAI(int branch);
-  void get_board(BoardMaster &myboard);
-  int get_mydepth();
 };

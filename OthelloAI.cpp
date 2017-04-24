@@ -38,43 +38,37 @@ inline bool StoneScoreList::is_edge(int x, int y) {
 
 // ------------------------- OthelloAI -----------------------------------------
 
-OthelloAI::OthelloAI(BoardMaster game_board, int max_depth)
+OthelloAI::OthelloAI(BoardMaster game_board)
   : rand_pos {std::random_device{}()},
     virtual_board{game_board},
-    mydepth{max_depth},
     serial_num{global++}
 {
-  //  std::cout << "Hello ! " << serial_num << std::endl;
-  set_subAI(mydepth);
+  std::cout << "Hello ! " << serial_num << std::endl;
 }
 
 OthelloAI::OthelloAI()
   : mydepth{0},
     serial_num{global++}
 {
-  //std::cout << "Hello ! " << serial_num << std::endl;
+  std::cout << "Hello ! " << serial_num << std::endl;
 }
 
 OthelloAI::~OthelloAI()
 {
-  //std::cout << "See you " << serial_num << std::endl;
-  //  std::cout << serial_num << std::endl;
+  delete[] subAI;
+  std::cout << "See you " << serial_num << std::endl;
+  std::cout << serial_num << std::endl;
 }
 
 OthelloAI& OthelloAI::operator=(OthelloAI& src) {
   virtual_board = src.virtual_board;
-  mydepth = src.mydepth;
   return *this;
 }
 
-int OthelloAI::get_mydepth() {
-  return mydepth;
-}
-
 void OthelloAI::set_subAI(int depth) {
-  record_dot_stone();
-  if (depth > 0) {
-    // std::cout << "current_depth = " << depth << std::endl;
+  mydepth = depth;
+  if (mydepth > 0) {
+    std::cout << "current_depth = " << depth << std::endl;
     subAI = new OthelloAI[score_list.size()];
     for (int i = 0; i < score_list.size(); i++)  {
       subAI[i] = *this;
@@ -82,14 +76,10 @@ void OthelloAI::set_subAI(int depth) {
       score_list[i].get_coordinate(x, y);
       subAI[i].virtual_board.insert(x, y);
       subAI[i].virtual_board.reverse_stone(x, y);
-      //      subAI[i].virtual_board.show();
+      subAI[i].virtual_board.show();
       subAI[i].virtual_board.switch_active_stone();
       subAI[i].set_subAI(depth-1);      
     }
-    delete[] subAI;
-  }
-  else {
-    //std::cout << "END !!!!!!!!!!!!! \n" << std::endl;
   }
 }
 
@@ -104,8 +94,9 @@ void OthelloAI::get_conclusion(int &x, int &y) {
   y = dist_y;
 }
 
-void OthelloAI::seek() {
+void OthelloAI::seek(int max_depth) {
   record_dot_stone();
+  set_subAI(max_depth);
   for (int i = 0; i < score_list.size(); i++) {
     int x, y;
     score_list[i].get_coordinate(x, y);
@@ -124,8 +115,4 @@ void OthelloAI::record_dot_stone() {
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
       if (virtual_board.is_available_position(j, i)) score_list.push_back(StoneScoreList(j, i));
-}
-
-void OthelloAI::get_board(BoardMaster &myboard) {
-  myboard = virtual_board;
 }
