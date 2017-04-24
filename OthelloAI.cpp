@@ -44,7 +44,7 @@ OthelloAI::OthelloAI(BoardMaster game_board, int max_depth)
     mydepth{max_depth},
     serial_num{global++}
 {
-  std::cout << "Hello ! " << serial_num << std::endl;
+  //  std::cout << "Hello ! " << serial_num << std::endl;
   set_subAI(mydepth);
 }
 
@@ -52,13 +52,13 @@ OthelloAI::OthelloAI()
   : mydepth{0},
     serial_num{global++}
 {
-  std::cout << "Hello ! " << serial_num << std::endl;
+  //std::cout << "Hello ! " << serial_num << std::endl;
 }
 
 OthelloAI::~OthelloAI()
 {
-  std::cout << "See you " << serial_num << std::endl;
-  std::cout << serial_num << std::endl;
+  //std::cout << "See you " << serial_num << std::endl;
+  //  std::cout << serial_num << std::endl;
 }
 
 OthelloAI& OthelloAI::operator=(OthelloAI& src) {
@@ -74,7 +74,7 @@ int OthelloAI::get_mydepth() {
 void OthelloAI::set_subAI(int depth) {
   record_dot_stone();
   if (depth > 0) {
-    std::cout << "current_depth = " << depth << std::endl;
+    // std::cout << "current_depth = " << depth << std::endl;
     subAI = new OthelloAI[score_list.size()];
     for (int i = 0; i < score_list.size(); i++)  {
       subAI[i] = *this;
@@ -88,7 +88,9 @@ void OthelloAI::set_subAI(int depth) {
     }
     delete[] subAI;
   }
-  else { std::cout << "END !!!!!!!!!!!!! \n" << std::endl; }
+  else {
+    //std::cout << "END !!!!!!!!!!!!! \n" << std::endl;
+  }
 }
 
 void OthelloAI::random_maker() {

@@ -1,5 +1,7 @@
 #include "include/Player_series.h"
 
+extern int global;
+
 enum class Task {
   INIT,
   OP,
@@ -100,13 +102,16 @@ Task GameMaster::task_init() {
 Task GameMaster::task_op() {
   Stone active_stone = active_player->get_mystone();
   board.set_active_stone(active_stone);
-  std::cout << "turn " << turn + 1 << std::endl;
+  std::cout << "\t\t\t\tturn " << turn + 1 << std::endl;
   std::cout << "WHITE STONE (O) : " << board.count_stone(Stone::WHITE) << '\n'
             << "BLACK STONE (X) : " << board.count_stone(Stone::BLACK) << '\n' <<std::endl;
   std::cout << "Now is [" << active_player->get_myname() << ']'<< std::endl;
   board.put_dot_stone();
   board.show();
+  static int pass_turn;
+  if (pass_turn > 1) return Task::ED;
   if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; return Task::JUDGE; }
+  else pass_turn = 0;
   board.remove_dot_stone();
   return Task::SET;
 }
@@ -186,8 +191,7 @@ int main(int argc, char** argv) {
   GameMaster master(player);
   Task task {Task::INIT};
   while (task != Task::ED) task = master.run(task);
-  std::cout << "See you~~\n";
-
+  std::cout << "See you~~\n" << global << std::endl;;
   // BoardMaster board;
   // board.init();
   // board.set_active_stone(Stone::WHITE);
