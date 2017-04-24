@@ -43,20 +43,17 @@ OthelloAI::OthelloAI(BoardMaster game_board)
     virtual_board{game_board},
     serial_num{global++}
 {
-  std::cout << "Hello ! " << serial_num << std::endl;
 }
 
 OthelloAI::OthelloAI()
   : mydepth{0},
     serial_num{global++}
 {
-  std::cout << "Hello ! " << serial_num << std::endl;
 }
 
 OthelloAI::~OthelloAI()
 {
   if (mydepth > 0) delete[] subAI;
-  std::cout << "See you " << serial_num << std::endl;
 }
 
 OthelloAI& OthelloAI::operator=(OthelloAI& src) {
@@ -68,7 +65,6 @@ void OthelloAI::set_subAI(int depth) {
   mydepth = depth;
   record_dot_stone();
   if (mydepth > 0) {
-    std::cout << "current_depth = " << depth << std::endl;
     branch = score_list.size();
     subAI = new OthelloAI[branch];
     for (int i = 0; i < branch; i++)  {
@@ -77,12 +73,13 @@ void OthelloAI::set_subAI(int depth) {
       score_list[i].get_coordinate(x, y);
       subAI[i].virtual_board.insert(x, y);
       subAI[i].virtual_board.reverse_stone(x, y);
+      std::cout << "mydepth = " << mydepth << '\n'
+                << i+1 << '/' << branch << std::endl;
       subAI[i].virtual_board.show();
       subAI[i].virtual_board.switch_active_stone();
       subAI[i].set_subAI(depth-1);      
     }
   }
-  std::cout << "AHI" << std::endl;
 }
 
 void OthelloAI::random_maker() {
@@ -98,7 +95,6 @@ void OthelloAI::get_conclusion(int &x, int &y) {
 
 void OthelloAI::seek(int max_depth) {
   set_subAI(max_depth);
-  std::cout << "IRONMAN" << std::endl;
   for (int i = 0; i < score_list.size(); i++) {
     int x, y;
     score_list[i].get_coordinate(x, y);
@@ -119,6 +115,7 @@ void OthelloAI::record_dot_stone() {
       if (virtual_board.is_available_position(j, i)) score_list.push_back(StoneScoreList(j, i));
 }
 
+<<<<<<< 41cd19f2bab73fe950ec26f6843fbdd0912400e2
 int OthelloAI::get_avarage_score() {
   if (mydepth > 0 && branch > 0) {
     int sum;
@@ -126,6 +123,13 @@ int OthelloAI::get_avarage_score() {
     std::cout << "Hey, my branch is " << branch << std::endl;
     std::cout << "Hey, my depth is " << mydepth << std::endl;
     return sum /* / (double)branch   */;
+=======
+double OthelloAI::get_avarage_score() {
+  if (mydepth > 0) {
+    double sum;
+    for (int i = 0; i < branch; i++) sum += subAI[i].get_avarage_score();
+    return sum / (double)branch;
+>>>>>>> Refact nestAI system
   }
   else return virtual_board.get_status_score();
 }
