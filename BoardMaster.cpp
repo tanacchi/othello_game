@@ -126,8 +126,8 @@ void BoardMaster::switch_active_stone() {
 }
 
 double BoardMaster::get_status_score() {
-  int status_score {0};
+  double status_score {0};
   Stone enemy_stone {get_enemy()};
   status_score = count_stone(active_stone) - count_stone(enemy_stone);
-  return (double)status_score;
+  return status_score;
 }
