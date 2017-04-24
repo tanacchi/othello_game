@@ -23,6 +23,7 @@ class OthelloAI {
   int mydepth;
   OthelloAI* subAI;
   int serial_num;
+  int branch;
  public:
   OthelloAI(BoardMaster game_board);
   OthelloAI();
@@ -33,4 +34,5 @@ class OthelloAI {
   void seek(int max_depth);
   void record_dot_stone();
   void set_subAI(int branch);
+  double get_avarage_score();
 };

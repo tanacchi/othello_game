@@ -1,6 +1,9 @@
 #include "include/BoardMaster.h"
 
-BoardMaster::BoardMaster()
+const int dx[8] = { 0, 1, 1, 1, 0,-1,-1,-1 };
+const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
+
+BoardMaster::BoardMaster()   // enemy をいちいち呼び出してるのたるいかもしれない
   : board{std::vector<std::vector<Stone> >(BOARD_SIZE, std::vector<Stone >(BOARD_SIZE))}
 {
 }
@@ -11,10 +14,6 @@ void BoardMaster::init() {
       board[i][j] = Stone::SPACE;
   board[3][3] = board[4][4] = Stone::WHITE;
   board[3][4] = board[4][3] = Stone::BLACK;
-}
-
-Stone BoardMaster::get_stone(int x, int y) {
-  return board[y][x];
 }
 
 char convert_stone_to_char(Stone src) {
@@ -70,9 +69,6 @@ Stone BoardMaster::get_enemy() {
   return (active_stone == Stone::WHITE) ? Stone::BLACK : Stone::WHITE;
 }
 
-const int dx[8] = { 0, 1, 1, 1, 0,-1,-1,-1 };
-const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
-
 bool BoardMaster::is_available_position(int x, int y) {
   return is_inside_board(x, y) && board[y][x] == Stone::SPACE && count_reversible_stone(x, y);
 }
@@ -127,4 +123,11 @@ BoardMaster::~BoardMaster() {
 
 void BoardMaster::switch_active_stone() {
   active_stone = (active_stone == Stone::WHITE) ? Stone::BLACK : Stone::WHITE;
+}
+
+double BoardMaster::get_status_score() {
+  int status_score {0};
+  Stone enemy_stone {get_enemy()};
+  status_score = count_stone(active_stone) - count_stone(enemy_stone);
+  return (double)status_score;
 }

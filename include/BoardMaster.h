@@ -15,7 +15,6 @@ public:
   void insert(int x, int y); 
   void insert(int x, int y, Stone stone); 
   void set_active_stone(Stone stone);
-  Stone get_stone(int x, int y);
   bool can_continue();
   bool is_available_position(int x, int y);
   int count_reversible_stone(int x, int y);
@@ -24,6 +23,7 @@ public:
   void reverse_stone(int x, int y);
   void show();
   BoardMaster& operator=(BoardMaster& src);
+  double get_status_score();
 };
 
 char convert_stone_to_char(Stone src);

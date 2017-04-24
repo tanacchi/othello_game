@@ -69,8 +69,9 @@ void OthelloAI::set_subAI(int depth) {
   mydepth = depth;
   if (mydepth > 0) {
     std::cout << "current_depth = " << depth << std::endl;
-    subAI = new OthelloAI[score_list.size()];
-    for (int i = 0; i < score_list.size(); i++)  {
+    branch = score_list.size();
+    subAI = new OthelloAI[branch];
+    for (int i = 0; i < branch; i++)  {
       subAI[i] = *this;
       int x, y;
       score_list[i].get_coordinate(x, y);
@@ -100,19 +101,29 @@ void OthelloAI::seek(int max_depth) {
   for (int i = 0; i < score_list.size(); i++) {
     int x, y;
     score_list[i].get_coordinate(x, y);
-    score_list[i].set_score(virtual_board.count_reversible_stone(x, y));
+    score_list[i].set_score(subAI[i].get_avarage_score());
     score_list[i].set_total_score();
   }
   std::sort(score_list.begin(), score_list.end(), std::greater<StoneScoreList>());
   for (int i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
-  std::cout << "HELLO!!\n";
-  std::shuffle(score_list.begin(), score_list.end(), rand_pos);
-  for (int i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
-  score_list[0].get_coordinate(dist_x, dist_y);
+  // std::cout << "HELLO!!\n";
+  // std::shuffle(score_list.begin(), score_list.end(), rand_pos);
+  // for (int i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
+  // score_list[0].get_coordinate(dist_x, dist_y);
 }
 
 void OthelloAI::record_dot_stone() {
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
       if (virtual_board.is_available_position(j, i)) score_list.push_back(StoneScoreList(j, i));
+}
+
+double OthelloAI::get_avarage_score() {
+  if (mydepth > 1 && branch > 0) {
+    double sum;
+    for (int i = 0; i < branch; i++) sum += subAI[i].get_avarage_score();
+    std::cout << "Hey, my branch is " << (double)branch << std::endl;
+    return sum / (double)branch;
+  }
+  else return virtual_board.get_status_score();
 }
