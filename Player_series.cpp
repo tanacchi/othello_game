@@ -51,7 +51,7 @@ ComputerPlayer::ComputerPlayer() {
 void ComputerPlayer::set_hand(const BoardMaster game_board) {
   OthelloAI* p;
   p = new OthelloAI(game_board);
-  p->seek(4);
+  p->seek(5);
   p->get_conclusion(hand_x, hand_y);
   delete p;
 }

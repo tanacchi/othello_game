@@ -1,6 +1,6 @@
 #include "include/OthelloAI.h"
 
-#define EDGE_SCORE 10
+#define EDGE_SCORE 10.5
 
 int global;
 
@@ -55,9 +55,8 @@ OthelloAI::OthelloAI()
 
 OthelloAI::~OthelloAI()
 {
-  delete[] subAI;
+  if (mydepth > 0) delete[] subAI;
   std::cout << "See you " << serial_num << std::endl;
-  std::cout << serial_num << std::endl;
 }
 
 OthelloAI& OthelloAI::operator=(OthelloAI& src) {
@@ -67,6 +66,7 @@ OthelloAI& OthelloAI::operator=(OthelloAI& src) {
 
 void OthelloAI::set_subAI(int depth) {
   mydepth = depth;
+  record_dot_stone();
   if (mydepth > 0) {
     std::cout << "current_depth = " << depth << std::endl;
     branch = score_list.size();
@@ -82,6 +82,7 @@ void OthelloAI::set_subAI(int depth) {
       subAI[i].set_subAI(depth-1);      
     }
   }
+  std::cout << "AHI" << std::endl;
 }
 
 void OthelloAI::random_maker() {
@@ -96,8 +97,8 @@ void OthelloAI::get_conclusion(int &x, int &y) {
 }
 
 void OthelloAI::seek(int max_depth) {
-  record_dot_stone();
   set_subAI(max_depth);
+  std::cout << "IRONMAN" << std::endl;
   for (int i = 0; i < score_list.size(); i++) {
     int x, y;
     score_list[i].get_coordinate(x, y);
@@ -123,6 +124,7 @@ double OthelloAI::get_avarage_score() {
     double sum;
     for (int i = 0; i < branch; i++) sum += subAI[i].get_avarage_score();
     std::cout << "Hey, my branch is " << (double)branch << std::endl;
+    std::cout << "Hey, my depth is " << (double)mydepth << std::endl;
     return sum / (double)branch;
   }
   else return virtual_board.get_status_score();
