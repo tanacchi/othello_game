@@ -18,7 +18,7 @@ void StoneScoreList::get_coordinate(int &x, int &y) {
   x = hand_x; y = hand_y;
 }
 
-void StoneScoreList::set_score(double s) {
+void StoneScoreList::set_score(int s) {
   if (is_edge(hand_x, hand_y)) s += EDGE_SCORE;
   score.push_back(s);
 }
@@ -119,13 +119,13 @@ void OthelloAI::record_dot_stone() {
       if (virtual_board.is_available_position(j, i)) score_list.push_back(StoneScoreList(j, i));
 }
 
-double OthelloAI::get_avarage_score() {
-  if (mydepth > 1 && branch > 0) {
-    double sum;
+int OthelloAI::get_avarage_score() {
+  if (mydepth > 0 && branch > 0) {
+    int sum;
     for (int i = 0; i < branch; i++) sum += subAI[i].get_avarage_score();
-    std::cout << "Hey, my branch is " << (double)branch << std::endl;
-    std::cout << "Hey, my depth is " << (double)mydepth << std::endl;
-    return sum / (double)branch;
+    std::cout << "Hey, my branch is " << branch << std::endl;
+    std::cout << "Hey, my depth is " << mydepth << std::endl;
+    return sum /* / (double)branch   */;
   }
   else return virtual_board.get_status_score();
 }

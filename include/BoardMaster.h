@@ -23,7 +23,7 @@ public:
   void reverse_stone(int x, int y);
   void show();
   BoardMaster& operator=(BoardMaster& src);
-  double get_status_score();
+  int get_status_score();
 };
 
 char convert_stone_to_char(Stone src);

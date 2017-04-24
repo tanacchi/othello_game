@@ -125,8 +125,8 @@ void BoardMaster::switch_active_stone() {
   active_stone = (active_stone == Stone::WHITE) ? Stone::BLACK : Stone::WHITE;
 }
 
-double BoardMaster::get_status_score() {
-  double status_score {0};
+int BoardMaster::get_status_score() {
+  int status_score {0};
   Stone enemy_stone {get_enemy()};
   status_score = count_stone(active_stone) - count_stone(enemy_stone);
   return status_score;
