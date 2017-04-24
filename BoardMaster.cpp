@@ -1,7 +1,11 @@
 #include "include/BoardMaster.h"
 
-BoardMaster::BoardMaster() {
-  board = std::vector<std::vector<Stone> >(BOARD_SIZE, std::vector<Stone >(BOARD_SIZE));
+const int dx[8] = { 0, 1, 1, 1, 0,-1,-1,-1 };
+const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
+
+BoardMaster::BoardMaster()   // enemy をいちいち呼び出してるのたるいかもしれない
+  : board{std::vector<std::vector<Stone> >(BOARD_SIZE, std::vector<Stone >(BOARD_SIZE))}
+{
 }
 
 void BoardMaster::init() {
@@ -10,10 +14,6 @@ void BoardMaster::init() {
       board[i][j] = Stone::SPACE;
   board[3][3] = board[4][4] = Stone::WHITE;
   board[3][4] = board[4][3] = Stone::BLACK;
-}
-
-Stone BoardMaster::get_stone(int x, int y) {
-  return board[y][x];
 }
 
 char convert_stone_to_char(Stone src) {
@@ -69,9 +69,6 @@ Stone BoardMaster::get_enemy() {
   return (active_stone == Stone::WHITE) ? Stone::BLACK : Stone::WHITE;
 }
 
-const int dx[8] = { 0, 1, 1, 1, 0,-1,-1,-1 };
-const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
-
 bool BoardMaster::is_available_position(int x, int y) {
   return is_inside_board(x, y) && board[y][x] == Stone::SPACE && count_reversible_stone(x, y);
 }
@@ -112,4 +109,25 @@ void BoardMaster::remove_dot_stone() {
   for (size_t i {0}; i< BOARD_SIZE; i++)
     for (size_t j {0}; j < BOARD_SIZE; j++)
       if (board[i][j] == Stone::DOT) insert(j, i, Stone::SPACE);
+}
+
+BoardMaster& BoardMaster::operator=(BoardMaster& src) {
+  for (int i = 0; i < BOARD_SIZE; i++)
+    for (int j = 0; j < BOARD_SIZE; j++)
+      board[i][j] = src.board[i][j];
+  active_stone = src.active_stone;
+}
+
+BoardMaster::~BoardMaster() {
+}
+
+void BoardMaster::switch_active_stone() {
+  active_stone = (active_stone == Stone::WHITE) ? Stone::BLACK : Stone::WHITE;
+}
+
+double BoardMaster::get_status_score() {
+  double status_score {0};
+  Stone enemy_stone {get_enemy()};
+  status_score = count_stone(active_stone) - count_stone(enemy_stone);
+  return status_score;
 }
