@@ -1,6 +1,6 @@
 #include "include/OthelloAI.h"
 
-#define EDGE_SCORE 10.5
+#define EDGE_SCORE 5
 
 int global;
 

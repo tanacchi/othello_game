@@ -129,5 +129,12 @@ int BoardMaster::get_status_score() {
   int status_score {0};
   Stone enemy_stone {get_enemy()};
   status_score = count_stone(active_stone) - count_stone(enemy_stone);
+  const int pos_x[] = {0, 0, 7, 7, 0, 0, 2, 2, 5, 5, 7, 7};
+  const int pos_y[] = {0, 7, 0, 7, 2, 5, 0, 7, 0, 7, 2, 5};
+  for (int i = 0; i < 12; i++) {
+    Stone target = board[pos_y[i]][pos_x[i]];
+    if (target == active_stone) status_score += 10;
+    else if (target == enemy_stone) status_score -= 10;
+  }
   return status_score;
 }

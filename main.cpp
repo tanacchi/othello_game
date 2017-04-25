@@ -149,7 +149,7 @@ Task GameMaster::task_switch() {
 Task GameMaster::task_ask() {
   std::cout << "WHITE STONE (O) : " << board.count_stone(Stone::WHITE) << '\n'
             << "BLACK STONE (X) : " << board.count_stone(Stone::BLACK) << '\n' <<std::endl;
-  show_hand_list();
+  //  show_hand_list();
   std::string answer;
   std::cout << "Continue ?? (yes/no)\n>"; 
   std::cin >> answer;
