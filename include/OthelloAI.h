@@ -13,6 +13,7 @@ public:
   void show_score_list();
   bool operator>(const StoneScoreList &right)const;
   inline bool is_edge(int x, int y);
+  int get_total_score();
 };
 
 class OthelloAI {
