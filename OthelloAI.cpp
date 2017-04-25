@@ -18,9 +18,12 @@ void StoneScoreList::get_coordinate(int &x, int &y) {
   x = hand_x; y = hand_y;
 }
 
-void StoneScoreList::set_score(int s) {
-  if (is_edge(hand_x, hand_y)) s += EDGE_SCORE;
+void StoneScoreList::set_score(double s) {
   score.push_back(s);
+}
+
+void StoneScoreList::set_score(int s) {
+  score.push_back((double)s);
 }
 
 void StoneScoreList::show_score_list() {
@@ -50,7 +53,6 @@ int StoneScoreList::get_total_score() {
 
  */
 
-
 OthelloAI::OthelloAI(BoardMaster game_board)
   : rand_pos {std::random_device{}()},
     virtual_board{game_board},
@@ -76,22 +78,18 @@ OthelloAI& OthelloAI::operator=(OthelloAI& src) {
 
 void OthelloAI::set_subAI(int depth) {
   mydepth = depth;
-  if (mydepth > 0) {
-      record_dot_stone();
-      branch = score_list.size();
-      subAI = new OthelloAI[branch];
-    for (int i = 0; i < branch; i++)  {
-      subAI[i] = *this;
-      int x, y;
-      score_list[i].get_coordinate(x, y);
-      subAI[i].virtual_board.insert(x, y);
-      subAI[i].virtual_board.reverse_stone(x, y);
-      std::cout << "mydepth = " << mydepth << '\n'
-                << i+1 << '/' << branch << std::endl;
-      subAI[i].virtual_board.show();
-      subAI[i].virtual_board.switch_active_stone();
-      //      subAI[i].set_subAI(mydepth-1);      
-    }
+  if (mydepth < 1) return; 
+  record_dot_stone();
+  branch = score_list.size();
+  subAI = new OthelloAI[branch];
+  for (int i = 0; i < branch; i++)  {
+    subAI[i] = *this;
+    int x, y;
+    score_list[i].get_coordinate(x, y);
+    subAI[i].virtual_board.insert(x, y);
+    subAI[i].virtual_board.reverse_stone(x, y);
+    subAI[i].virtual_board.switch_active_stone();
+    subAI[i].set_subAI(mydepth-1);      
   }
 }
 
@@ -111,14 +109,17 @@ void OthelloAI::seek(int max_depth) {
   for (int i = 0; i < score_list.size(); i++) {
     int x, y;
     score_list[i].get_coordinate(x, y);
+    score_list[i].set_score(virtual_board.count_reversible_stone(x, y));
     score_list[i].set_score(subAI[i].get_avarage_score());
     score_list[i].set_total_score();
   }
   std::sort(score_list.begin(), score_list.end(), std::greater<StoneScoreList>()); // REFACT : 要は最大値を取る奴の中でランダム参照したい
-  int best_score = score_list[0].get_total_score();
+  for (int i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
+  double best_score = score_list[0].get_total_score();
   std::vector<StoneScoreList>::iterator p = score_list.begin();
   while (p->get_total_score() == best_score) p++;
   score_list.erase(p-1, score_list.end());
+  for (int i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
   std::shuffle(score_list.begin(), score_list.end(), rand_pos);
   score_list[0].get_coordinate(dist_x, dist_y);
 }
@@ -131,7 +132,7 @@ void OthelloAI::record_dot_stone() {
 
 double OthelloAI::get_avarage_score() {
   if (mydepth > 0) {
-    double sum;
+    double sum = 0;
     for (int i = 0; i < branch; i++) sum += subAI[i].get_avarage_score();
     return sum / (double)branch;
   }

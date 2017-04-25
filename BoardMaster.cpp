@@ -1,7 +1,7 @@
 #include "include/BoardMaster.h"
 
-const int dx[8] = { 0, 1, 1, 1, 0,-1,-1,-1 };
-const int dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1 };
+const std::vector<int> dx = { 0, 1, 1, 1, 0,-1,-1,-1 };
+const std::vector<int> dy = {-1,-1, 0, 1, 1, 1, 0,-1 };
 
 BoardMaster::BoardMaster()   // enemy をいちいち呼び出してるのたるいかもしれない
   : board{std::vector<std::vector<Stone> >(BOARD_SIZE, std::vector<Stone >(BOARD_SIZE))}
@@ -125,16 +125,30 @@ void BoardMaster::switch_active_stone() {
   active_stone = (active_stone == Stone::WHITE) ? Stone::BLACK : Stone::WHITE;
 }
 
-int BoardMaster::get_status_score() {
-  int status_score {0};
+double BoardMaster::get_status_score() {
+  double status_score {0};
   Stone enemy_stone {get_enemy()};
   status_score = count_stone(active_stone) - count_stone(enemy_stone);
-  const int pos_x[] = {0, 0, 7, 7, 0, 0, 2, 2, 5, 5, 7, 7};
-  const int pos_y[] = {0, 7, 0, 7, 2, 5, 0, 7, 0, 7, 2, 5};
-  for (int i = 0; i < 12; i++) {
-    Stone target = board[pos_y[i]][pos_x[i]];
+  const std::vector<int> edge_x = {0, 0, 7, 7};   // REFACT : 絶対まとめた方がいい
+  const std::vector<int> edge_y = {0, 7, 0, 7};
+  for (int i = 0; i < 4; i++) {
+    Stone target = board[edge_y[i]][edge_x[i]];
     if (target == active_stone) status_score += 10;
     else if (target == enemy_stone) status_score -= 10;
+  }
+  const std::vector<int> adv_x = {0, 0, 2, 2, 5, 5, 7, 7};
+  const std::vector<int> adv_y = {2, 5, 0, 7, 0, 7, 2, 5};
+  for (int i = 0; i < 8; i++) {
+    Stone target = board[adv_y[i]][adv_x[i]];
+    if (target == active_stone) status_score += 5;
+    else if (target == enemy_stone) status_score -= 5;
+  }
+  const std::vector<int> pin_x = {0, 0, 1, 1, 1, 1, 6, 6, 6, 6, 7, 7};
+  const std::vector<int> pin_y = {1, 6, 0, 1, 6, 7, 0, 1, 6, 7, 1, 6};
+  for (int i = 0; i < 12; i++) {
+    Stone target = board[pin_y[i]][pin_x[i]];
+    if (target == active_stone) status_score -= 3;
+    else if (target == enemy_stone) status_score += 3;
   }
   return status_score;
 }
