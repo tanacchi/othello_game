@@ -88,6 +88,7 @@ void OthelloAI::set_subAI(int depth) {
     score_list[i].get_coordinate(x, y);
     subAI[i].virtual_board.insert(x, y);
     subAI[i].virtual_board.reverse_stone(x, y);
+    subAI[i].virtual_board.show();
     subAI[i].virtual_board.switch_active_stone();
     subAI[i].set_subAI(mydepth-1);      
   }
@@ -131,6 +132,7 @@ void OthelloAI::record_dot_stone() {
 }
 
 double OthelloAI::get_avarage_score() {
+  std::cout << "mydepth = " << mydepth << std::endl;
   if (mydepth > 0) {
     double sum = 0;
     for (int i = 0; i < branch; i++) sum += subAI[i].get_avarage_score();
