@@ -54,10 +54,11 @@ public:
   Task task_switch();
   Task task_ask();
   Task task_ed();
-  void show_hand_list();
+  void record_hand_list();
 };
 
-GameMaster::GameMaster(Player* player[]) {
+GameMaster::GameMaster(Player* player[])
+{
   participant[0] = player[0];
   participant[1] = player[1];
   participant[0]->set_mystone(Stone::WHITE);
@@ -147,7 +148,7 @@ Task GameMaster::task_ed() {
   return Task::ED;
 }
 
-void GameMaster::show_hand_list() {
+void GameMaster::record_hand_list() {
   std::vector<HandList>::iterator p {hand_list.begin()};
   while(p != hand_list.end()) {
     p++->report();
@@ -176,7 +177,7 @@ int main(int argc, char** argv) {
   GameMaster master(player);
   Task task {Task::INIT};
   while (task != Task::ED) task = master.run(task);
-  std::cout << "See you~~\n" << global << std::endl;;
+  std::cout << "See you~~\n" << global << std::endl;
   // BoardMaster board;
   // board.init();
   // board.set_active_stone(Stone::WHITE);
