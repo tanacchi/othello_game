@@ -31,7 +31,7 @@ TODO : OthelloAIもtask制にする？？
 
 class HandList {
   int turn;
-  Stone stone;
+  char stone;
   int hand_x;
   int hand_y;
 public:
@@ -40,12 +40,12 @@ public:
 };
 
 HandList::HandList(int t, Stone s, int x, int y) {
-    turn = t; stone = s; hand_x = x; hand_y = y;
+  turn = t; stone = convert_stone_to_char(s); hand_x = x; hand_y = y;
 }
 
 void HandList::report() {
   std::cout << "[turn] : " << turn << '\t';
-  std::cout << "Stone : " << convert_stone_to_char(stone) << '\t';
+  std::cout << "Stone : " << stone << '\t';
   std::cout << "x = " << hand_x << ",  y = " << hand_y << std::endl;;
 }
 
@@ -105,12 +105,11 @@ Task GameMaster::task_op() {
   std::cout << "\t\t\t\tturn " << turn + 1 << std::endl;
   std::cout << "WHITE STONE (O) : " << board.count_stone(Stone::WHITE) << '\n'
             << "BLACK STONE (X) : " << board.count_stone(Stone::BLACK) << '\n' <<std::endl;
-  std::cout << "Now is [" << active_player->get_myname() << ']'<< std::endl;
+  std::cout << "Now is [" << active_player->get_myname() << "] : " << convert_stone_to_char(active_stone)<< std::endl;
   board.put_dot_stone();
   board.show();
   static int pass_turn;
-  if (pass_turn > 1) return Task::ED;
-  if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; return Task::JUDGE; }
+  if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; return (++pass_turn < 2) ? Task::JUDGE : Task::ED; }
   else pass_turn = 0;
   board.remove_dot_stone();
   return Task::SET;
@@ -186,7 +185,7 @@ int main(int argc, char** argv) {
   Player* player[2];
 
   player[0] = new HumanPlayer();
-  player[1] = new HumanPlayer();
+  player[1] = new ComputerPlayer();
 
   GameMaster master(player);
   Task task {Task::INIT};

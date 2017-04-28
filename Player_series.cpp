@@ -36,9 +36,9 @@ HumanPlayer::HumanPlayer() {
 
 void HumanPlayer::set_hand(const BoardMaster game_board) {
   int input_x, input_y;
-  std::cout << "Set your hand !!" << std::endl;
-  std::cout << "x = "; std::cin >> input_x;
-  std::cout << "y = "; std::cin >> input_y;
+  std::cout << "Set your hand !!\n > " << std::flush;
+  std::cin >> input_x;
+  std::cin >> input_y; 
   hand_x = input_x - 1; hand_y = input_y - 1;
 }
 
@@ -49,8 +49,7 @@ ComputerPlayer::ComputerPlayer() {
 }
 
 void ComputerPlayer::set_hand(const BoardMaster game_board) {
-  OthelloAI* p;
-  p = new OthelloAI(game_board);
+  OthelloAI* p = new OthelloAI(game_board);
   p->seek(4);
   p->get_conclusion(hand_x, hand_y);
   delete p;

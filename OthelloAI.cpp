@@ -47,11 +47,16 @@ int StoneScoreList::get_total_score() {
 
 /*
 
-1. 位置ごとの詳細な点数振り分け
-2. ５手先の状態＆打つ手の位置評価
-3. 
+  1. 位置ごとの詳細な点数振り分け
+  2. ５手先の状態＆打つ手の位置評価
+  3. 
 
- */
+
+  status_score 取得時のactive_stoneがずれている？
+  max_depthが奇数→セグフォ
+  max_depthが偶数→点数が逆
+
+*/
 
 OthelloAI::OthelloAI(BoardMaster game_board)
   : rand_pos {std::random_device{}()},
@@ -78,7 +83,6 @@ OthelloAI& OthelloAI::operator=(OthelloAI& src) {
 
 void OthelloAI::set_subAI(int depth) {
   mydepth = depth;
-  if (mydepth < 1) return; 
   record_dot_stone();
   branch = score_list.size();
   subAI = new OthelloAI[branch];
@@ -88,8 +92,12 @@ void OthelloAI::set_subAI(int depth) {
     score_list[i].get_coordinate(x, y);
     subAI[i].virtual_board.insert(x, y);
     subAI[i].virtual_board.reverse_stone(x, y);
-    subAI[i].virtual_board.show();
+    //    subAI[i].virtual_board.show();
+    // std::cout << "serial_num = " << serial_num << '\n'
+    //           << "mydepth = " << mydepth << '\n'
+    //           << "mybranch = "<< branch<< std::endl;
     subAI[i].virtual_board.switch_active_stone();
+    if (mydepth < 1) return;
     subAI[i].set_subAI(mydepth-1);      
   }
 }
@@ -117,9 +125,10 @@ void OthelloAI::seek(int max_depth) {
   std::sort(score_list.begin(), score_list.end(), std::greater<StoneScoreList>()); // REFACT : 要は最大値を取る奴の中でランダム参照したい
   for (int i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
   double best_score = score_list[0].get_total_score();
-  std::vector<StoneScoreList>::iterator p = score_list.begin();
+  std::vector<StoneScoreList>::iterator p = score_list.begin();   // XXX : 
   while (p->get_total_score() == best_score) p++;
-  score_list.erase(p-1, score_list.end());
+  score_list.erase(p, score_list.end());
+  std::cout << "Hey" << std::endl;
   for (int i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
   std::shuffle(score_list.begin(), score_list.end(), rand_pos);
   score_list[0].get_coordinate(dist_x, dist_y);
@@ -132,7 +141,6 @@ void OthelloAI::record_dot_stone() {
 }
 
 double OthelloAI::get_avarage_score() {
-  std::cout << "mydepth = " << mydepth << std::endl;
   if (mydepth > 0) {
     double sum = 0;
     for (int i = 0; i < branch; i++) sum += subAI[i].get_avarage_score();
