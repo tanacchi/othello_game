@@ -45,19 +45,6 @@ int StoneScoreList::get_total_score() {
 
 // ------------------------- OthelloAI -----------------------------------------
 
-/*
-
-  1. 位置ごとの詳細な点数振り分け
-  2. ５手先の状態＆打つ手の位置評価
-  3. 
-
-
-  status_score 取得時のactive_stoneがずれている？
-  max_depthが奇数→セグフォ
-  max_depthが偶数→点数が逆
-
-*/
-
 OthelloAI::OthelloAI(BoardMaster game_board)
   : rand_pos {std::random_device{}()},
     virtual_board{game_board},

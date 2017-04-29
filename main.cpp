@@ -15,20 +15,6 @@ enum class Task {
   ED
 };
 
-/*
-
-REFACT : 入力部分を設計しなおしてみる
-REFACT : 高度な出力を使ってみる
-
-TODO : OthelloAIもtask制にする？？
-
-[設定可能にする項目]
---personal human vs human
---normal   human vs cpu    --level  cpu's level
---auto     cpu   vs cpu    --level  cpu's level
-
-*/
-
 class HandList {
   int turn;
   char stone;
