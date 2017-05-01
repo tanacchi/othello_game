@@ -151,7 +151,7 @@ void GameMaster::record_hand_list() {
   while(p != hand_list.end()) p++->report(log_file);
   log_file << "~~END~~" << std::endl;
   log_file << "WHITE," << board.count_stone(Stone::WHITE) << std::endl;
-  log_file << "BLACK," << board.count_stone(Stone::BLACK) << std::endl;
+  log_file << "BLACK," << board.count_stone(Stone::BLACK) << '\n' << std::endl;
   log_file.close();
 }
 

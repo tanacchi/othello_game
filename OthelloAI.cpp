@@ -54,7 +54,8 @@ OthelloAI::OthelloAI(BoardMaster game_board)
 
 OthelloAI::OthelloAI()
   : mydepth{0},
-    serial_num{global++}
+    serial_num{global++},
+    branch{-1}
 {
 }
 
@@ -111,13 +112,13 @@ void OthelloAI::seek(int max_depth) {
   }
   std::sort(score_list.begin(), score_list.end(), std::greater<StoneScoreList>()); // REFACT : 要は最大値を取る奴の中でランダム参照したい
   for (size_t i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
-  double best_score = score_list[0].get_total_score();
-  std::vector<StoneScoreList>::iterator p = score_list.begin();
-  while (p->get_total_score() == best_score) p++;
-  score_list.erase(p, score_list.end());
-  std::cout << "Hey" << std::endl;
-  for (size_t i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
-  std::shuffle(score_list.begin(), score_list.end(), rand_pos);
+  // double best_score = score_list[0].get_total_score();
+  // std::vector<StoneScoreList>::iterator p = score_list.begin();
+  // while (p->get_total_score() == best_score) p++;
+  // score_list.erase(p, score_list.end());
+  // std::cout << "Hey" << std::endl;
+  // for (size_t i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
+  // std::shuffle(score_list.begin(), score_list.end(), rand_pos);
   score_list[0].get_coordinate(dist_x, dist_y);
 }
 
@@ -131,7 +132,19 @@ double OthelloAI::get_avarage_score() {
   if (mydepth > 0) {
     double sum = 0;
     for (int i = 0; i < branch; i++) sum += subAI[i].get_avarage_score();
+    if (std::isnan(sum / (double)branch))
+      std::cout << "This is nan !!\n"
+                << "serial_num = " << serial_num << '\n'
+                << "mydepth = " << mydepth << '\n'
+                << "branch = " << branch << std::endl;
     return sum / (double)branch;
   }
-  else return virtual_board.get_status_score();
+  else {
+    if (std::isnan(virtual_board.get_status_score()))
+      std::cout << "This is nan !!\n"
+                << "serial_num = " << serial_num << '\n'
+                << "mydepth = " << mydepth << '\n'
+                << "branch = " << branch << std::endl;
+    return virtual_board.get_status_score();
+  }
 }
