@@ -94,7 +94,7 @@ Task GameMaster::task_op() {
   board.put_dot_stone();
   board.show();
   static int pass_turn;
-  if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; return (++pass_turn < 2) ? Task::JUDGE : Task::ED; }
+  if (!board.count_stone(Stone::DOT)) { std::cout << "PASS !!!" << std::endl; return (++pass_turn < 2) ? Task::JUDGE : Task::ASK; }
   else pass_turn = 0;
   board.remove_dot_stone();
   return Task::SET;
@@ -143,11 +143,15 @@ Task GameMaster::task_ask() {
 }
 
 void GameMaster::record_hand_list() {
-  std::string file_name = participant[0]->get_myname() + '_' + participant[1]->get_myname() + ".csv";
-  log_file.open(file_name, std::ios::app);
+  std::string file_name = participant[0]->get_myname() + '_' + participant[1]->get_myname();
+  log_file.open(file_name + ".csv", std::ios::app);
   std::vector<HandList>::iterator p {hand_list.begin()};
+  log_file << file_name << std::endl;
+  log_file << "~~BEGIN~~" << std::endl;
   while(p != hand_list.end()) p++->report(log_file);
-  log_file << std::endl;
+  log_file << "~~END~~" << std::endl;
+  log_file << "WHITE," << board.count_stone(Stone::WHITE) << std::endl;
+  log_file << "BLACK," << board.count_stone(Stone::BLACK) << std::endl;
   log_file.close();
 }
 
@@ -163,8 +167,8 @@ void show_usage() {
 
 int main(int argc, char** argv) {
   std::vector<std::string> input_buff;
-  for (int i = 1; i < argc; i++) input_buff.push_back(argv[i]);
-  for (size_t i = 0; i < input_buff.size(); i++) std::cout << input_buff[i] << std::endl;
+  for (int i {1}; i < argc; i++) input_buff.push_back(argv[i]);
+  for (size_t i {0}; i < input_buff.size(); i++) std::cout << input_buff[i] << std::endl;
 
   show_usage();
   

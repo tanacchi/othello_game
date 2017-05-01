@@ -60,7 +60,7 @@ OthelloAI::OthelloAI()
 
 OthelloAI::~OthelloAI()
 {
-  //  if (mydepth > 0) delete[] subAI;
+  if (mydepth > 0) delete[] subAI;
 }
 
 OthelloAI& OthelloAI::operator=(OthelloAI& src) {
@@ -72,17 +72,17 @@ void OthelloAI::set_subAI(int depth) {
   mydepth = depth;
   record_dot_stone();
   branch = score_list.size();
-  // subAI = new OthelloAI[branch];
+  subAI = new OthelloAI[branch];
   for (int i = 0; i < branch; i++)  {
     subAI[i] = *this;
     int x, y;
     score_list[i].get_coordinate(x, y);
     subAI[i].virtual_board.insert(x, y);
     subAI[i].virtual_board.reverse_stone(x, y);
-    //    subAI[i].virtual_board.show();
-    // std::cout << "serial_num = " << serial_num << '\n'
-    //           << "mydepth = " << mydepth << '\n'
-    //           << "mybranch = "<< branch<< std::endl;
+    subAI[i].virtual_board.show();
+    std::cout << "serial_num = " << serial_num << '\n'
+              << "mydepth = " << mydepth << '\n'
+              << "mybranch = "<< branch<< std::endl;
     subAI[i].virtual_board.switch_active_stone();
     if (mydepth < 1) return;
     subAI[i].set_subAI(mydepth-1);      
