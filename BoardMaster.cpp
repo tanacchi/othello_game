@@ -22,6 +22,7 @@ char convert_stone_to_char(Stone src) {
   case Stone::BLACK: return 'X';
   case Stone::WHITE: return 'O';
   case Stone::DOT:   return '*';
+  default: return '\0';
   }
 }
 
@@ -50,7 +51,7 @@ void BoardMaster::insert(int x, int y, Stone stone) {
   board[y][x] = stone;
 }
 
-int BoardMaster::get_reversible_length(int x, int y, int dx, int dy) {
+unsigned int BoardMaster::get_reversible_length(int x, int y, int dx, int dy) {
   Stone enemy_stone {get_enemy()}; 
   for (size_t i {1}; is_inside_board(x + i*dx, y + i*dy); i++) {
     Stone target {board[y + i*dy][x + i*dx]};
@@ -92,7 +93,7 @@ int BoardMaster::count_reversible_stone(int x, int y) {
 }
 
 void BoardMaster::reverse_stone(int x, int y) {
-  int reverse_length {0};
+  unsigned int reverse_length {0};
   for (size_t i {0}; i < 8; i++) {
     reverse_length = get_reversible_length(x, y, dx[i], dy[i]);
     for (size_t j {1}; j <= reverse_length; j++) insert(x + j*dx[i], y + j*dy[i]);
@@ -116,6 +117,7 @@ BoardMaster& BoardMaster::operator=(BoardMaster& src) {
     for (int j = 0; j < BOARD_SIZE; j++)
       board[i][j] = src.board[i][j];
   active_stone = src.active_stone;
+  return *this;
 }
 
 BoardMaster::~BoardMaster() {

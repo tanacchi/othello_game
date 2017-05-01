@@ -102,7 +102,7 @@ void OthelloAI::get_conclusion(int &x, int &y) {
 
 void OthelloAI::seek(int max_depth) {
   set_subAI(max_depth);
-  for (int i = 0; i < score_list.size(); i++) {
+  for (size_t i = 0; i < score_list.size(); i++) {
     int x, y;
     score_list[i].get_coordinate(x, y);
     score_list[i].set_score(virtual_board.count_reversible_stone(x, y));
@@ -110,13 +110,13 @@ void OthelloAI::seek(int max_depth) {
     score_list[i].set_total_score();
   }
   std::sort(score_list.begin(), score_list.end(), std::greater<StoneScoreList>()); // REFACT : 要は最大値を取る奴の中でランダム参照したい
-  for (int i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
+  for (size_t i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
   double best_score = score_list[0].get_total_score();
   std::vector<StoneScoreList>::iterator p = score_list.begin();   // XXX : 
   while (p->get_total_score() == best_score) p++;
   score_list.erase(p, score_list.end());
   std::cout << "Hey" << std::endl;
-  for (int i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
+  for (size_t i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
   std::shuffle(score_list.begin(), score_list.end(), rand_pos);
   score_list[0].get_coordinate(dist_x, dist_y);
 }

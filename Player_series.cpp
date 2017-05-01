@@ -28,7 +28,7 @@ std::string Player::get_myname() {
 HumanPlayer::HumanPlayer() {
   std::string myname;
   std::cout << "What is your name ?\n"
-            << "> ";
+            << " > "<< std::flush;
   std::getline(std::cin, myname);
   std::cout << std::endl;
   set_myname(myname);
@@ -36,9 +36,9 @@ HumanPlayer::HumanPlayer() {
 
 void HumanPlayer::set_hand(const BoardMaster game_board) {
   int input_x, input_y;
-  std::cout << "Set your hand !!\n > " << std::flush;
-  std::cin >> input_x;
-  std::cin >> input_y; 
+  std::cout << "Set your hand !!" << std::endl;;
+  std::cout << "x = " << std::flush; std::cin >> input_x;
+  std::cout << "y = " << std::flush; std::cin >> input_y; 
   hand_x = input_x - 1; hand_y = input_y - 1;
 }
 

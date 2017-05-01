@@ -9,7 +9,7 @@ public:
   Stone get_enemy();
   void switch_active_stone();
   bool is_inside_board(int x, int y);
-  int get_reversible_length(int x, int y, int dx, int dy);
+  unsigned int get_reversible_length(int x, int y, int dx, int dy);
   int count_stone(Stone target);
   void init();
   void insert(int x, int y); 

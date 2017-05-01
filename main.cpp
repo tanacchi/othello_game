@@ -5,7 +5,6 @@ extern int global;
 enum class Task {
   INIT,
   OP,
-  SHOW,
   SET,
   INSERT,  
   WRITE,
@@ -53,12 +52,10 @@ public:
   Task task_judge();
   Task task_switch();
   Task task_ask();
-  Task task_ed();
   void record_hand_list();
 };
 
-GameMaster::GameMaster(Player* player[])
-{
+GameMaster::GameMaster(Player* player[]) {
   participant[0] = player[0];
   participant[1] = player[1];
   participant[0]->set_mystone(Stone::WHITE);
@@ -75,7 +72,8 @@ Task GameMaster::run(Task mode) {
   case Task::JUDGE:  return task_judge();
   case Task::SWITCH: return task_switch();
   case Task::ASK:    return task_ask();
-  case Task::ED:     return task_ed();
+  case Task::ED:
+  default:           return Task::ED;
   }
 }
 
@@ -105,8 +103,8 @@ Task GameMaster::task_op() {
 Task GameMaster::task_set() {
   active_player->set_hand(board);
   active_player->get_hand(x, y);
-  if (board.is_available_position(x, y)) return Task::INSERT;
-  else { std::cout << "It's wrong hand !! Try again." << std::endl; return Task::SET; }
+  if (!board.is_available_position(x, y)) { std::cout << "It's wrong hand !! Try again." << std::endl; return Task::SET; }
+  return Task::INSERT;
 }
 
 Task GameMaster::task_insert() {
@@ -137,22 +135,16 @@ Task GameMaster::task_ask() {
             << "BLACK STONE (X) : " << board.count_stone(Stone::BLACK) << '\n' <<std::endl;
   //  show_hand_list();
   std::string answer;
-  std::cout << "Continue ?? (yes/no)\n>"; 
+  std::cout << "Continue ?? (yes/no)\n > " << std::flush; 
   std::cin >> answer;
   if (answer == "yes")     return Task::INIT;
   else if (answer == "no") return Task::ED;
-  else return Task::ASK;
-}
-
-Task GameMaster::task_ed() {
-  return Task::ED;
+  return Task::ASK;
 }
 
 void GameMaster::record_hand_list() {
   std::vector<HandList>::iterator p {hand_list.begin()};
-  while(p != hand_list.end()) {
-    p++->report();
-  }
+  while(p != hand_list.end()) p++->report();
 }
 
 void show_usage() {
@@ -160,7 +152,7 @@ void show_usage() {
             << "***************************************************************************************\n"
             << "* [Usage]                                                                             *\n"
             << "* Options  : --normal <first player (human or cpu)>（通常のコンピューターとの対戦）   *\n"
-            << "*            --personal（２人での対人戦）                                             *\n" 
+            << "*            --personal（２人での対人戦）                                             *\n"
             << "*            --auto（コンピューター同士での自動プレイ）                               *\n"
             << "***************************************************************************************\n" << std::endl;
 }
@@ -168,20 +160,18 @@ void show_usage() {
 int main(int argc, char** argv) {
   std::vector<std::string> input_buff;
   for (int i = 1; i < argc; i++) input_buff.push_back(argv[i]);
+  for (size_t i = 0; i < input_buff.size(); i++) std::cout << input_buff[i] << std::endl;
+
+  show_usage();
   
   Player* player[2];
-
   player[0] = new HumanPlayer();
   player[1] = new ComputerPlayer();
 
   GameMaster master(player);
   Task task {Task::INIT};
   while (task != Task::ED) task = master.run(task);
+
   std::cout << "See you~~\n" << global << std::endl;
-  // BoardMaster board;
-  // board.init();
-  // board.set_active_stone(Stone::WHITE);
-  // OthelloAI ai(board, 3);
-  
   return 0;
 }
