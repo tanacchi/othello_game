@@ -79,12 +79,12 @@ void OthelloAI::set_subAI(int depth) {
     score_list[i].get_coordinate(x, y);
     subAI[i].virtual_board.insert(x, y);
     subAI[i].virtual_board.reverse_stone(x, y);
-    subAI[i].virtual_board.show();
-    std::cout << "serial_num = " << serial_num << '\n'
-              << "mydepth = " << mydepth << '\n'
-              << "mybranch = "<< branch<< std::endl;
+    // subAI[i].virtual_board.show();
+    // std::cout << "serial_num = " << serial_num << '\n'
+    //           << "mydepth = " << mydepth << '\n'
+    //           << "mybranch = "<< branch<< std::endl;
     subAI[i].virtual_board.switch_active_stone();
-    if (mydepth < 1) return;
+    if (mydepth < 1 || branch < 1) return;
     subAI[i].set_subAI(mydepth-1);      
   }
 }
@@ -112,7 +112,7 @@ void OthelloAI::seek(int max_depth) {
   std::sort(score_list.begin(), score_list.end(), std::greater<StoneScoreList>()); // REFACT : 要は最大値を取る奴の中でランダム参照したい
   for (size_t i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
   double best_score = score_list[0].get_total_score();
-  std::vector<StoneScoreList>::iterator p = score_list.begin();   // XXX : 
+  std::vector<StoneScoreList>::iterator p = score_list.begin();
   while (p->get_total_score() == best_score) p++;
   score_list.erase(p, score_list.end());
   std::cout << "Hey" << std::endl;
