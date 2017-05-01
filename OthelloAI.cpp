@@ -60,7 +60,7 @@ OthelloAI::OthelloAI()
 
 OthelloAI::~OthelloAI()
 {
-  if (mydepth > 0) delete[] subAI;
+  //  if (mydepth > 0) delete[] subAI;
 }
 
 OthelloAI& OthelloAI::operator=(OthelloAI& src) {
@@ -72,7 +72,7 @@ void OthelloAI::set_subAI(int depth) {
   mydepth = depth;
   record_dot_stone();
   branch = score_list.size();
-  subAI = new OthelloAI[branch];
+  // subAI = new OthelloAI[branch];
   for (int i = 0; i < branch; i++)  {
     subAI[i] = *this;
     int x, y;

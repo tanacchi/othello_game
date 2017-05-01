@@ -21,17 +21,18 @@ class HandList {
   int hand_y;
 public:
   HandList(int t, Stone s, int x, int y);
-  void report();
+  void report(std::ofstream& log);
 };
 
 HandList::HandList(int t, Stone s, int x, int y) {
   turn = t; stone = convert_stone_to_char(s); hand_x = x; hand_y = y;
 }
 
-void HandList::report() {
-  std::cout << "[turn] : " << turn << '\t';
-  std::cout << "Stone : " << stone << '\t';
-  std::cout << "x = " << hand_x << ",  y = " << hand_y << std::endl;;
+void HandList::report(std::ofstream& log) {
+  // std::cout << "[turn] : " << turn << '\t';
+  // std::cout << "Stone : " << stone << '\t';
+  // std::cout << "x = " << hand_x << ",  y = " << hand_y << std::endl;;
+  log << turn << ','<< stone << ',' << hand_x << ',' << hand_y << std::endl;
 }
 
 class GameMaster {
@@ -52,7 +53,7 @@ public:
   Task task_judge();
   Task task_switch();
   Task task_ask();
-  void record_hand_list();
+  void record_hand_list(std::ofstream& log);
 };
 
 GameMaster::GameMaster(Player* player[]) {
@@ -142,9 +143,9 @@ Task GameMaster::task_ask() {
   return Task::ASK;
 }
 
-void GameMaster::record_hand_list() {
+void GameMaster::record_hand_list(std::ofstream& log) {
   std::vector<HandList>::iterator p {hand_list.begin()};
-  while(p != hand_list.end()) p++->report();
+  while(p != hand_list.end()) p++->report(log);
 }
 
 void show_usage() {
@@ -165,13 +166,16 @@ int main(int argc, char** argv) {
   show_usage();
   
   Player* player[2];
-  player[0] = new HumanPlayer();
+  player[0] = new ComputerPlayer();
   player[1] = new ComputerPlayer();
 
   GameMaster master(player);
   Task task {Task::INIT};
   while (task != Task::ED) task = master.run(task);
 
+  std::ofstream log("test.csv");
+  master.record_hand_list(log);
+  
   std::cout << "See you~~\n" << global << std::endl;
   return 0;
 }
