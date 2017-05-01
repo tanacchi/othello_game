@@ -28,11 +28,8 @@ HandList::HandList(int t, Stone s, int x, int y) {
   turn = t; stone = convert_stone_to_char(s); hand_x = x; hand_y = y;
 }
 
-void HandList::report(std::ofstream& log) {
-  // std::cout << "[turn] : " << turn << '\t';
-  // std::cout << "Stone : " << stone << '\t';
-  // std::cout << "x = " << hand_x << ",  y = " << hand_y << std::endl;;
-  log << turn << ','<< stone << ',' << hand_x << ',' << hand_y << std::endl;
+void HandList::report(std::ofstream& log_file) {
+  log_file << turn << ','<< stone << ',' << hand_x << ',' << hand_y << std::endl;
 }
 
 class GameMaster {
@@ -42,6 +39,7 @@ class GameMaster {
   int turn;
   int x, y;
   std::vector<HandList> hand_list;
+  std::ofstream log_file;
 public:
   GameMaster(Player* player[]);
   Task run(Task mode);
@@ -53,7 +51,7 @@ public:
   Task task_judge();
   Task task_switch();
   Task task_ask();
-  void record_hand_list(std::ofstream& log);
+  void record_hand_list();
 };
 
 GameMaster::GameMaster(Player* player[]) {
@@ -82,6 +80,7 @@ Task GameMaster::task_init() {
   turn = 0;
   board.init();
   active_player = participant[0];
+  hand_list.erase(hand_list.begin(), hand_list.end());
   return Task::OP;
 }
 
@@ -134,7 +133,7 @@ Task GameMaster::task_switch() {
 Task GameMaster::task_ask() {
   std::cout << "WHITE STONE (O) : " << board.count_stone(Stone::WHITE) << '\n'
             << "BLACK STONE (X) : " << board.count_stone(Stone::BLACK) << '\n' <<std::endl;
-  //  show_hand_list();
+  record_hand_list();
   std::string answer;
   std::cout << "Continue ?? (yes/no)\n > " << std::flush; 
   std::cin >> answer;
@@ -143,9 +142,13 @@ Task GameMaster::task_ask() {
   return Task::ASK;
 }
 
-void GameMaster::record_hand_list(std::ofstream& log) {
+void GameMaster::record_hand_list() {
+  std::string file_name = participant[0]->get_myname() + '_' + participant[1]->get_myname() + ".csv";
+  log_file.open(file_name, std::ios::app);
   std::vector<HandList>::iterator p {hand_list.begin()};
-  while(p != hand_list.end()) p++->report(log);
+  while(p != hand_list.end()) p++->report(log_file);
+  log_file << std::endl;
+  log_file.close();
 }
 
 void show_usage() {
@@ -173,9 +176,6 @@ int main(int argc, char** argv) {
   Task task {Task::INIT};
   while (task != Task::ED) task = master.run(task);
 
-  std::ofstream log("test.csv");
-  master.record_hand_list(log);
-  
   std::cout << "See you~~\n" << global << std::endl;
   return 0;
 }
