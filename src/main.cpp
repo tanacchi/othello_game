@@ -87,7 +87,7 @@ Task GameMaster::task_init() {
 Task GameMaster::task_op() {
   Stone active_stone = active_player->get_mystone();
   board.set_active_stone(active_stone);
-  std::cout << "\t\t\t\tturn " << turn + 1 << std::endl;
+  std::cout << "turn " << turn + 1 << std::endl;
   std::cout << "WHITE STONE (O) : " << board.count_stone(Stone::WHITE) << '\n'
             << "BLACK STONE (X) : " << board.count_stone(Stone::BLACK) << '\n' <<std::endl;
   std::cout << "Now is [" << active_player->get_myname() << "] : " << convert_stone_to_char(active_stone)<< std::endl;
@@ -143,11 +143,13 @@ Task GameMaster::task_ask() {
 }
 
 void GameMaster::record_hand_list() {
-  std::string file_name = participant[0]->get_myname() + '_' + participant[1]->get_myname();
-  log_file.open("log/" + file_name + ".csv", std::ios::app);
-  std::vector<HandList>::iterator p {hand_list.begin()};
-  log_file << file_name << std::endl;
+  std::string participant_1 = participant[0]->get_myname();
+  std::string participant_2 = participant[1]->get_myname();
+  log_file.open("log/" + participant_1 + "_vs_" + participant_2 + ".csv", std::ios::app);
+  log_file << participant_1 << ",O" << std::endl;
+  log_file << participant_2 << ",X" << std::endl;
   log_file << "~~BEGIN~~" << std::endl;
+  std::vector<HandList>::iterator p {hand_list.begin()};
   while(p != hand_list.end()) p++->report(log_file);
   log_file << "~~END~~" << std::endl;
   log_file << "WHITE," << board.count_stone(Stone::WHITE) << std::endl;

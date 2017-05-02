@@ -128,10 +128,8 @@ void OthelloAI::record_dot_stone() {
 }
 
 double OthelloAI::get_avarage_score() {
-  if (mydepth > 0 && branch > 0) {
-    double sum = 0;
-    for (int i = 0; i < branch; i++) sum += subAI[i].get_avarage_score();
-    return sum / (double)branch;
-  }
-  else return virtual_board.get_status_score();
+  if (mydepth < 1 || branch < 1) return virtual_board.get_status_score();
+  double sum = 0;
+  for (int i = 0; i < branch; i++) sum += subAI[i].get_avarage_score();
+  return sum / (double)branch;    
 }
