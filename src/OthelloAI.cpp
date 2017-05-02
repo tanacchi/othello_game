@@ -60,12 +60,16 @@ OthelloAI::OthelloAI()
 
 OthelloAI::~OthelloAI()
 {
-  global--;
-  // std::cout << "serial_num = " << serial_num << std::endl;
-  // std::cout << "global = " << global << std::endl;
-  // std::cout << "branch = " << branch << std::endl;
-  //  if (branch < 1 || mydepth < 1) delete[] subAI;
+  if (mydepth > 0 && branch > 0) {
+    global--;
+    // std::cout << "serial_num = " << serial_num << std::endl;
+    // std::cout << "global = " << global << std::endl;
+    // std::cout << "branch = " << branch << std::endl;
+    //  if (branch < 1 || mydepth < 1) delete[] subAI;
+    delete[] subAI;
+  }
 }
+
 
 OthelloAI& OthelloAI::operator=(OthelloAI& src) {
   virtual_board = src.virtual_board;
@@ -76,6 +80,7 @@ void OthelloAI::set_subAI(int depth) {
   mydepth = depth;
   record_dot_stone();
   branch = score_list.size();
+  if (mydepth < 1 || branch < 1) return;
   subAI = new OthelloAI[branch];
   for (int i = 0; i < branch; i++)  {
     subAI[i] = *this;
@@ -88,7 +93,6 @@ void OthelloAI::set_subAI(int depth) {
     //           << "mydepth = " << mydepth << '\n'
     //           << "mybranch = "<< branch<< std::endl;
     subAI[i].virtual_board.switch_active_stone();
-    if (mydepth < 1 || branch < 1) return;
     subAI[i].set_subAI(mydepth-1);      
   }
 }
@@ -135,6 +139,5 @@ double OthelloAI::get_avarage_score() {
   if (mydepth < 1 || branch < 1) return virtual_board.get_status_score();
   double sum = 0;
   for (int i = 0; i < branch; i++) sum += subAI[i].get_avarage_score();
-  delete[] subAI;
   return sum / (double)branch;    
 }
