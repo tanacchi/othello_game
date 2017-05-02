@@ -1,4 +1,4 @@
-#include "include/Player_series.h"
+#include "../include/Player_series.h"
 
 extern int global;
 
@@ -173,7 +173,7 @@ int main(int argc, char** argv) {
   show_usage();
   
   Player* player[2];
-  player[0] = new ComputerPlayer();
+  player[0] = new HumanPlayer();
   player[1] = new ComputerPlayer();
 
   GameMaster master(player);

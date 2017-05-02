@@ -1,4 +1,4 @@
-#include "include/BoardMaster.h"
+#include "../include/BoardMaster.h"
 
 const std::vector<int> dx = { 0, 1, 1, 1, 0,-1,-1,-1 };
 const std::vector<int> dy = {-1,-1, 0, 1, 1, 1, 0,-1 };

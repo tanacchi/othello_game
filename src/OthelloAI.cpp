@@ -1,4 +1,4 @@
-#include "include/OthelloAI.h"
+#include "../include/OthelloAI.h"
 
 #define EDGE_SCORE 5
 
@@ -54,8 +54,7 @@ OthelloAI::OthelloAI(BoardMaster game_board)
 
 OthelloAI::OthelloAI()
   : mydepth{0},
-    serial_num{global++},
-    branch{-1}
+    serial_num{global++}
 {
 }
 
@@ -129,22 +128,10 @@ void OthelloAI::record_dot_stone() {
 }
 
 double OthelloAI::get_avarage_score() {
-  if (mydepth > 0) {
+  if (mydepth > 0 && branch > 0) {
     double sum = 0;
     for (int i = 0; i < branch; i++) sum += subAI[i].get_avarage_score();
-    if (std::isnan(sum / (double)branch))
-      std::cout << "This is nan !!\n"
-                << "serial_num = " << serial_num << '\n'
-                << "mydepth = " << mydepth << '\n'
-                << "branch = " << branch << std::endl;
     return sum / (double)branch;
   }
-  else {
-    if (std::isnan(virtual_board.get_status_score()))
-      std::cout << "This is nan !!\n"
-                << "serial_num = " << serial_num << '\n'
-                << "mydepth = " << mydepth << '\n'
-                << "branch = " << branch << std::endl;
-    return virtual_board.get_status_score();
-  }
+  else return virtual_board.get_status_score();
 }
