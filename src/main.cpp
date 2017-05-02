@@ -144,7 +144,7 @@ Task GameMaster::task_ask() {
 
 void GameMaster::record_hand_list() {
   std::string file_name = participant[0]->get_myname() + '_' + participant[1]->get_myname();
-  log_file.open(file_name + ".csv", std::ios::app);
+  log_file.open("log/" + file_name + ".csv", std::ios::app);
   std::vector<HandList>::iterator p {hand_list.begin()};
   log_file << file_name << std::endl;
   log_file << "~~BEGIN~~" << std::endl;
@@ -173,7 +173,7 @@ int main(int argc, char** argv) {
   show_usage();
   
   Player* player[2];
-  player[0] = new HumanPlayer();
+  player[0] = new ComputerPlayer();
   player[1] = new ComputerPlayer();
 
   GameMaster master(player);
