@@ -88,6 +88,7 @@ Task GameMaster::task_op() {
   Stone active_stone = active_player->get_mystone();
   board.set_active_stone(active_stone);
   std::cout << "turn " << turn + 1 << std::endl;
+  std::cout << global << std::endl;
   std::cout << "WHITE STONE (O) : " << board.count_stone(Stone::WHITE) << '\n'
             << "BLACK STONE (X) : " << board.count_stone(Stone::BLACK) << '\n' <<std::endl;
   std::cout << "Now is [" << active_player->get_myname() << "] : " << convert_stone_to_char(active_stone)<< std::endl;
@@ -175,7 +176,7 @@ int main(int argc, char** argv) {
   show_usage();
   
   Player* player[2];
-  player[0] = new ComputerPlayer();
+  player[0] = new HumanPlayer();
   player[1] = new ComputerPlayer();
 
   GameMaster master(player);

@@ -48,19 +48,23 @@ int StoneScoreList::get_total_score() {
 OthelloAI::OthelloAI(BoardMaster game_board)
   : rand_pos {std::random_device{}()},
     virtual_board{game_board},
-    serial_num{global++}
+    serial_num{++global}
 {
 }
 
 OthelloAI::OthelloAI()
   : mydepth{0},
-    serial_num{global++}
+    serial_num{++global}
 {
 }
 
 OthelloAI::~OthelloAI()
 {
-  if (mydepth > 0) delete[] subAI;
+  global--;
+  // std::cout << "serial_num = " << serial_num << std::endl;
+  // std::cout << "global = " << global << std::endl;
+  // std::cout << "branch = " << branch << std::endl;
+  //  if (branch < 1 || mydepth < 1) delete[] subAI;
 }
 
 OthelloAI& OthelloAI::operator=(OthelloAI& src) {
@@ -131,5 +135,6 @@ double OthelloAI::get_avarage_score() {
   if (mydepth < 1 || branch < 1) return virtual_board.get_status_score();
   double sum = 0;
   for (int i = 0; i < branch; i++) sum += subAI[i].get_avarage_score();
+  delete[] subAI;
   return sum / (double)branch;    
 }
