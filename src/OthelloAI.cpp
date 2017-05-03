@@ -60,7 +60,7 @@ OthelloAI::OthelloAI()
 
 OthelloAI::~OthelloAI()
 {
-  global--;
+  //  global--;
   if (mydepth > 0 && branch > 0) {
     // std::cout << "serial_num = " << serial_num << std::endl;
     // std::cout << "global = " << global << std::endl;
@@ -88,10 +88,10 @@ void OthelloAI::set_subAI(int depth) {
     score_list[i].get_coordinate(x, y);
     subAI[i].virtual_board.insert(x, y);
     subAI[i].virtual_board.reverse_stone(x, y);
-    // subAI[i].virtual_board.show();
-    // std::cout << "serial_num = " << serial_num << '\n'
-    //           << "mydepth = " << mydepth << '\n'
-    //           << "mybranch = "<< branch<< std::endl;
+    subAI[i].virtual_board.show();
+    std::cout << "serial_num = " << serial_num << '\n'
+              << "mydepth = " << mydepth << '\n'
+              << "mybranch = "<< branch<< std::endl;
     subAI[i].virtual_board.switch_active_stone();
     subAI[i].set_subAI(mydepth-1);      
   }
@@ -114,8 +114,8 @@ void OthelloAI::seek(int max_depth) {
     int x, y;
     score_list[i].get_coordinate(x, y);
     score_list[i].set_score(virtual_board.count_reversible_stone(x, y));
-    score_list[i].set_score(virtual_board.get_status_score()/10);
-    score_list[i].set_score(subAI[i].get_avarage_score());
+    score_list[i].set_score(virtual_board.get_status_score()/5);
+    score_list[i].set_score(subAI[i].get_avarage_score()/5);
     score_list[i].set_total_score();
   }
   std::sort(score_list.begin(), score_list.end(), std::greater<StoneScoreList>()); // REFACT : 要は最大値を取る奴の中でランダム参照したい

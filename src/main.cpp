@@ -78,6 +78,7 @@ Task GameMaster::run(Task mode) {
 
 Task GameMaster::task_init() {
   turn = 0;
+  global = 0;
   board.init();
   active_player = participant[0];
   hand_list.erase(hand_list.begin(), hand_list.end());
@@ -88,7 +89,7 @@ Task GameMaster::task_op() {
   Stone active_stone = active_player->get_mystone();
   board.set_active_stone(active_stone);
   std::cout << "turn " << turn + 1 << std::endl;
-  std::cout << global << std::endl;
+  // std::cout << global << std::endl;
   std::cout << "WHITE STONE (O) : " << board.count_stone(Stone::WHITE) << '\n'
             << "BLACK STONE (X) : " << board.count_stone(Stone::BLACK) << '\n' <<std::endl;
   std::cout << "Now is [" << active_player->get_myname() << "] : " << convert_stone_to_char(active_stone)<< std::endl;
