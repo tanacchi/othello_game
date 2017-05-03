@@ -60,8 +60,8 @@ OthelloAI::OthelloAI()
 
 OthelloAI::~OthelloAI()
 {
+  global--;
   if (mydepth > 0 && branch > 0) {
-    global--;
     // std::cout << "serial_num = " << serial_num << std::endl;
     // std::cout << "global = " << global << std::endl;
     // std::cout << "branch = " << branch << std::endl;
@@ -114,6 +114,7 @@ void OthelloAI::seek(int max_depth) {
     int x, y;
     score_list[i].get_coordinate(x, y);
     score_list[i].set_score(virtual_board.count_reversible_stone(x, y));
+    score_list[i].set_score(virtual_board.get_status_score()/10);
     score_list[i].set_score(subAI[i].get_avarage_score());
     score_list[i].set_total_score();
   }
