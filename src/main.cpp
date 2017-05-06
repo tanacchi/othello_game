@@ -89,7 +89,6 @@ Task GameMaster::task_op() {
   Stone active_stone = active_player->get_mystone();
   board.set_active_stone(active_stone);
   std::cout << "turn " << turn + 1 << std::endl;
-  // std::cout << global << std::endl;
   std::cout << "WHITE STONE (O) : " << board.count_stone(Stone::WHITE) << '\n'
             << "BLACK STONE (X) : " << board.count_stone(Stone::BLACK) << '\n' <<std::endl;
   std::cout << "Now is [" << active_player->get_myname() << "] : " << convert_stone_to_char(active_stone)<< std::endl;
@@ -169,12 +168,27 @@ void show_usage() {
             << "***************************************************************************************\n" << std::endl;
 }
 
-int main(int argc, char** argv) {
-  std::vector<std::string> input_buff;
-  for (int i {1}; i < argc; i++) input_buff.push_back(argv[i]);
-  for (size_t i {0}; i < input_buff.size(); i++) std::cout << input_buff[i] << std::endl;
+void set_mode() {
+  std::cout << "What is game mode ? (normal / personal / auto)" << std::endl;
+  std::cout << " > " << std::flush;
+  std::string input_buff;
+  std::getline(std::cin, input_buff);
+  if (input_buff == "normal") 
 
-  show_usage();
+}
+
+int main(int argc, char** argv) {
+
+  std::vector<std::string> user_message;
+  for (int i {1}; i < argc; i++) user_message.push_back(argv[i]);
+  for (size_t i {0}; i < user_message.size(); i++)
+    // try {
+    //   if (!user_message.size()) throw 0;
+    //   else if (user_message[i] == "-h" || user_message[i] == "--help") throw "HELP";
+    //   else throw 
+    // }
+
+  user_message.shrink_to_fit();
   
   Player* player[2];
   player[0] = new HumanPlayer();

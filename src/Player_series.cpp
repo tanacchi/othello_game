@@ -26,9 +26,9 @@ std::string Player::get_myname() {
 // ------------------------- HumanPlayer ---------------------------------------
 
 HumanPlayer::HumanPlayer() {
-  std::string myname;
   std::cout << "What is your name ?\n"
             << " > "<< std::flush;
+  std::string myname;
   std::getline(std::cin, myname);
   std::cout << std::endl;
   set_myname(myname);
