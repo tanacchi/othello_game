@@ -6,7 +6,8 @@ enum class Task {
   INIT,
   OP,
   SET,
-  INSERT,  
+  INSERT,
+  REVERT,
   WRITE,
   JUDGE,
   SWITCH,
@@ -47,6 +48,7 @@ public:
   Task task_op();
   Task task_set();
   Task task_insert();
+  Task task_revert();
   Task task_write();
   Task task_judge();
   Task task_switch();
@@ -67,6 +69,7 @@ Task GameMaster::run(Task mode) {
   case Task::OP:     return task_op();
   case Task::SET:    return task_set();
   case Task::INSERT: return task_insert();
+  case Task::REVERT: return task_revert();
   case Task::WRITE:  return task_write();
   case Task::JUDGE:  return task_judge();
   case Task::SWITCH: return task_switch();
@@ -91,7 +94,7 @@ Task GameMaster::task_op() {
   std::cout << "turn " << turn + 1 << std::endl;
   std::cout << "WHITE STONE (O) : " << board.count_stone(Stone::WHITE) << '\n'
             << "BLACK STONE (X) : " << board.count_stone(Stone::BLACK) << '\n' <<std::endl;
-  std::cout << "Now is [" << active_player->get_myname() << "] : " << convert_stone_to_char(active_stone)<< std::endl;
+  std::cout << "Now is "<< active_player->get_myname() << "'s turn ! : " << convert_stone_to_char(active_stone)<< std::endl;
   board.put_dot_stone();
   board.show();
   static int pass_turn;
@@ -112,6 +115,10 @@ Task GameMaster::task_insert() {
   board.insert(x, y);
   board.reverse_stone(x, y);
   return Task::WRITE;
+}
+
+Task GameMaster::task_revert() {
+  ;
 }
 
 Task GameMaster::task_write() {
@@ -173,7 +180,7 @@ void set_mode() {
   std::cout << " > " << std::flush;
   std::string input_buff;
   std::getline(std::cin, input_buff);
-  if (input_buff == "normal") 
+  if (input_buff == "normal") ;
 
 }
 

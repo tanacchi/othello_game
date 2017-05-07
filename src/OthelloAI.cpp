@@ -86,12 +86,10 @@ void OthelloAI::set_subAI(int depth) {
     subAI[i] = *this;
     int x, y;
     score_list[i].get_coordinate(x, y);
+    score_list[i].set_score(virtual_board.count_reversible_stone(x, y));
     subAI[i].virtual_board.insert(x, y);
     subAI[i].virtual_board.reverse_stone(x, y);
-    subAI[i].virtual_board.show();
-    std::cout << "serial_num = " << serial_num << '\n'
-              << "mydepth = " << mydepth << '\n'
-              << "mybranch = "<< branch<< std::endl;
+    score_list[i].set_score(virtual_board.get_status_score());
     subAI[i].virtual_board.switch_active_stone();
     subAI[i].set_subAI(mydepth-1);      
   }
@@ -114,8 +112,8 @@ void OthelloAI::seek(int max_depth) {
     int x, y;
     score_list[i].get_coordinate(x, y);
     score_list[i].set_score(virtual_board.count_reversible_stone(x, y));
-    score_list[i].set_score(virtual_board.get_status_score()/5);
-    score_list[i].set_score(subAI[i].get_avarage_score()/5);
+    score_list[i].set_score(virtual_board.get_status_score()/2);
+    score_list[i].set_score(subAI[i].get_avarage_score());
     score_list[i].set_total_score();
   }
   std::sort(score_list.begin(), score_list.end(), std::greater<StoneScoreList>()); // REFACT : 要は最大値を取る奴の中でランダム参照したい
@@ -137,8 +135,14 @@ void OthelloAI::record_dot_stone() {
 }
 
 double OthelloAI::get_avarage_score() {
-  if (mydepth < 1 || branch < 1) return virtual_board.get_status_score();
+  if (mydepth < 1 || branch < 1) { 
+    return virtual_board.get_status_score();
+  }
   double sum = 0;
-  for (int i = 0; i < branch; i++) sum += subAI[i].get_avarage_score();
+  for (int i = 0; i < branch; i++) {
+    score_list[i].set_total_score();
+    sum += score_list[i].get_total_score();
+    sum += subAI[i].get_avarage_score();
+  }
   return sum / (double)branch;    
 }
