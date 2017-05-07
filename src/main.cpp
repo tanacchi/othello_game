@@ -182,12 +182,7 @@ int main(int argc, char** argv) {
   std::vector<std::string> user_message;
   for (int i {1}; i < argc; i++) user_message.push_back(argv[i]);
   for (size_t i {0}; i < user_message.size(); i++)
-    // try {
-    //   if (!user_message.size()) throw 0;
-    //   else if (user_message[i] == "-h" || user_message[i] == "--help") throw "HELP";
-    //   else throw 
-    // }
-
+    
   user_message.shrink_to_fit();
   
   Player* player[2];
