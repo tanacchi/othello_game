@@ -149,8 +149,8 @@ double BoardMaster::get_status_score() {
   const std::vector<int> pin_y = {1, 6, 0, 1, 6, 7, 0, 1, 6, 7, 1, 6};
   for (int i = 0; i < 12; i++) {
     Stone target = board[pin_y[i]][pin_x[i]];
-    if (target == active_stone) status_score -= 3;
-    else if (target == enemy_stone) status_score += 3;
+    if (target == active_stone) status_score -= 5;
+    else if (target == enemy_stone) status_score += 5;
   }
   return status_score;
 }
