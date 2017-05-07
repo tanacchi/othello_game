@@ -35,10 +35,6 @@ bool StoneScoreList::operator>(const StoneScoreList &right ) const {
   return total_score > right.total_score;
 }
 
-inline bool StoneScoreList::is_edge(int x, int y) {
-  return (!x || x == 7) && (!y || y == 7);
-}
-
 int StoneScoreList::get_total_score() {
   return total_score;
 }
@@ -60,14 +56,7 @@ OthelloAI::OthelloAI()
 
 OthelloAI::~OthelloAI()
 {
-  //  global--;
-  if (mydepth > 0 && branch > 0) {
-    // std::cout << "serial_num = " << serial_num << std::endl;
-    // std::cout << "global = " << global << std::endl;
-    // std::cout << "branch = " << branch << std::endl;
-    //  if (branch < 1 || mydepth < 1) delete[] subAI;
-    delete[] subAI;
-  }
+  if (mydepth > 0 && branch > 0) delete[] subAI;
 }
 
 
