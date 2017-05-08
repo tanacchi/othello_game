@@ -35,15 +35,18 @@ HumanPlayer::HumanPlayer() {
 }
 
 bool HumanPlayer::set_hand(const BoardMaster game_board) {
-  std::string input_str_x, input_str_y;
   std::cout << "Set your hand !!" << std::endl;
-  std::cout << "x = " << std::flush; std::cin >> input_str_x;
-  std::cout << "y = " << std::flush; std::cin >> input_str_y; 
-  if (input_str_x == "revert" || input_str_y == "revert") return false;
-  int input_num_x, input_num_y;
-  input_num_x = std::atoi(input_str_x.c_str());
-  input_num_y = std::atoi(input_str_y.c_str());
-  hand_x = input_num_x - 1; hand_y = input_num_y - 1;
+  std::string input_str[2];
+  for (int i = 0; i < 2; i++) {
+    (!i) ? std::cout << "x" : std::cout << "y";
+    std::cout << " = " << std::flush;
+    std::cin >> input_str[i];
+    if (input_str[i] == "revert") return false;
+  }
+  int input_num[2];
+  for (int i = 0; i < 2; i++) input_num[i] = std::atoi(input_str[i].c_str());
+  hand_x = input_num[0] - 1;
+  hand_y = input_num[1] - 1;
   return true;
 }
 
