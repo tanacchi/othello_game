@@ -146,9 +146,10 @@ Task GameMaster::task_ask() {
   std::string answer;
   std::cout << "Continue ?? (yes/no)\n > " << std::flush; 
   std::cin >> answer;
-  if (answer == "yes")     return Task::INIT;
-  else if (answer == "no") return Task::ED;
-  return Task::ASK;
+  return
+    (answer == "yes") ? Task::INIT :
+    (answer == "no")  ? Task::ED :
+    Task::ASK;
 }
 
 void GameMaster::record_hand_list() {
