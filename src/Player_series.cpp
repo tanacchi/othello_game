@@ -35,11 +35,14 @@ HumanPlayer::HumanPlayer() {
 }
 
 void HumanPlayer::set_hand(const BoardMaster game_board) {
-  int input_x, input_y;
+  std::string input_str_x, input_str_y;
   std::cout << "Set your hand !!" << std::endl;;
-  std::cout << "x = " << std::flush; std::cin >> input_x;
-  std::cout << "y = " << std::flush; std::cin >> input_y; 
-  hand_x = input_x - 1; hand_y = input_y - 1;
+  std::cout << "x = " << std::flush; std::cin >> input_str_x;
+  std::cout << "y = " << std::flush; std::cin >> input_str_y; 
+  int input_num_x, input_num_y;
+  input_num_x = std::atoi(input_str_x.c_str());
+  input_num_y = std::atoi(input_str_y.c_str());
+  hand_x = input_num_x - 1; hand_y = input_num_y - 1;
 }
 
 // ------------------------- ComputerPlayer ------------------------------------
