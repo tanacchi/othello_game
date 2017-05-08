@@ -105,7 +105,7 @@ Task GameMaster::task_op() {
 }
 
 Task GameMaster::task_set() {
-  active_player->set_hand(board);
+  if (!active_player->set_hand(board)) return Task::REVERT;
   active_player->get_hand(x, y);
   if (!board.is_available_position(x, y)) { std::cout << "It's wrong hand !! Try again." << std::endl; return Task::SET; }
   return Task::INSERT;
@@ -118,7 +118,8 @@ Task GameMaster::task_insert() {
 }
 
 Task GameMaster::task_revert() {
-  ;
+  std::cout << "AHI !!" << std::endl;
+  return Task::SET;
 }
 
 Task GameMaster::task_write() {
