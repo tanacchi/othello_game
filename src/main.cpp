@@ -22,11 +22,23 @@ class HandList {
   int hand_y;
 public:
   HandList(int t, Stone s, int x, int y);
+  void replay(BoardMaster& board);
   void report(std::ofstream& log);
+  Stone convert_char_to_stone(char stone_type);
 };
 
 HandList::HandList(int t, Stone s, int x, int y) {
   turn = t; stone = convert_stone_to_char(s); hand_x = x; hand_y = y;
+}
+
+void HandList::replay(BoardMaster& board) {
+  board.insert(hand_x-1, hand_y-1, convert_char_to_stone(stone));
+  board.reverse_stone(hand_x-1, hand_y-1);
+  board.switch_active_stone();
+} 
+
+Stone HandList::convert_char_to_stone(char stone_type) {
+  return (stone_type == 'O') ? Stone::WHITE : Stone::BLACK;
 }
 
 void HandList::report(std::ofstream& log_file) {
@@ -118,8 +130,19 @@ Task GameMaster::task_insert() {
 }
 
 Task GameMaster::task_revert() {
-  std::cout << "AHI !!" << std::endl;
-  return Task::SET;
+  std::string input_buff;
+  std::cout << "Set the turn you wanna play back !" << std::endl;
+  std::cout << " > " << std::flush;
+  std::cin >> input_buff;
+  int destination = std::atoi(input_buff.c_str()) - 1;
+  if (destination < 0 || turn < destination) { std::cout << "Pardon ?" << std::endl; return Task::SET; }
+  hand_list.erase(hand_list.begin() + destination, hand_list.end());
+  turn = destination;
+  board.init();
+  std::vector<HandList>::iterator p_list = hand_list.begin();
+  while (p_list != hand_list.end()) p_list++->replay(board);
+  active_player = participant[destination%2];
+  return Task::OP;
 }
 
 Task GameMaster::task_write() {
