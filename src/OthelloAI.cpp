@@ -101,7 +101,7 @@ void OthelloAI::seek(int max_depth) {
     int x, y;
     score_list[i].get_coordinate(x, y);
     score_list[i].set_score(virtual_board.count_reversible_stone(x, y));
-    score_list[i].set_score(virtual_board.get_status_score()/2);
+    score_list[i].set_score(virtual_board.get_status_score());
     score_list[i].set_score(subAI[i].get_avarage_score());
     score_list[i].set_total_score();
   }
@@ -129,8 +129,8 @@ double OthelloAI::get_avarage_score() {
   }
   double sum = 0;
   for (int i = 0; i < branch; i++) {
-    score_list[i].set_total_score();
-    sum += score_list[i].get_total_score();
+    // score_list[i].set_total_score();
+    // sum += score_list[i].get_total_score();
     sum += subAI[i].get_avarage_score();
   }
   return sum / (double)branch;    
