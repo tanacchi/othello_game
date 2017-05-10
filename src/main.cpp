@@ -199,10 +199,10 @@ void GameMaster::record_hand_list() {
 }
 
 Mode read_mode(std::vector<std::string> user_message) {
- for (size_t i = 0; i < user_message.size(); i++) {
-   std::cout << "Done" << std::endl; 
-   if (user_message[i] == "--normal") {
-      if (++i >= user_message.size()) return Mode::FALSE;
+  for (size_t i {0}; i < user_message.size(); i++) std::cout << user_message[i] << std::endl;
+  for (size_t i = 0; i < user_message.size(); i++) {
+    if (user_message[i] == "--normal") {
+      if (++i < user_message.size()) return Mode::FALSE;
       else if (user_message[i] == "human") return Mode::NORMAL_H;
       else if (user_message[i] == "cpu") return Mode::NORMAL_C;
     }
@@ -227,21 +227,22 @@ void reset_message(std::vector<std::string>& user_message) {
     user_message.shrink_to_fit();
     std::cout << "What is game mode ? (normal / personal / auto)" << std::endl;
     std::cout << "> " << std::flush;
-    std::string input_buff;
-    std::getline(std::cin, input_buff);
-    if (input_buff == "normal") {
-      input_buff.clear();
+    std::string input_mode;
+    std::getline(std::cin, input_mode);
+    if (input_mode == "normal") {
       user_message.push_back("--normal");
       std::cout << "Who is the 1st player ? (human / cpu)" << std::endl;
       std::cout << "> " << std::flush;
-      std::cin >> input_buff;
-      if (input_buff == "human") user_message.push_back("human");
-      else if (input_buff == "cpu") user_message.push_back("cpu");
+      std::string input_person;
+      std::cin >> input_person;
+      std::cout << input_person << std::endl;
+      if (input_person == "human")  { user_message.push_back("human"); return; }
+      else if (input_person == "cpu") { user_message.push_back("cpu"); return; }
       std::cout << "Pardon ?" << std::endl;
       continue;
     }
-    else if (input_buff == "personal") { user_message.push_back("--personal"); return; }
-    else if (input_buff == "auto") { user_message.push_back("--auto"); return; }
+    else if (input_mode == "personal") { user_message.push_back("--personal"); return; }
+    else if (input_mode == "auto") { user_message.push_back("--auto"); return; }
     std::cout << "Pardon ??" << std::endl;
   }
 }
@@ -265,7 +266,8 @@ void set_player(Mode mode, Player* player[]) {
     player[1] = new ComputerPlayer();
     break; 
   default:
-    ;
+    player[0] = NULL;
+    player[1] = NULL;
   }
 }
 
@@ -273,15 +275,16 @@ int main(int argc, char** argv) {
 
   std::vector<std::string> user_message;
   for (int i {1}; i < argc; i++) user_message.push_back(argv[i]);
-  Mode mode;
-  while ((mode = read_mode(user_message)) != Mode::FALSE) {
-    show_usage();
-    reset_message(user_message);
-  }
+
+  Mode mode = Mode::NORMAL_H;// Mode::FALSE;;
+  // while ((mode = read_mode(user_message)) == Mode::FALSE) {
+  //   show_usage();
+  //   reset_message(user_message);
+  //   for (size_t i = 0; i < user_message.size(); i++) std::cout << user_message[i] << std::endl;
+  // }
   
   Player* player[2];
   set_player(mode, player);
-  
   GameMaster master(player);
   Task task {Task::INIT};
   while (task != Task::ED) task = master.run(task);
