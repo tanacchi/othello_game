@@ -273,8 +273,8 @@ void set_player(Mode mode, Player* player[]) {
 
 int main(int argc, char** argv) {
 
-  std::vector<std::string> user_message;
-  for (int i {1}; i < argc; i++) user_message.push_back(argv[i]);
+  std::vector<std::string> user_message{argv, argv + argc};
+  // for (int i {1}; i < argc; i++) user_message.push_back(argv[i]);
 
   Mode mode = Mode::NORMAL_H;// Mode::FALSE;;
   // while ((mode = read_mode(user_message)) == Mode::FALSE) {
