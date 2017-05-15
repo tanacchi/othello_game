@@ -34,12 +34,20 @@ HumanPlayer::HumanPlayer() {
   set_myname(myname);
 }
 
-void HumanPlayer::set_hand(const BoardMaster game_board) {
-  int input_x, input_y;
-  std::cout << "Set your hand !!" << std::endl;;
-  std::cout << "x = " << std::flush; std::cin >> input_x;
-  std::cout << "y = " << std::flush; std::cin >> input_y; 
-  hand_x = input_x - 1; hand_y = input_y - 1;
+bool HumanPlayer::set_hand(const BoardMaster game_board) {
+  std::cout << "Set your hand !!" << std::endl;
+  std::string input_str[2];
+  for (int i = 0; i < 2; i++) {
+    (!i) ? std::cout << "x" : std::cout << "y";
+    std::cout << " = " << std::flush;
+    std::cin >> input_str[i];
+    if (input_str[i] == "revert") return false;
+  }
+  int input_num[2];
+  for (int i = 0; i < 2; i++) input_num[i] = std::atoi(input_str[i].c_str());
+  hand_x = input_num[0] - 1;
+  hand_y = input_num[1] - 1;
+  return true;
 }
 
 // ------------------------- ComputerPlayer ------------------------------------
@@ -48,9 +56,10 @@ ComputerPlayer::ComputerPlayer() {
   set_myname("Computer");
 }
 
-void ComputerPlayer::set_hand(const BoardMaster game_board) {
+bool ComputerPlayer::set_hand(const BoardMaster game_board) {
   OthelloAI* p = new OthelloAI(game_board);
   p->seek(4);
   p->get_conclusion(hand_x, hand_y);
   delete p;
+  return true;
 }

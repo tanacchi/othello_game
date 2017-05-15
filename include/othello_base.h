@@ -4,9 +4,9 @@
 #include <list>
 #include <random>
 #include <thread>
-#include <string.h>
 #include <algorithm>
 #include <fstream>
+#include <cstdlib>
 
 #define BOARD_SIZE 8
 
