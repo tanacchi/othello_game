@@ -77,22 +77,29 @@ void set_player(Mode mode, Player* player[]) {
 
 int main(int argc, char** argv) {
 
-  std::vector<std::string> user_message{argv, argv + argc};
-  // for (int i {1}; i < argc; i++) user_message.push_back(argv[i]);
+  // std::vector<std::string> user_message{argv, argv + argc};
+  // // for (int i {1}; i < argc; i++) user_message.push_back(argv[i]);
 
-  Mode mode = Mode::NORMAL_H;// Mode::FALSE;;
-  // while ((mode = read_mode(user_message)) == Mode::FALSE) {
-  //   show_usage();
-  //   reset_message(user_message);
-  //   for (size_t i = 0; i < user_message.size(); i++) std::cout << user_message[i] << std::endl;
-  // }
+  // Mode mode = Mode::NORMAL_H;// Mode::FALSE;;
+  // // while ((mode = read_mode(user_message)) == Mode::FALSE) {
+  // //   show_usage();
+  // //   reset_message(user_message);
+  // //   for (size_t i = 0; i < user_message.size(); i++) std::cout << user_message[i] << std::endl;
+  // // }
   
+  // Player* player[2];
+  // set_player(mode, player);
+
   Player* player[2];
-  set_player(mode, player);
+  player[0] = new ComputerPlayer;
+  player[1] = new ComputerPlayer;
+
   GameMaster master(player);
   Task task {Task::INIT};
   while (task != Task::ED) task = master.run(task);
 
   std::cout << "See you~~\n" << global << std::endl;
+  delete* player;
+   
   return 0;
 }
