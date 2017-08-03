@@ -16,7 +16,8 @@ void BoardMaster::init() {
   board[3][4] = board[4][3] = Stone::BLACK;
 }
 
-char convert_stone_to_char(Stone src) {
+char convert_stone_to_char(Stone src)
+{
   switch (src) {
   case Stone::SPACE: return ' ';
   case Stone::BLACK: return 'X';
@@ -26,7 +27,8 @@ char convert_stone_to_char(Stone src) {
   }
 }
 
-void BoardMaster::show() {
+void BoardMaster::show()
+{
   std::cout << "---------------------------" << std::endl;
   std::cout << "  ";
   for (size_t i {0}; i < BOARD_SIZE; i++) std::cout << i+1 << ' ';
@@ -39,19 +41,23 @@ void BoardMaster::show() {
   std::cout << "---------------------------" << std::endl;
 }
 
-void BoardMaster::set_active_stone(Stone stone) {
+void BoardMaster::set_active_stone(Stone stone)
+{
   active_stone = stone;
 }
 
-void BoardMaster::insert(int x, int y) {
+void BoardMaster::insert(int x, int y)
+{
   board[y][x] = active_stone;
 }
 
-void BoardMaster::insert(int x, int y, Stone stone) {
+void BoardMaster::insert(int x, int y, Stone stone)
+{
   board[y][x] = stone;
 }
 
-unsigned int BoardMaster::get_reversible_length(int x, int y, int dx, int dy) {
+unsigned int BoardMaster::get_reversible_length(int x, int y, int dx, int dy)
+{
   Stone enemy_stone {get_enemy()}; 
   for (size_t i {1}; is_inside_board(x + i*dx, y + i*dy); i++) {
     Stone target {board[y + i*dy][x + i*dx]};
@@ -62,23 +68,28 @@ unsigned int BoardMaster::get_reversible_length(int x, int y, int dx, int dy) {
   return 0;
 }
 
-bool BoardMaster::is_inside_board(int x, int y) {
+bool BoardMaster::is_inside_board(int x, int y)
+{
   return (0 <= x && x < BOARD_SIZE) && (0 <= y && y < BOARD_SIZE);
 }
 
-Stone BoardMaster::get_enemy() {
+Stone BoardMaster::get_enemy()
+{
   return (active_stone == Stone::WHITE) ? Stone::BLACK : Stone::WHITE;
 }
 
-bool BoardMaster::is_available_position(int x, int y) {
+bool BoardMaster::is_available_position(int x, int y)
+{
   return is_inside_board(x, y) && board[y][x] == Stone::SPACE && count_reversible_stone(x, y);
 }
 
-bool BoardMaster::can_continue() {
+bool BoardMaster::can_continue()
+{
   return count_stone(Stone::SPACE) && count_stone(Stone::BLACK) && count_stone(Stone::WHITE);
 }
 
-int BoardMaster::count_stone(Stone target) {
+int BoardMaster::count_stone(Stone target)
+{
   int count {0};
   for (size_t i {0}; i < BOARD_SIZE; i++)
     for (size_t j {0}; j < BOARD_SIZE; j++)
@@ -86,13 +97,15 @@ int BoardMaster::count_stone(Stone target) {
   return count;
 }
 
-int BoardMaster::count_reversible_stone(int x, int y) {
+int BoardMaster::count_reversible_stone(int x, int y)
+{
   int reversible_stone_count {0};
   for (size_t i {0}; i < 8; i++) reversible_stone_count += get_reversible_length(x, y, dx[i], dy[i]);
   return reversible_stone_count;
 }
 
-void BoardMaster::reverse_stone(int x, int y) {
+void BoardMaster::reverse_stone(int x, int y)
+{
   unsigned int reverse_length {0};
   for (size_t i {0}; i < 8; i++) {
     reverse_length = get_reversible_length(x, y, dx[i], dy[i]);
@@ -100,19 +113,22 @@ void BoardMaster::reverse_stone(int x, int y) {
   }
 }
 
-void BoardMaster::put_dot_stone() {
+void BoardMaster::put_dot_stone()
+{
   for (size_t i {0}; i < BOARD_SIZE; i++)
     for (size_t j {0}; j < BOARD_SIZE; j++)
       if (is_available_position(j, i)) insert(j, i, Stone::DOT);
 }
 
-void BoardMaster::remove_dot_stone() {
+void BoardMaster::remove_dot_stone()
+{
   for (size_t i {0}; i< BOARD_SIZE; i++)
     for (size_t j {0}; j < BOARD_SIZE; j++)
       if (board[i][j] == Stone::DOT) insert(j, i, Stone::SPACE);
 }
 
-BoardMaster& BoardMaster::operator=(BoardMaster& src) {
+BoardMaster& BoardMaster::operator=(BoardMaster& src)
+{
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
       board[i][j] = src.board[i][j];
@@ -120,14 +136,17 @@ BoardMaster& BoardMaster::operator=(BoardMaster& src) {
   return *this;
 }
 
-BoardMaster::~BoardMaster() {
+BoardMaster::~BoardMaster()
+{
 }
 
-void BoardMaster::switch_active_stone() {
+void BoardMaster::switch_active_stone()
+{
   active_stone = (active_stone == Stone::WHITE) ? Stone::BLACK : Stone::WHITE;
 }
 
-double BoardMaster::get_status_score() {
+double BoardMaster::get_status_score()
+{
   double status_score {0};
   Stone enemy_stone {get_enemy()};
   status_score = count_stone(active_stone) - count_stone(enemy_stone);

@@ -2,32 +2,38 @@
 
 extern int global;
 
-HandList::HandList(int t, Stone s, int x, int y) {
+HandList::HandList(int t, Stone s, int x, int y)
+{
   turn = t; stone_type = convert_stone_to_char(s); hand_x = x; hand_y = y;
 }
 
-void HandList::replay(BoardMaster& board) {
+void HandList::replay(BoardMaster& board)
+{
   board.insert(hand_x-1, hand_y-1, convert_char_to_stone(stone_type));
   board.reverse_stone(hand_x-1, hand_y-1);
   board.switch_active_stone();
 } 
 
-Stone HandList::convert_char_to_stone(char stone_type) {
+Stone HandList::convert_char_to_stone(char stone_type)
+{
   return (stone_type == 'O') ? Stone::WHITE : Stone::BLACK;
 }
 
-void HandList::report(std::ofstream& log_file) {
+void HandList::report(std::ofstream& log_file)
+{
   log_file << turn << ','<< stone_type << ',' << hand_x << ',' << hand_y << std::endl;
 }
 
-GameMaster::GameMaster(Player* player[]) {
+GameMaster::GameMaster(Player* player[])
+{
   participant[0] = player[0];
   participant[1] = player[1];
   participant[0]->set_mystone(Stone::WHITE);
   participant[1]->set_mystone(Stone::BLACK);
 }
 
-Task GameMaster::run(Task mode) {
+Task GameMaster::run(Task mode)
+{
   switch (mode) {
   case Task::INIT:   return task_init();
   case Task::OP:     return task_op();
@@ -43,7 +49,8 @@ Task GameMaster::run(Task mode) {
   }
 }
 
-Task GameMaster::task_init() {
+Task GameMaster::task_init()
+{
   turn = 0;
   global = 0;
   board.init();
@@ -52,7 +59,8 @@ Task GameMaster::task_init() {
   return Task::OP;
 }
 
-Task GameMaster::task_op() {
+Task GameMaster::task_op()
+{
   Stone active_stone = active_player->get_mystone();
   board.set_active_stone(active_stone);
   std::cout << "turn " << turn + 1 << std::endl;
@@ -68,20 +76,23 @@ Task GameMaster::task_op() {
   return Task::SET;
 }
 
-Task GameMaster::task_set() {
+Task GameMaster::task_set()
+{
   if (!active_player->set_hand(board)) return Task::REVERT;
   active_player->get_hand(x, y);
   if (!board.is_available_position(x, y)) { std::cout << "It's wrong hand !! Try again." << std::endl; return Task::SET; }
   return Task::INSERT;
 }
 
-Task GameMaster::task_insert() {
+Task GameMaster::task_insert()
+{
   board.insert(x, y);
   board.reverse_stone(x, y);
   return Task::WRITE;
 }
 
-Task GameMaster::task_revert() {
+Task GameMaster::task_revert()
+{
   std::string input_buff;
   std::cout << "Set the turn you wanna play back !" << std::endl;
   std::cout << " > " << std::flush;
@@ -97,24 +108,28 @@ Task GameMaster::task_revert() {
   return Task::OP;
 }
 
-Task GameMaster::task_write() {
+Task GameMaster::task_write()
+{
   hand_list.push_back(HandList(turn+1, active_player->get_mystone(), x+1, y+1));
   return Task::JUDGE;
 }
 
-Task GameMaster::task_judge() {
+Task GameMaster::task_judge()
+{
   board.show();
   std::cout << "\n\n" << std::endl;
   return (board.can_continue()) ? Task::SWITCH : Task::ASK;
 }
 
-Task GameMaster::task_switch() {
+Task GameMaster::task_switch()
+{
   active_player = participant[++turn % 2];
   //wait(100);
   return Task::OP;
 }
 
-Task GameMaster::task_ask() {
+Task GameMaster::task_ask()
+{
   std::cout << "WHITE STONE (O) : " << board.count_stone(Stone::WHITE) << '\n'
             << "BLACK STONE (X) : " << board.count_stone(Stone::BLACK) << '\n' <<std::endl;
   record_hand_list();
@@ -127,7 +142,8 @@ Task GameMaster::task_ask() {
     Task::ASK;
 }
 
-void GameMaster::record_hand_list() {
+void GameMaster::record_hand_list()
+{
   std::string participant_1 = participant[0]->get_myname();
   std::string participant_2 = participant[1]->get_myname();
   log_file.open("log/" + participant_1 + "_vs_" + participant_2 + ".csv", std::ios::app);
