@@ -2,7 +2,8 @@
 
 extern int global;
 
-Mode read_mode(std::vector<std::string> user_message) {
+Mode read_mode(std::vector<std::string> user_message)
+{
   for (size_t i {0}; i < user_message.size(); i++) std::cout << user_message[i] << std::endl;
   for (size_t i = 0; i < user_message.size(); i++) {
     if (user_message[i] == "--normal") {
@@ -16,7 +17,8 @@ Mode read_mode(std::vector<std::string> user_message) {
   return Mode::FALSE;
 }
 
-void show_usage() {
+void show_usage()
+{
   std::cout << '\n'
             << "********************************************************\n"
             << "* [Usage]                                              *\n"
@@ -26,7 +28,8 @@ void show_usage() {
             << "********************************************************\n" << std::endl;
 }
 
-void reset_message(std::vector<std::string>& user_message) {
+void reset_message(std::vector<std::string>& user_message)
+{
   while (true) {
     user_message.shrink_to_fit();
     std::cout << "What is game mode ? (normal / personal / auto)" << std::endl;
@@ -51,7 +54,8 @@ void reset_message(std::vector<std::string>& user_message) {
   }
 }
 
-void set_player(Mode mode, Player* player[]) {
+void set_player(Mode mode, Player* player[])
+{
   switch (mode) {
   case Mode::NORMAL_H:
     player[0] = new HumanPlayer();
@@ -75,7 +79,8 @@ void set_player(Mode mode, Player* player[]) {
   }
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
 
   // std::vector<std::string> user_message{argv, argv + argc};
   // // for (int i {1}; i < argc; i++) user_message.push_back(argv[i]);

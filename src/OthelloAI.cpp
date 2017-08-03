@@ -6,36 +6,44 @@ int global;
 
 // ------------------------- StoneList -----------------------------------------
 
-StoneScoreList::StoneScoreList(int x, int y) {
+StoneScoreList::StoneScoreList(int x, int y)
+{
   hand_x = x; hand_y = y; total_score = 0;
 }
  
-void StoneScoreList::set_total_score() {
+void StoneScoreList::set_total_score()
+{
   for (size_t i {0}; i < score.size(); i++) total_score += score[i];
 }
 
-void StoneScoreList::get_coordinate(int &x, int &y) {
+void StoneScoreList::get_coordinate(int &x, int &y)
+{
   x = hand_x; y = hand_y;
 }
 
-void StoneScoreList::set_score(double s) {
+void StoneScoreList::set_score(double s)
+{
   score.push_back(s);
 }
 
-void StoneScoreList::set_score(int s) {
+void StoneScoreList::set_score(int s)
+{
   score.push_back((double)s);
 }
 
-void StoneScoreList::show_score_list() {
+void StoneScoreList::show_score_list()
+{
   std::cout << "x = " << hand_x+1 << ", y = " << hand_y+1 << ' ';
   std::cout << "Score : " << total_score << std::endl;
 }
 
-bool StoneScoreList::operator>(const StoneScoreList &right ) const {
+bool StoneScoreList::operator>(const StoneScoreList &right ) const
+{
   return total_score > right.total_score;
 }
 
-int StoneScoreList::get_total_score() {
+int StoneScoreList::get_total_score()
+{
   return total_score;
 }
 
@@ -60,12 +68,14 @@ OthelloAI::~OthelloAI()
 }
 
 
-OthelloAI& OthelloAI::operator=(OthelloAI& src) {
+OthelloAI& OthelloAI::operator=(OthelloAI& src)
+{
   virtual_board = src.virtual_board;
   return *this;
 }
 
-void OthelloAI::set_subAI(int depth) {
+void OthelloAI::set_subAI(int depth)
+{
   mydepth = depth;
   record_dot_stone();
   branch = score_list.size();
@@ -84,18 +94,21 @@ void OthelloAI::set_subAI(int depth) {
   }
 }
 
-void OthelloAI::random_maker() {
+void OthelloAI::random_maker()
+{
   std::uniform_int_distribution<int> rand100(0, 7);
   dist_x = rand100(rand_pos);
   dist_y = rand100(rand_pos);
 }
 
-void OthelloAI::get_conclusion(int &x, int &y) {
+void OthelloAI::get_conclusion(int &x, int &y)
+{
   x = dist_x;
   y = dist_y;
 }
 
-void OthelloAI::seek(int max_depth) {
+void OthelloAI::seek(int max_depth)
+{
   set_subAI(max_depth);
   for (size_t i = 0; i < score_list.size(); i++) {
     int x, y;
@@ -117,13 +130,15 @@ void OthelloAI::seek(int max_depth) {
   score_list[0].get_coordinate(dist_x, dist_y);
 }
 
-void OthelloAI::record_dot_stone() {
+void OthelloAI::record_dot_stone()
+{
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
       if (virtual_board.is_available_position(j, i)) score_list.push_back(StoneScoreList(j, i));
 }
 
-double OthelloAI::get_avarage_score() {
+double OthelloAI::get_avarage_score()
+{
   if (mydepth < 1 || branch < 1) { 
     return virtual_board.get_status_score();
   }
