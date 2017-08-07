@@ -1,4 +1,4 @@
-#include "../include/OthelloAI.h"
+#include "../include/OthelloAI.hpp"
 
 #define EDGE_SCORE 5
 

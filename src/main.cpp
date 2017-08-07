@@ -1,4 +1,4 @@
-#include "../include/GameMaster.h"
+#include "../include/GameMaster.hpp"
 
 extern int global;
 
