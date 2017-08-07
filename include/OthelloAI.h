@@ -1,4 +1,5 @@
 #include "BoardMaster.h"
+#include <memory>
 
 class StoneScoreList {
  public:
