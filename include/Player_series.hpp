@@ -4,11 +4,6 @@
 #include "OthelloAI.hpp"
 
 class Player {
-  Stone mystone;
-  std::string myname;
-  std::vector<StoneScoreList> score_list;
-protected:
-  int hand_x, hand_y;
 public:
   Player() = default;
   virtual ~Player() = default;
@@ -18,6 +13,11 @@ public:
   void get_hand(int &x, int &y);
   void set_myname(std::string src);
   std::string get_myname();
+private:
+  Stone mystone_;
+  std::string myname_;
+protected:
+  int hand_x_, hand_y_;
 };
 
 class HumanPlayer : public Player {

@@ -8,145 +8,145 @@ int global;
 
 StoneScoreList::StoneScoreList(int x, int y)
 {
-  hand_x = x; hand_y = y; total_score = 0;
+  hand_x_ = x; hand_y_ = y; total_score_ = 0;
 }
  
 void StoneScoreList::set_total_score()
 {
-  for (size_t i {0}; i < score.size(); i++) total_score += score[i];
+  for (size_t i {0}; i < score_.size(); i++) total_score_ += score_[i];
 }
 
 void StoneScoreList::get_coordinate(int &x, int &y)
 {
-  x = hand_x; y = hand_y;
+  x = hand_x_; y = hand_y_;
 }
 
 void StoneScoreList::set_score(double s)
 {
-  score.push_back(s);
+  score_.push_back(s);
 }
 
 void StoneScoreList::set_score(int s)
 {
-  score.push_back((double)s);
+  score_.push_back((double)s);
 }
 
 void StoneScoreList::show_score_list()
 {
-  std::cout << "x = " << hand_x+1 << ", y = " << hand_y+1 << ' ';
-  std::cout << "Score : " << total_score << std::endl;
+  std::cout << "x = " << hand_x_+1 << ", y = " << hand_y_+1 << ' ';
+  std::cout << "Score : " << total_score_ << std::endl;
 }
 
 bool StoneScoreList::operator>(const StoneScoreList &right ) const
 {
-  return total_score > right.total_score;
+  return total_score_ > right.total_score_;
 }
 
 int StoneScoreList::get_total_score()
 {
-  return total_score;
+  return total_score_;
 }
 
 // ------------------------- OthelloAI -----------------------------------------
 
 OthelloAI::OthelloAI(BoardMaster game_board)
-  : rand_pos {std::random_device{}()},
-    virtual_board{game_board},
-    serial_num{++global}
+  : rand_pos_ {std::random_device{}()},
+    virtual_board_{game_board},
+    serial_num_{++global}
 {
 }
 
 OthelloAI::OthelloAI()
-  : mydepth{0},
-    serial_num{++global}
+  : mydepth_{0},
+    serial_num_{++global}
 {
 }
 
 OthelloAI::~OthelloAI()
 {
-  if (mydepth > 0 && branch > 0) delete[] subAI;
+  if (mydepth_ > 0 && branch_ > 0) delete[] subAI_;
 }
 
 
 OthelloAI& OthelloAI::operator=(OthelloAI& src)
 {
-  virtual_board = src.virtual_board;
+  virtual_board_ = src.virtual_board_;
   return *this;
 }
 
 void OthelloAI::set_subAI(int depth)
 {
-  mydepth = depth;
+  mydepth_ = depth;
   record_dot_stone();
-  branch = score_list.size();
-  if (mydepth < 1 || branch < 1) return;
-  subAI = new OthelloAI[branch];
-  for (int i = 0; i < branch; i++)  {
-    subAI[i] = *this;
+  branch_ = score_list_.size();
+  if (mydepth_ < 1 || branch_ < 1) return;
+  subAI_ = new OthelloAI[branch_];
+  for (int i = 0; i < branch_; i++)  {
+    subAI_[i] = *this;
     int x, y;
-    score_list[i].get_coordinate(x, y);
-    score_list[i].set_score(virtual_board.count_reversible_stone(x, y));
-    subAI[i].virtual_board.insert(x, y);
-    subAI[i].virtual_board.reverse_stone(x, y);
-    score_list[i].set_score(virtual_board.get_status_score());
-    subAI[i].virtual_board.switch_active_stone();
-    subAI[i].set_subAI(mydepth-1);      
+    score_list_[i].get_coordinate(x, y);
+    score_list_[i].set_score(virtual_board_.count_reversible_stone(x, y));
+    subAI_[i].virtual_board_.insert(x, y);
+    subAI_[i].virtual_board_.reverse_stone(x, y);
+    score_list_[i].set_score(virtual_board_.get_status_score());
+    subAI_[i].virtual_board_.switch_active_stone();
+    subAI_[i].set_subAI(mydepth_-1);      
   }
 }
 
 void OthelloAI::random_maker()
 {
   std::uniform_int_distribution<int> rand100(0, 7);
-  dist_x = rand100(rand_pos);
-  dist_y = rand100(rand_pos);
+  dist_x_ = rand100(rand_pos_);
+  dist_y_ = rand100(rand_pos_);
 }
 
 void OthelloAI::get_conclusion(int &x, int &y)
 {
-  x = dist_x;
-  y = dist_y;
+  x = dist_x_;
+  y = dist_y_;
 }
 
 void OthelloAI::seek(int max_depth)
 {
   set_subAI(max_depth);
-  for (size_t i = 0; i < score_list.size(); i++) {
+  for (size_t i = 0; i < score_list_.size(); i++) {
     int x, y;
-    score_list[i].get_coordinate(x, y);
-    score_list[i].set_score(virtual_board.count_reversible_stone(x, y));
-    score_list[i].set_score(virtual_board.get_status_score());
-    score_list[i].set_score(subAI[i].get_avarage_score());
-    score_list[i].set_total_score();
+    score_list_[i].get_coordinate(x, y);
+    score_list_[i].set_score(virtual_board_.count_reversible_stone(x, y));
+    score_list_[i].set_score(virtual_board_.get_status_score());
+    score_list_[i].set_score(subAI_[i].get_avarage_score());
+    score_list_[i].set_total_score();
   }
-  std::sort(score_list.begin(), score_list.end(), std::greater<StoneScoreList>()); // REFACT : 要は最大値を取る奴の中でランダム参照したい
-  for (size_t i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
-  // double best_score = score_list[0].get_total_score();
-  // std::vector<StoneScoreList>::iterator p = score_list.begin();
+  std::sort(score_list_.begin(), score_list_.end(), std::greater<StoneScoreList>()); // REFACT : 要は最大値を取る奴の中でランダム参照したい
+  for (size_t i = 0; i < score_list_.size(); i++) score_list_[i].show_score_list();
+  // double best_score = score_list_[0].get_total_score();
+  // std::vector<StoneScoreList>::iterator p = score_list_.begin();
   // while (p->get_total_score() == best_score) p++;
-  // score_list.erase(p, score_list.end());
+  // score_list_.erase(p, score_list_.end());
   // std::cout << "Hey" << std::endl;
-  // for (size_t i = 0; i < score_list.size(); i++) score_list[i].show_score_list();
-  // std::shuffle(score_list.begin(), score_list.end(), rand_pos);
-  score_list[0].get_coordinate(dist_x, dist_y);
+  // for (size_t i = 0; i < score_list_.size(); i++) score_list_[i].show_score_list_();
+  // std::shuffle(score_list_.begin(), score_list_.end(), rand_pos);
+  score_list_[0].get_coordinate(dist_x_, dist_y_);
 }
 
 void OthelloAI::record_dot_stone()
 {
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
-      if (virtual_board.is_available_position(j, i)) score_list.push_back(StoneScoreList(j, i));
+      if (virtual_board_.is_available_position(j, i)) score_list_.push_back(StoneScoreList(j, i));
 }
 
 double OthelloAI::get_avarage_score()
 {
-  if (mydepth < 1 || branch < 1) { 
-    return virtual_board.get_status_score();
+  if (mydepth_ < 1 || branch_ < 1) { 
+    return virtual_board_.get_status_score();
   }
   double sum = 0;
-  for (int i = 0; i < branch; i++) {
-    // score_list[i].set_total_score();
-    // sum += score_list[i].get_total_score();
-    sum += subAI[i].get_avarage_score();
+  for (int i = 0; i < branch_; i++) {
+    // score_list_[i].set_total_score();
+    // sum += score_list_[i].get_total_score();
+    sum += subAI_[i].get_avarage_score();
   }
-  return sum / (double)branch;    
+  return sum / (double)branch_;    
 }

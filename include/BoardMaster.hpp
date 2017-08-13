@@ -4,8 +4,6 @@
 #include "othello_base.hpp"
 
 class BoardMaster {
-  std::vector<std::vector<Stone> > board;
-  Stone active_stone;
 public:
   BoardMaster();
   ~BoardMaster();
@@ -27,6 +25,9 @@ public:
   void show();
   BoardMaster& operator=(BoardMaster& src);
   double get_status_score();
+private:
+  std::vector<std::vector<Stone> > board_;
+  Stone active_stone_;
 };
 
 char convert_stone_to_char(Stone src);
