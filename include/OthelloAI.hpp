@@ -15,10 +15,10 @@ class StoneScoreList {
   bool operator>(const StoneScoreList &right)const;
   int get_total_score();
  private:
-  int hand_x;
-  int hand_y;
-  std::vector<double> score;
-  double total_score;
+  int hand_x_;
+  int hand_y_;
+  std::vector<double> score_;
+  double total_score_;
 };
 
 class OthelloAI {
@@ -34,14 +34,14 @@ class OthelloAI {
   void set_subAI(int branch);
   double get_avarage_score();
  private:
-  int dist_x, dist_y;
-  std::mt19937 rand_pos;
-  std::vector<StoneScoreList> score_list;
-  BoardMaster virtual_board;
-  int mydepth;
-  OthelloAI* subAI;
-  int serial_num;
-  int branch;
+  int dist_x_, dist_y_;
+  std::mt19937 rand_pos_;
+  std::vector<StoneScoreList> score_list_;
+  BoardMaster virtual_board_;
+  int mydepth_;
+  OthelloAI* subAI_;
+  int serial_num_;
+  int branch_;
 };
 
 #endif // OTHELLO_AI_H_
