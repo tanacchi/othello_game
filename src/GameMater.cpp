@@ -4,7 +4,7 @@ extern int global;
 
 HandList::HandList(int turn, Stone stone, int hand_x, int hand_y)
   : turn_{turn},
-    stone_type_{convert_stone_to_char(stone)},
+    stone_type_{to_char(stone)},
     hand_x_{hand_x},
     hand_y_{hand_y}
 {
@@ -68,7 +68,7 @@ Task GameMaster::task_op()
   std::cout << "turn " << turn_ + 1 << std::endl;
   std::cout << "WHITE STONE (O) : " << board_.count_stone(Stone::White) << '\n'
             << "BLACK STONE (X) : " << board_.count_stone(Stone::Black) << '\n' <<std::endl;
-  std::cout << "Now is "<< active_player_->get_myname() << "'s turn ! : " << convert_stone_to_char(active_stone)<< std::endl;
+  std::cout << "Now is "<< active_player_->get_myname() << "'s turn ! : " << to_char(active_stone)<< std::endl;
   board_.put_dot_stone();
   board_.show();
   static int pass_turn;

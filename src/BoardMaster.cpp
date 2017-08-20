@@ -21,7 +21,7 @@ void BoardMaster::init() {
   board_[3][4] = board_[4][3] = Stone::Black;
 }
 
-char convert_stone_to_char(Stone src)
+char to_char(Stone src)
 {
   switch (src) {
   case Stone::Space: return ' ';
@@ -40,7 +40,7 @@ void BoardMaster::show()
   std::cout << std::endl;
   for (size_t i {0}; i < BOARD_SIZE; i++) {
     std::cout << i+1 << ' ';
-    for (size_t j {0}; j < BOARD_SIZE; j++) std::cout << convert_stone_to_char(board_[i][j]) << ' ';
+    for (size_t j {0}; j < BOARD_SIZE; j++) std::cout << to_char(board_[i][j]) << ' ';
     std::cout << std::endl;
   }
   std::cout << "---------------------------" << std::endl;
@@ -134,9 +134,7 @@ void BoardMaster::remove_dot_stone()
 
 const BoardMaster& BoardMaster::operator=(BoardMaster& src)
 {
-  for (int i = 0; i < BOARD_SIZE; i++)
-    for (int j = 0; j < BOARD_SIZE; j++)
-      board_[i][j] = src.board_[i][j];
+  board_ = src.board_;
   active_stone_ = src.active_stone_;
   return *this;
 }
