@@ -31,6 +31,6 @@ private:
   Stone active_stone_;
 };
 
-char convert_stone_to_char(Stone src);
+char to_char(Stone src);
 
 #endif // BOARD_MASTER_H_
