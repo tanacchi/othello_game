@@ -7,14 +7,14 @@ Mode read_mode(std::vector<std::string> user_message)
   for (size_t i {0}; i < user_message.size(); i++) std::cout << user_message[i] << std::endl;
   for (size_t i = 0; i < user_message.size(); i++) {
     if (user_message[i] == "--normal") {
-      if (++i < user_message.size()) return Mode::FALSE;
-      else if (user_message[i] == "human") return Mode::NORMAL_H;
-      else if (user_message[i] == "cpu") return Mode::NORMAL_C;
+      if (++i < user_message.size()) return Mode::False;
+      else if (user_message[i] == "human") return Mode::Normal_h;
+      else if (user_message[i] == "cpu") return Mode::Normal_c;
     }
-    else if(user_message[i] == "--personal") return Mode::PERSONAL;
-    else if(user_message[i] == "--auto") return Mode::AUTO;
+    else if(user_message[i] == "--personal") return Mode::Personal;
+    else if(user_message[i] == "--auto") return Mode::Auto;
   }
-  return Mode::FALSE;
+  return Mode::False;
 }
 
 void show_usage()
@@ -57,19 +57,19 @@ void reset_message(std::vector<std::string>& user_message)
 void set_player(Mode mode, Player* player[])
 {
   switch (mode) {
-  case Mode::NORMAL_H:
+  case Mode::Normal_h:
     player[0] = new HumanPlayer();
     player[1] = new ComputerPlayer();
     break;
-  case Mode::NORMAL_C:
+  case Mode::Normal_c:
     player[0] = new ComputerPlayer();
     player[1] = new HumanPlayer();
     break;
-  case Mode::PERSONAL:
+  case Mode::Personal:
     player[0] = new HumanPlayer();
     player[1] = new HumanPlayer();
     break;
-  case Mode::AUTO:
+  case Mode::Auto:
     player[0] = new ComputerPlayer();
     player[1] = new ComputerPlayer();
     break; 
@@ -85,8 +85,8 @@ int main(int argc, char** argv)
   // std::vector<std::string> user_message{argv, argv + argc};
   // // for (int i {1}; i < argc; i++) user_message.push_back(argv[i]);
 
-  // Mode mode = Mode::NORMAL_H;// Mode::FALSE;;
-  // // while ((mode = read_mode(user_message)) == Mode::FALSE) {
+  // Mode mode = Mode::Normal_h;// Mode::False;;
+  // // while ((mode = read_mode(user_message)) == Mode::False) {
   // //   show_usage();
   // //   reset_message(user_message);
   // //   for (size_t i = 0; i < user_message.size(); i++) std::cout << user_message[i] << std::endl;
@@ -100,8 +100,8 @@ int main(int argc, char** argv)
   player[1] = new ComputerPlayer;
 
   GameMaster master(player);
-  Task task {Task::INIT};
-  while (task != Task::ED) task = master.run(task);
+  Task task {Task::Init};
+  while (task != Task::Ed) task = master.run(task);
 
   std::cout << "See you~~\n" << global << std::endl;
   delete* player;

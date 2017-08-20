@@ -3,7 +3,7 @@
 // ------------------------- Player --------------------------------------------
 
 Player::Player()
-  : mystone_ {Stone::SPACE},
+  : mystone_ {Stone::Space},
     myname_(),
     hand_x_{-1},
     hand_y_{-1}

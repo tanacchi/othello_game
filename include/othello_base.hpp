@@ -16,10 +16,10 @@
 inline void wait(int num) { std::this_thread::sleep_for(std::chrono::milliseconds(num)); }
 
 enum class Stone {
-  SPACE,
-  BLACK,
-  WHITE,
-  DOT
+  Space,
+  Black,
+  White,
+  Dot
 };
 
 #endif // OTHELLO_BASE_H_

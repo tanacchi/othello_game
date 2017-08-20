@@ -5,7 +5,7 @@ const std::vector<int> dy = {-1,-1, 0, 1, 1, 1, 0,-1 };
 
 BoardMaster::BoardMaster()   // enemy をいちいち呼び出してるのたるいかもしれない
   : board_{std::vector<std::vector<Stone> >(BOARD_SIZE, std::vector<Stone >(BOARD_SIZE))},
-    active_stone_{Stone::SPACE}
+    active_stone_{Stone::Space}
 {
 }
 
@@ -18,18 +18,18 @@ BoardMaster::BoardMaster(const BoardMaster& src)
 void BoardMaster::init() {
   for (size_t i {0}; i < board_.size(); i++)
     for (size_t j {0}; j < board_.front().size(); j++)
-      board_[i][j] = Stone::SPACE;
-  board_[3][3] = board_[4][4] = Stone::WHITE;
-  board_[3][4] = board_[4][3] = Stone::BLACK;
+      board_[i][j] = Stone::Space;
+  board_[3][3] = board_[4][4] = Stone::White;
+  board_[3][4] = board_[4][3] = Stone::Black;
 }
 
 char convert_stone_to_char(Stone src)
 {
   switch (src) {
-  case Stone::SPACE: return ' ';
-  case Stone::BLACK: return 'X';
-  case Stone::WHITE: return 'O';
-  case Stone::DOT:   return '*';
+  case Stone::Space: return ' ';
+  case Stone::Black: return 'X';
+  case Stone::White: return 'O';
+  case Stone::Dot:   return '*';
   default: return '\0';
   }
 }
@@ -82,17 +82,17 @@ bool BoardMaster::is_inside_board(int x, int y)
 
 Stone BoardMaster::get_enemy()
 {
-  return (active_stone_ == Stone::WHITE) ? Stone::BLACK : Stone::WHITE;
+  return (active_stone_ == Stone::White) ? Stone::Black : Stone::White;
 }
 
 bool BoardMaster::is_available_position(int x, int y)
 {
-  return is_inside_board(x, y) && board_[y][x] == Stone::SPACE && count_reversible_stone(x, y);
+  return is_inside_board(x, y) && board_[y][x] == Stone::Space && count_reversible_stone(x, y);
 }
 
 bool BoardMaster::can_continue()
 {
-  return count_stone(Stone::SPACE) && count_stone(Stone::BLACK) && count_stone(Stone::WHITE);
+  return count_stone(Stone::Space) && count_stone(Stone::Black) && count_stone(Stone::White);
 }
 
 int BoardMaster::count_stone(Stone target)
@@ -124,14 +124,14 @@ void BoardMaster::put_dot_stone()
 {
   for (size_t i {0}; i < BOARD_SIZE; i++)
     for (size_t j {0}; j < BOARD_SIZE; j++)
-      if (is_available_position(j, i)) insert(j, i, Stone::DOT);
+      if (is_available_position(j, i)) insert(j, i, Stone::Dot);
 }
 
 void BoardMaster::remove_dot_stone()
 {
   for (size_t i {0}; i< BOARD_SIZE; i++)
     for (size_t j {0}; j < BOARD_SIZE; j++)
-      if (board_[i][j] == Stone::DOT) insert(j, i, Stone::SPACE);
+      if (board_[i][j] == Stone::Dot) insert(j, i, Stone::Space);
 }
 
 const BoardMaster& BoardMaster::operator=(BoardMaster& src)
@@ -145,7 +145,7 @@ const BoardMaster& BoardMaster::operator=(BoardMaster& src)
 
 void BoardMaster::switch_active_stone()
 {
-  active_stone_ = (active_stone_ == Stone::WHITE) ? Stone::BLACK : Stone::WHITE;
+  active_stone_ = (active_stone_ == Stone::White) ? Stone::Black : Stone::White;
 }
 
 double BoardMaster::get_status_score()
