@@ -4,24 +4,24 @@
 #include "../include/Player_series.hpp"
 
 enum class Task {
-  INIT,
-  OP,
-  SET,
-  INSERT,
-  REVERT,
-  WRITE,
-  JUDGE,
-  SWITCH,
-  ASK,
-  ED
+  Init,
+  Op,
+  Set,
+  Insert,
+  Revert,
+  Write,
+  Judge,
+  Switch,
+  Ask,
+  Ed
 };
 
 enum class Mode {
-  NORMAL_H,
-  NORMAL_C,
-  PERSONAL,
-  AUTO,
-  FALSE
+  Normal_h,
+  Normal_c,
+  Personal,
+  Auto,
+  False
 };
 
 class HandList {
