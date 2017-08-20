@@ -2,9 +2,12 @@
 
 extern int global;
 
-HandList::HandList(int t, Stone s, int x, int y)
+HandList::HandList(int turn, Stone stone, int hand_x, int hand_y)
+  : turn_{turn},
+    stone_type_{convert_stone_to_char(stone)},
+    hand_x_{hand_x},
+    hand_y_{hand_y}
 {
-  turn_ = t; stone_type_ = convert_stone_to_char(s); hand_x_ = x; hand_y_ = y;
 }
 
 void HandList::replay(BoardMaster& board)

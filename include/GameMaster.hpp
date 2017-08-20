@@ -27,6 +27,7 @@ enum class Mode {
 class HandList {
 public:
   HandList(int t, Stone s, int x, int y);
+  ~HandList() = default;
   void replay(BoardMaster& board);
   void report(std::ofstream& log_file);
   Stone convert_char_to_stone(char stone_type);
@@ -40,6 +41,7 @@ private:
 class GameMaster {
 public:
   GameMaster(Player* player[]);
+  ~GameMaster() = default;
   Task run(Task mode);
   Task task_init();
   Task task_op();

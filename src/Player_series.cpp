@@ -2,6 +2,14 @@
 
 // ------------------------- Player --------------------------------------------
 
+Player::Player()
+  : mystone_ {Stone::SPACE},
+    myname_(),
+    hand_x_{-1},
+    hand_y_{-1}
+{
+}
+
 void Player::set_mystone(Stone stone)
 {
   mystone_ = stone;

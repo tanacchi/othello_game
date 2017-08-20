@@ -5,7 +5,7 @@
 
 class Player {
 public:
-  Player() = default;
+  Player();
   virtual ~Player() = default;
   void set_mystone(Stone stone);
   virtual bool set_hand(const BoardMaster game_board) = 0;

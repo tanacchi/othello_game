@@ -7,6 +7,7 @@
 class StoneScoreList {
  public:
   StoneScoreList(int x, int y);
+  ~StoneScoreList() = default;
   void set_total_score();
   void get_coordinate(int &x, int &y);
   void set_score(double s);

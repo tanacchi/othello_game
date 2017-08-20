@@ -4,7 +4,14 @@ const std::vector<int> dx = { 0, 1, 1, 1, 0,-1,-1,-1 };
 const std::vector<int> dy = {-1,-1, 0, 1, 1, 1, 0,-1 };
 
 BoardMaster::BoardMaster()   // enemy をいちいち呼び出してるのたるいかもしれない
-  : board_{std::vector<std::vector<Stone> >(BOARD_SIZE, std::vector<Stone >(BOARD_SIZE))}
+  : board_{std::vector<std::vector<Stone> >(BOARD_SIZE, std::vector<Stone >(BOARD_SIZE))},
+    active_stone_{Stone::SPACE}
+{
+}
+
+BoardMaster::BoardMaster(const BoardMaster& src)
+  : board_ {src.board_},
+    active_stone_{src.active_stone_}
 {
 }
 
@@ -127,17 +134,13 @@ void BoardMaster::remove_dot_stone()
       if (board_[i][j] == Stone::DOT) insert(j, i, Stone::SPACE);
 }
 
-BoardMaster& BoardMaster::operator=(BoardMaster& src)
+const BoardMaster& BoardMaster::operator=(BoardMaster& src)
 {
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
       board_[i][j] = src.board_[i][j];
   active_stone_ = src.active_stone_;
   return *this;
-}
-
-BoardMaster::~BoardMaster()
-{
 }
 
 void BoardMaster::switch_active_stone()

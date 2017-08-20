@@ -6,7 +6,9 @@
 class BoardMaster {
 public:
   BoardMaster();
-  ~BoardMaster();
+  BoardMaster(const BoardMaster& src);
+  const BoardMaster& operator=(BoardMaster& src);
+  ~BoardMaster() = default;
   Stone get_enemy();
   void switch_active_stone();
   bool is_inside_board(int x, int y);
@@ -23,7 +25,6 @@ public:
   void remove_dot_stone();
   void reverse_stone(int x, int y);
   void show();
-  BoardMaster& operator=(BoardMaster& src);
   double get_status_score();
 private:
   std::vector<std::vector<Stone> > board_;
