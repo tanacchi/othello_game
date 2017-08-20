@@ -24,10 +24,10 @@ class StoneScoreList {
 
 class OthelloAI {
  public:
-  OthelloAI(BoardMaster game_board);
   OthelloAI();
-  ~OthelloAI();
+  OthelloAI(BoardMaster game_board);
   OthelloAI& operator=(OthelloAI& src);
+  ~OthelloAI();
   void get_conclusion(int &x, int &y);
   void random_maker();
   void seek(int max_depth);
