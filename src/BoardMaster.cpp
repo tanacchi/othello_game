@@ -16,9 +16,7 @@ BoardMaster::BoardMaster(const BoardMaster& src)
 }
 
 void BoardMaster::init() {
-  for (size_t i {0}; i < board_.size(); i++)
-    for (size_t j {0}; j < board_.front().size(); j++)
-      board_[i][j] = Stone::Space;
+  for (size_t i {0}; i < board_.size(); i++) board_[i].assign(BOARD_SIZE, Stone::Space);
   board_[3][3] = board_[4][4] = Stone::White;
   board_[3][4] = board_[4][3] = Stone::Black;
 }
