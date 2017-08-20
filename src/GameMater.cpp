@@ -28,9 +28,8 @@ void HandList::report(std::ofstream& log_file)
 }
 
 GameMaster::GameMaster(Player* player[])
+  : participant_ {player[0], player[1]}
 {
-  participant_[0] = player[0];
-  participant_[1] = player[1];
   participant_[0]->set_mystone(Stone::WHITE);
   participant_[1]->set_mystone(Stone::BLACK);
 }
