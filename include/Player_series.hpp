@@ -14,6 +14,8 @@ public:
   void set_myname(std::string src);
   std::string get_myname();
 private:
+  Player(const Player& src);
+  const Player& operator=(const Player& src);
   Stone mystone_;
   std::string myname_;
 protected:
