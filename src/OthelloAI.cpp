@@ -7,8 +7,11 @@ int global;
 // ------------------------- StoneList -----------------------------------------
 
 StoneScoreList::StoneScoreList(int x, int y)
+  : hand_x_ {x},
+    hand_y_ {y},
+    score_(),
+    total_score_ {0}
 {
-  hand_x_ = x; hand_y_ = y; total_score_ = 0;
 }
  
 void StoneScoreList::set_total_score()
