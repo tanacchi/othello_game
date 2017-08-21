@@ -9,12 +9,12 @@ class StoneScoreList {
   StoneScoreList(int x, int y);
   ~StoneScoreList() = default;
   void set_total_score();
-  void get_coordinate(int &x, int &y);
+  void get_coordinate(int &x, int &y) const;
   void set_score(double s);
   void set_score(int s);
-  void show_score_list();
+  void show_score_list() const;
   bool operator>(const StoneScoreList &right)const;
-  int get_total_score();
+  int get_total_score() const;
  private:
   int hand_x_;
   int hand_y_;
@@ -28,7 +28,7 @@ class OthelloAI {
   OthelloAI(BoardMaster game_board);
   OthelloAI& operator=(OthelloAI& src);
   ~OthelloAI();
-  void get_conclusion(int &x, int &y);
+  void get_conclusion(int &x, int &y) const;
   void random_maker();
   void seek(int max_depth);
   void record_dot_stone();
