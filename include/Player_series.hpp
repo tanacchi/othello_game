@@ -9,10 +9,10 @@ public:
   virtual ~Player() = default;
   void set_mystone(Stone stone);
   virtual bool set_hand(const BoardMaster game_board) = 0;
-  Stone get_mystone();
-  void get_hand(int &x, int &y);
+  Stone get_mystone() const;
+  void get_hand(int &x, int &y) const;
   void set_myname(std::string src);
-  std::string get_myname();
+  std::string get_myname() const;
 private:
   Player(const Player& src);
   const Player& operator=(const Player& src);

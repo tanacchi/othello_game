@@ -32,7 +32,7 @@ char to_char(Stone src)
   }
 }
 
-void BoardMaster::show()
+void BoardMaster::show() const
 {
   std::cout << "---------------------------" << std::endl;
   std::cout << "  ";
@@ -61,7 +61,7 @@ void BoardMaster::insert(int x, int y, Stone stone)
   board_[y][x] = stone;
 }
 
-unsigned int BoardMaster::get_reversible_length(int x, int y, int dx, int dy)
+unsigned int BoardMaster::get_reversible_length(int x, int y, int dx, int dy) const
 {
   Stone enemy_stone {get_enemy()}; 
   for (size_t i {1}; is_inside_board(x + i*dx, y + i*dy); i++) {
@@ -73,27 +73,27 @@ unsigned int BoardMaster::get_reversible_length(int x, int y, int dx, int dy)
   return 0;
 }
 
-bool BoardMaster::is_inside_board(int x, int y)
+bool BoardMaster::is_inside_board(int x, int y) const
 {
   return (0 <= x && x < BOARD_SIZE) && (0 <= y && y < BOARD_SIZE);
 }
 
-Stone BoardMaster::get_enemy()
+Stone BoardMaster::get_enemy() const
 {
   return (active_stone_ == Stone::White) ? Stone::Black : Stone::White;
 }
 
-bool BoardMaster::is_available_position(int x, int y)
+bool BoardMaster::is_available_position(int x, int y) const
 {
   return is_inside_board(x, y) && board_[y][x] == Stone::Space && count_reversible_stone(x, y);
 }
 
-bool BoardMaster::can_continue()
+bool BoardMaster::can_continue() const
 {
   return count_stone(Stone::Space) && count_stone(Stone::Black) && count_stone(Stone::White);
 }
 
-int BoardMaster::count_stone(Stone target)
+int BoardMaster::count_stone(Stone target) const
 {
   int count {0};
   for (size_t i {0}; i < BOARD_SIZE; i++)
@@ -102,7 +102,7 @@ int BoardMaster::count_stone(Stone target)
   return count;
 }
 
-int BoardMaster::count_reversible_stone(int x, int y)
+int BoardMaster::count_reversible_stone(int x, int y) const
 {
   int reversible_stone_count {0};
   for (size_t i {0}; i < 8; i++) reversible_stone_count += get_reversible_length(x, y, dx[i], dy[i]);
@@ -144,7 +144,7 @@ void BoardMaster::switch_active_stone()
   active_stone_ = (active_stone_ == Stone::White) ? Stone::Black : Stone::White;
 }
 
-double BoardMaster::get_status_score()
+double BoardMaster::get_status_score() const
 {
   double status_score {0};
   Stone enemy_stone {get_enemy()};

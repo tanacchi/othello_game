@@ -15,12 +15,12 @@ void Player::set_mystone(Stone stone)
   mystone_ = stone;
 }
 
-Stone Player::get_mystone()
+Stone Player::get_mystone() const
 {
   return mystone_;
 }
 
-void Player::get_hand(int &x, int &y)
+void Player::get_hand(int &x, int &y) const
 {
   x = hand_x_;
   y = hand_y_;
@@ -31,7 +31,7 @@ void Player::set_myname(std::string src)
   myname_ = src;
 }
 
-std::string Player::get_myname()
+std::string Player::get_myname() const
 {
   return myname_;
 }

@@ -19,7 +19,7 @@ void StoneScoreList::set_total_score()
   for (size_t i {0}; i < score_.size(); i++) total_score_ += score_[i];
 }
 
-void StoneScoreList::get_coordinate(int &x, int &y)
+void StoneScoreList::get_coordinate(int &x, int &y) const
 {
   x = hand_x_; y = hand_y_;
 }
@@ -34,7 +34,7 @@ void StoneScoreList::set_score(int s)
   score_.push_back((double)s);
 }
 
-void StoneScoreList::show_score_list()
+void StoneScoreList::show_score_list() const
 {
   std::cout << "x = " << hand_x_+1 << ", y = " << hand_y_+1 << ' ';
   std::cout << "Score : " << total_score_ << std::endl;
@@ -45,7 +45,7 @@ bool StoneScoreList::operator>(const StoneScoreList &right ) const
   return total_score_ > right.total_score_;
 }
 
-int StoneScoreList::get_total_score()
+int StoneScoreList::get_total_score() const
 {
   return total_score_;
 }
@@ -104,7 +104,7 @@ void OthelloAI::random_maker()
   dist_y_ = rand100(rand_pos_);
 }
 
-void OthelloAI::get_conclusion(int &x, int &y)
+void OthelloAI::get_conclusion(int &x, int &y) const
 {
   x = dist_x_;
   y = dist_y_;
