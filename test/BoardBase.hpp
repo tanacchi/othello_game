@@ -13,30 +13,34 @@ public:
     Black,
     Dot
   };
-  BoardBase();
+  BoardBase(const position size = std::make_pair(8, 8));
   BoardBase(const BoardBase& src);
   const BoardBase& operator=(const BoardBase& src);
   ~BoardBase() = default;
 private:
   std::valarray<Stone> board_;
-  position size_;
+  const position size_;
+  Stone active_stone_;
 };
 
-BoardBase::BoardBase()
-  : board_(4),
-    size_ {std::make_pair(2, 2)}
+BoardBase::BoardBase(const position size)
+  : board_ {std::size_t(size.first * size.second)},
+    size_ {size},
+    active_stone_ {Stone::White}
 {  
 }
 
 BoardBase::BoardBase(const BoardBase& src)
-  : board_{src.board_},
-    size_{src.size_}
+  : board_ {src.board_},
+    size_ {src.size_},
+    active_stone_ {src.active_stone_}
 {
 }
 
 const BoardBase& BoardBase::operator=(const BoardBase& src)
 {
   board_ = src.board_;
-  size_  = src.size_;
+  //  size_  = src.size_;
+  active_stone_ = src.active_stone_;
   return *this;
 }
