@@ -1,8 +1,9 @@
 #include <iostream>
 #include "BoardBase.hpp"
 
-int main()
+auto main() -> int
 {
   BoardBase base;
+  BoardBase::Stone stone = BoardBase::Stone::Space;
   return 0;
 }
