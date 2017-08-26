@@ -15,7 +15,7 @@ public:
   };
   BoardBase();
   BoardBase(const BoardBase& src);
-  const BoardBase operator=(const BoardBase src);
+  const BoardBase& operator=(const BoardBase& src);
   ~BoardBase() = default;
 private:
   std::valarray<Stone> board_;
@@ -34,7 +34,7 @@ BoardBase::BoardBase(const BoardBase& src)
 {
 }
 
-const BoardBase::BoardBase operator=(const BoardBase src)
+const BoardBase& BoardBase::operator=(const BoardBase& src)
 {
   board_ = src.board_;
   size_  = src.size_;
