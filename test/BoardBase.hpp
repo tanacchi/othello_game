@@ -20,6 +20,7 @@ public:
   inline position::second_type height() const;
   inline bool is_inside(position pos) const;
   inline std::size_t get_access_num(position pos) const;
+  inline std::size_t get_access_num(point x, point y) const;
   //bool is_available_position(position pos) const;
   //int get_reversible_length(position) const;
   void switch_active_stone();
@@ -28,7 +29,7 @@ public:
   {
     width = (std::size_t)size_.first;
     height = (std::size_t)size_.second;
-    length = (std::size_t)board_.size();z
+    length = (std::size_t)board_.size();
   }
 protected:
   std::valarray<Stone> board_;
@@ -64,7 +65,12 @@ inline position::second_type BoardBase::height() const
 
 inline std::size_t BoardBase::get_access_num(position pos) const
 {
-  return (std::size_t)(pos.first + (width() * pos.second));
+  return get_access_num(pos.first, pos.second);
+}
+
+inline std::size_t BoardBase::get_access_num(point x, point y) const
+{
+  return (std::size_t)(x + width()*y);
 }
 
 inline bool BoardBase::is_inside(position pos) const
