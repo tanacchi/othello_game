@@ -4,8 +4,8 @@
 
 using point = unsigned char;
 using position = std::pair<point, point>;
-class BoardBase {
 
+class BoardBase {
 public:
   enum class Stone {
     Space,
@@ -16,18 +16,19 @@ public:
   BoardBase(const position size = std::make_pair(8, 8));
   BoardBase(const BoardBase& src);
   ~BoardBase() = default;
-
+  // for Test
   void get_size(std::size_t& width, std::size_t& height, std::size_t& length)
   {
     width = (std::size_t)size_.first;
     height = (std::size_t)size_.second;
     length = (std::size_t)board_.size();
   }
-private:
-  const BoardBase& operator=(const BoardBase& src);
+protected:
   std::valarray<Stone> board_;
   const position size_;
   Stone active_stone_;
+private:
+  const BoardBase& operator=(const BoardBase& src);
 };
 
 BoardBase::BoardBase(const position size)
@@ -47,7 +48,6 @@ BoardBase::BoardBase(const BoardBase& src)
 const BoardBase& BoardBase::operator=(const BoardBase& src)
 {
   board_ = src.board_;
-  //  size_  = src.size_;
   active_stone_ = src.active_stone_;
   return *this;
 }
