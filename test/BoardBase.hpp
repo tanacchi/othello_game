@@ -16,12 +16,19 @@ public:
   BoardBase(const position size = std::make_pair(8, 8));
   BoardBase(const BoardBase& src);
   ~BoardBase() = default;
+  inline position::first_type width() const;
+  inline position::second_type height() const;
+  inline bool is_inside(position pos) const;
+  inline std::size_t get_access_num(position pos) const;
+  //bool is_available_position(position pos) const;
+  //int get_reversible_length(position) const;
+  void switch_active_stone();
   // for Test
   void get_size(std::size_t& width, std::size_t& height, std::size_t& length)
   {
     width = (std::size_t)size_.first;
     height = (std::size_t)size_.second;
-    length = (std::size_t)board_.size();
+    length = (std::size_t)board_.size();z
   }
 protected:
   std::valarray<Stone> board_;
@@ -35,7 +42,7 @@ BoardBase::BoardBase(const position size)
   : board_ {std::size_t(size.first * size.second)},
     size_ {size},
     active_stone_ {Stone::White}
-{  
+{
 }
 
 BoardBase::BoardBase(const BoardBase& src)
@@ -45,9 +52,27 @@ BoardBase::BoardBase(const BoardBase& src)
 {
 }
 
-const BoardBase& BoardBase::operator=(const BoardBase& src)
+inline position::first_type BoardBase::width() const
 {
-  board_ = src.board_;
-  active_stone_ = src.active_stone_;
-  return *this;
+  return size_.first;
+}
+
+inline position::second_type BoardBase::height() const
+{
+  return size_.second;
+}
+
+inline std::size_t BoardBase::get_access_num(position pos) const
+{
+  return (std::size_t)(pos.first + (width() * pos.second));
+}
+
+inline bool BoardBase::is_inside(position pos) const
+{
+  return pos.first < width() && pos.first < height();
+}
+
+void BoardBase::switch_active_stone()
+{
+  active_stone_ = (active_stone_ == Stone::White) ? Stone::Black : Stone::White;
 }
