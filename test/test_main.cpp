@@ -5,6 +5,10 @@ int main()
 {
   position p {std::make_pair(10, 10)};
   BoardMaster board{p};
+
+  std::cout << "sizeof(BoardBase) = " << sizeof(BoardBase) << ", "
+            << "sizeof(BoardMaster) = " << sizeof(BoardMaster) << std::endl;
+  
   // std::size_t width, height, length;
   // board.get_size(width, height, length);
   // std::cout << width << ' ' << height << ' ' << length << std::endl;
