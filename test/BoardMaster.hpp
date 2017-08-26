@@ -21,10 +21,10 @@ BoardMaster::BoardMaster(const position size)
 char BoardMaster::to_char(BoardBase::Stone stone) const
 {
   switch (stone) {
-  case BoardMaster::Stone::Space:  return ' ';
-  case BoardMaster::Stone::White:  return 'O';
+  case BoardMaster::Stone::Space: return ' ';
+  case BoardMaster::Stone::White: return 'O';
   case BoardMaster::Stone::Black: return 'X';
-  case BoardMaster::Stone::Dot:    return '*';
+  case BoardMaster::Stone::Dot:   return '*';
   default: throw std::invalid_argument{"In to_char:Cannot convert"};
   }
   
