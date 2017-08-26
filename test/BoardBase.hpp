@@ -15,7 +15,6 @@ public:
   };
   BoardBase(const position size = std::make_pair(8, 8));
   BoardBase(const BoardBase& src);
-  const BoardBase& operator=(const BoardBase& src);
   ~BoardBase() = default;
 
   void get_size(std::size_t& width, std::size_t& height, std::size_t& length)
@@ -25,6 +24,7 @@ public:
     length = (std::size_t)board_.size();
   }
 private:
+  const BoardBase& operator=(const BoardBase& src);
   std::valarray<Stone> board_;
   const position size_;
   Stone active_stone_;
