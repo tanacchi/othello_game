@@ -17,6 +17,13 @@ public:
   BoardBase(const BoardBase& src);
   const BoardBase& operator=(const BoardBase& src);
   ~BoardBase() = default;
+
+  void get_size(std::size_t& width, std::size_t& height, std::size_t& length)
+  {
+    width = (std::size_t)size_.first;
+    height = (std::size_t)size_.second;
+    length = (std::size_t)board_.size();
+  }
 private:
   std::valarray<Stone> board_;
   const position size_;
