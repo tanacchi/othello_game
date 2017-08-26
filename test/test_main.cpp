@@ -32,6 +32,11 @@ int main()
   BoardBase board3{};  
 
   // board3 = board1;
+
+  // char c = board.to_char((BoardBase::Stone)5);
+  // std::cout << c << std::endl;
+
+  board.show();
   
   return 0;
 }
