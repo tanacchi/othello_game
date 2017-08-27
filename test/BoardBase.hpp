@@ -45,8 +45,7 @@ BoardBase::BoardBase(const position size)
   : board_{std::size_t(size.first * size.second)},
     size_{size},
     direction_{{{0,-1},{1,-1},{1,0},{1,1},{0,1},{-1,1},{-1,0},{-1,-1}}},
-    active_stone_{Stone::White},
-    enemy_stone_{Stone::Black}
+    active_stone_{Stone::White}
 {
 }
 
@@ -54,8 +53,7 @@ BoardBase::BoardBase(const BoardBase& src)
   : board_{src.board_},
     size_{src.size_},
     direction_{src.direction_},
-    active_stone_{src.active_stone_},
-    enemy_stone_{src.enemy_stone_}
+    active_stone_{src.active_stone_}
 {
 }
 
@@ -84,9 +82,9 @@ inline bool BoardBase::is_inside(position pos) const
   return pos.first < width() && pos.first < height();
 }
 
-Stone BoardBase::get_enemy_stone() const
+BoardBase::Stone BoardBase::get_enemy_stone() const
 {
-  return (active_stone_ == Space::White) ? Stone::Black : Stone::White;
+  return (active_stone_ == Stone::White) ? Stone::Black : Stone::White;
 }
 
 void BoardBase::switch_active_stone()
