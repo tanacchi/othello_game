@@ -9,6 +9,7 @@ public:
   ~GameBoard() = default;
   void show() const;
   void init();
+  bool can_continue() const;
 private:
   const GameBoard& operator=(const GameBoard& src);
   char to_char(BoardBase::Stone stone) const;
@@ -27,8 +28,7 @@ char GameBoard::to_char(BoardBase::Stone stone) const
   case BoardBase::Stone::Black: return 'X';
   case BoardBase::Stone::Dot:   return '*';
   default: throw std::invalid_argument{"In to_char:Cannot convert"};
-  }
-  
+  }  
 }
 
 void GameBoard::show() const
@@ -51,8 +51,12 @@ void GameBoard::show() const
 void GameBoard::init()
 {
   board_ = Stone::Space;
-  board_[std::slice(get_access_num(width()/2-1, height()/2-1), 2, width()+1)]
-    = Stone::White;
-  board_[std::slice(get_access_num(width()/2  , height()/2-1), 2, width()-1)]
-    = Stone::Black;
+  board_[std::slice(get_access_num(width()/2-1, height()/2-1), 2, width()+1)] = Stone::White;
+  board_[std::slice(get_access_num(width()/2  , height()/2-1), 2, width()-1)] = Stone::Black;
+}
+
+bool GameBoard::can_continue() const
+{
+  for (auto target : board_) if (target == BoardBase::Stone::Space) return true;
+  return false;
 }
