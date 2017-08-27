@@ -1,13 +1,13 @@
 #include <iostream>
-#include "BoardMaster.hpp"
+#include "GameBoard.hpp"
 
 int main()
 {
   position p {std::make_pair(10, 10)};
-  BoardMaster board{p};
+  GameBoard board{p};
 
   std::cout << "sizeof(BoardBase) = " << sizeof(BoardBase) << ", "
-            << "sizeof(BoardMaster) = " << sizeof(BoardMaster) << std::endl;
+            << "sizeof(GameBoard) = " << sizeof(GameBoard) << std::endl;
   
   // std::size_t width, height, length;
   // board.get_size(width, height, length);

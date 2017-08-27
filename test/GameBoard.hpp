@@ -2,36 +2,36 @@
 
 #include "BoardBase.hpp"
 
-class BoardMaster : private BoardBase {
+class GameBoard : private BoardBase {
 public:
-  BoardMaster(const position size = std::make_pair(8, 8));
-  BoardMaster(const BoardMaster& src) = default;
-  ~BoardMaster() = default;
+  GameBoard(const position size = std::make_pair(8, 8));
+  GameBoard(const GameBoard& src) = default;
+  ~GameBoard() = default;
   void show() const;
   void init();
 private:
-  const BoardMaster& operator=(const BoardMaster& src);
+  const GameBoard& operator=(const GameBoard& src);
   char to_char(BoardBase::Stone stone) const;
 };
 
-BoardMaster::BoardMaster(const position size)
+GameBoard::GameBoard(const position size)
   : BoardBase(size)
 {
 }
 
-char BoardMaster::to_char(BoardBase::Stone stone) const
+char GameBoard::to_char(BoardBase::Stone stone) const
 {
   switch (stone) {
-  case BoardMaster::Stone::Space: return ' ';
-  case BoardMaster::Stone::White: return 'O';
-  case BoardMaster::Stone::Black: return 'X';
-  case BoardMaster::Stone::Dot:   return '*';
+  case BoardBase::Stone::Space: return ' ';
+  case BoardBase::Stone::White: return 'O';
+  case BoardBase::Stone::Black: return 'X';
+  case BoardBase::Stone::Dot:   return '*';
   default: throw std::invalid_argument{"In to_char:Cannot convert"};
   }
   
 }
 
-void BoardMaster::show() const
+void GameBoard::show() const
 {
   for (int i {0}; i < width()+1; i++) std::cout << "--";
   std::cout << std::endl;
@@ -48,7 +48,7 @@ void BoardMaster::show() const
   std::cout << std::endl;
 }
 
-void BoardMaster::init()
+void GameBoard::init()
 {
   board_ = Stone::Space;
   board_[std::slice(get_access_num(width()/2-1, height()/2-1), 2, width()+1)]
