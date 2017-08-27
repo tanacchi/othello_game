@@ -35,7 +35,7 @@ int main()
 
   // char c = board.to_char((BoardBase::Stone)5);
   // std::cout << c << std::endl;
-
+  board.init();
   board.show();
   
   return 0;
