@@ -22,7 +22,7 @@ public:
   inline std::size_t get_access_num(position pos) const;
   inline std::size_t get_access_num(point x, point y) const;
   //bool is_available_position(position pos) const;
-  //int get_reversible_length(position) const;
+  //bool cat_reverse(position) const;
   void switch_active_stone();
   // for Test
   void get_size(std::size_t& width, std::size_t& height, std::size_t& length)
