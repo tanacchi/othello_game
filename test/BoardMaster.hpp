@@ -8,6 +8,7 @@ public:
   BoardMaster(const BoardMaster& src) = default;
   ~BoardMaster() = default;
   void show() const;
+  void init();
 private:
   const BoardMaster& operator=(const BoardMaster& src);
   char to_char(BoardBase::Stone stone) const;
@@ -45,4 +46,13 @@ void BoardMaster::show() const
   }
   for (int i {0}; i < width()+1; i++) std::cout << "--";
   std::cout << std::endl;
+}
+
+void BoardMaster::init()
+{
+  board_ = Stone::Space;
+  board_[std::slice(get_access_num(width()/2-1, height()/2-1), 2, width()+1)]
+    = Stone::White;
+  board_[std::slice(get_access_num(width()/2  , height()/2-1), 2, width()-1)]
+    = Stone::Black;
 }
