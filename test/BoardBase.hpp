@@ -36,6 +36,7 @@ protected:
   const position size_;
   const std::array<std::array<short,2ul>,8ul> direction_;
   Stone active_stone_;
+  Stone enemy_stone_;
 private:
   const BoardBase& operator=(const BoardBase& src);
 };
@@ -44,15 +45,17 @@ BoardBase::BoardBase(const position size)
   : board_{std::size_t(size.first * size.second)},
     size_{size},
     direction_{{{0,-1},{1,-1},{1,0},{1,1},{0,1},{-1,1},{-1,0},{-1,-1}}},
-    active_stone_{Stone::White}
+    active_stone_{Stone::White},
+    enemy_stone_{Stone::Black}
 {
 }
 
 BoardBase::BoardBase(const BoardBase& src)
   : board_{src.board_},
     size_{src.size_},
-    direction_{{{0,-1},{1,-1},{1,0},{1,1},{0,1},{-1,1},{-1,0},{-1,-1}}},
-    active_stone_{src.active_stone_}
+    direction_{src.direction_},
+    active_stone_{src.active_stone_},
+    enemy_stone_{src.enemy_stone_}
 {
 }
 
