@@ -21,6 +21,7 @@ public:
   inline bool is_inside(position pos) const;
   inline std::size_t get_access_num(position pos) const;
   inline std::size_t get_access_num(point x, point y) const;
+  Stone get_enemy_stone() const;
   //bool is_available_position(position pos) const;
   //bool cat_reverse(position) const;
   void switch_active_stone();
@@ -36,7 +37,6 @@ protected:
   const position size_;
   const std::array<std::array<short,2ul>,8ul> direction_;
   Stone active_stone_;
-  Stone enemy_stone_;
 private:
   const BoardBase& operator=(const BoardBase& src);
 };
@@ -84,7 +84,12 @@ inline bool BoardBase::is_inside(position pos) const
   return pos.first < width() && pos.first < height();
 }
 
+Stone BoardBase::get_enemy_stone() const
+{
+  return (active_stone_ == Space::White) ? Stone::Black : Stone::White;
+}
+
 void BoardBase::switch_active_stone()
 {
-  active_stone_ = (active_stone_ == Stone::White) ? Stone::Black : Stone::White;
+  active_stone_ = get_enemy_stone();
 }
