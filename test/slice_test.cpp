@@ -33,8 +33,8 @@ int main()
   std::cout << "Hey" << std::endl;  
 
   for (int i = 0; i < size_y; std::cout.put('\n'), i++) {
-    std::gslice_array<int> sliced = data[std::slice(size_x*i, size_x, 1)];
-    for (auto x : sliced)
+    // std::slice_array<int> sliced = data[std::slice(size_x*i, size_x, 1)];
+    for (auto x : data)
       std::cout << x << '\t' << std::flush;
   }
   std::cout << std::endl;
