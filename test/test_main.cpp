@@ -4,7 +4,7 @@
 
 int main()
 {
-  position p {std::make_pair(10, 10)};
+  position p {std::make_pair(4, 4)};
   GameBoard board{p};
 
   std::cout << "sizeof(BoardBase) = " << sizeof(BoardBase) << ", "
@@ -40,9 +40,14 @@ int main()
   board.init();
   board.show();
 
-  for (int i{0}; i < 10; std::cout.put('\n'), i++)
-    for (int j{0}; j < 10; std::cout.put(' '), j++)
-      for (int k{0}; k < 8; k++)
-        std::cout << board.get_reversible_length(std::make_pair(j,i), direction[k]);
+  // for (int i{0}; i < 10; std::cout.put('\n'), i++)
+  //   for (int j{0}; j < 10; std::cout.put(' '), j++)
+  //     for (int k{0}; k < 8; k++)
+  //       std::cout << board.get_reversible_length(std::make_pair(j,i), direction[k]);
+
+   for (int i{0}; i < 10; i++)
+     for (int j{0}; j < 10; j++)
+       if (board.can_reverse(std::make_pair(j, i)))
+         std::cout << "x = " << j+1 << ", y = " << i+1 << std::endl;;
   return 0;
 }
