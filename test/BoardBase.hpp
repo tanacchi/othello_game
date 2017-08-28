@@ -29,8 +29,7 @@ public:
   Stone get_enemy_stone() const;
   int get_reversible_length(position pos, std::pair<short,short>) const;
   bool can_reverse(position pos) const;
-  //bool is_available_position(position pos) const;
-  //bool cat_reverse(position) const;
+  bool is_available_position(position pos) const;
   void switch_active_stone();
   // for Test
   void get_size(std::size_t& width, std::size_t& height, std::size_t& length)
@@ -113,6 +112,11 @@ bool BoardBase::can_reverse(position pos) const
   for (auto dr : direction)
     if (get_reversible_length(pos, dr) != 0) return true;
   return false;
+}
+
+bool BoardBase::is_available_position(position pos) const
+{
+  return is_inside(pos) && (board_[get_access_num(pos)] == Stone::Space) && can_reverse(pos);
 }
 
 void BoardBase::switch_active_stone()
