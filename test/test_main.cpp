@@ -45,9 +45,10 @@ int main()
   //     for (int k{0}; k < 8; k++)
   //       std::cout << board.get_reversible_length(std::make_pair(j,i), direction[k]);
 
-   for (int i{0}; i < 10; i++)
-     for (int j{0}; j < 10; j++)
-       if (board.can_reverse(std::make_pair(j, i)))
-         std::cout << "x = " << j+1 << ", y = " << i+1 << std::endl;;
+   // for (int i{0}; i < 10; i++)
+   //   for (int j{0}; j < 10; j++)
+   //     if (board.can_reverse(std::make_pair(j, i)))
+   //       std::cout << "x = " << j+1 << ", y = " << i+1 << std::endl;;
+
   return 0;
 }
