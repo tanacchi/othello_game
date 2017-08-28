@@ -10,6 +10,7 @@ public:
   void show() const;
   void init();
   bool can_continue() const;
+  int count_stone(BoardBase::Stone&& stone) const;
 private:
   const GameBoard& operator=(const GameBoard& src);
   char to_char(BoardBase::Stone stone) const;
@@ -59,4 +60,11 @@ bool GameBoard::can_continue() const
 {
   for (auto target : board_) if (target == BoardBase::Stone::Space) return true;
   return false;
+}
+
+int GameBoard::count_stone(BoardBase::Stone&& stone) const
+{
+  int count{0};
+  for (auto s : board_) if (s == stone) count++;
+  return count;
 }
