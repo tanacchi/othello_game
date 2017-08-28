@@ -5,8 +5,8 @@
 using point = unsigned char;
 using position = std::pair<point, point>;
 
-static const std::array<std::pair<short, short>,8ul> direction_ {{
-    {0,-1}, {1,-1}, {1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}
+static const std::array<std::pair<short, short>,8ul> direction {{
+    {1,-1}, {1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}, {0,-1}
   }};
 
 class BoardBase {
@@ -20,12 +20,14 @@ public:
   BoardBase(const position size = std::make_pair(8, 8));
   BoardBase(const BoardBase& src);
   ~BoardBase() = default;
-  inline position::first_type width() const;
-  inline position::second_type height() const;
-  inline bool is_inside(position pos) const;
-  inline std::size_t get_access_num(position pos) const;
-  inline std::size_t get_access_num(point x, point y) const;
+  position::first_type width() const;
+  position::second_type height() const;
+  bool is_inside(point x, point y) const;
+  bool is_inside(position pos) const;
+  std::size_t get_access_num(position pos) const;
+  std::size_t get_access_num(point x, point y) const;
   Stone get_enemy_stone() const;
+  int get_reversible_length(position pos, std::pair<short,short>) const;
   //bool is_available_position(position pos) const;
   //bool cat_reverse(position) const;
   void switch_active_stone();
@@ -80,12 +82,29 @@ inline std::size_t BoardBase::get_access_num(point x, point y) const
 
 inline bool BoardBase::is_inside(position pos) const
 {
-  return pos.first < width() && pos.first < height();
+  return is_inside(pos.first, pos.second);
+}
+
+inline bool BoardBase::is_inside(point x, point y) const
+{
+  return x < width() && y < height();
 }
 
 BoardBase::Stone BoardBase::get_enemy_stone() const
 {
   return (active_stone_ == Stone::White) ? Stone::Black : Stone::White;
+}
+
+int BoardBase::get_reversible_length(position pos, std::pair<short,short>dr) const
+{
+  Stone enemy_stone{get_enemy_stone()};   // REFACT : もう少し賢い方法を考える
+  position target{std::make_pair(pos.first+dr.first, pos.second+dr.second)};
+  for (int length{0}; is_inside(target); length++) {
+    if (board_[get_access_num(target)] == active_stone_) return length;
+    else if (board_[get_access_num(target)] != enemy_stone) break;
+    target.first += dr.first; target.second += dr.second;
+  }
+  return 0;
 }
 
 void BoardBase::switch_active_stone()
