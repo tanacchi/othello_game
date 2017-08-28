@@ -2,7 +2,7 @@
 
 #include "BoardBase.hpp"
 
-class GameBoard : private BoardBase {
+class GameBoard : public BoardBase {
 public:
   GameBoard(const position size = std::make_pair(8, 8));
   GameBoard(const GameBoard& src) = default;
@@ -11,7 +11,6 @@ public:
   void init();
   bool can_continue() const;
   int count_stone(BoardBase::Stone&& stone) const;
-  void switch_active_stone();
 private:
   const GameBoard& operator=(const GameBoard& src);
   char to_char(BoardBase::Stone stone) const;
@@ -68,9 +67,4 @@ int GameBoard::count_stone(BoardBase::Stone&& stone) const
   int count{0};
   for (auto s : board_) if (s == stone) count++;
   return count;
-}
-
-void GameBoard::switch_active_stone()
-{
-  BoardBase::switch_active_stone();
 }

@@ -115,7 +115,7 @@ BoardBase::Stone BoardBase::get_enemy_stone() const
 
 int BoardBase::get_reversible_length(position pos, std::pair<short,short>dr) const
 {
-  Stone enemy_stone{get_enemy_stone()};   // REFACT : もう少し賢い方法を考える
+  Stone enemy_stone{get_enemy_stone()};
   position target{std::make_pair(pos.first+dr.first, pos.second+dr.second)};
   for (int length{0}; is_inside(target); length++) {
     if (board_[get_access_num(target)] == active_stone_) return length;
