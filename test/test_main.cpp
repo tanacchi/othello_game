@@ -4,7 +4,7 @@
 
 int main()
 {
-  position p {std::make_pair(4, 4)};
+  position p {std::make_pair(10, 10)};
   GameBoard board{p};
 
   std::cout << "sizeof(BoardBase) = " << sizeof(BoardBase) << ", "
@@ -50,5 +50,9 @@ int main()
    //     if (board.can_reverse(std::make_pair(j, i)))
    //       std::cout << "x = " << j+1 << ", y = " << i+1 << std::endl;;
 
+  std::cout << "Space : " << board.count_stone(BoardBase::Stone::Space) << '\n'
+            << "White : " << board.count_stone(BoardBase::Stone::White) << '\n'
+            << "Black : " << board.count_stone(BoardBase::Stone::Black) << std::endl;
+  
   return 0;
 }
