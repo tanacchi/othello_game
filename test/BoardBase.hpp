@@ -5,10 +5,9 @@
 using point = unsigned char;
 using position = std::pair<point, point>;
 
-static const std::array<std::array<short,2ul>,8ul> direction_ {{
+static const std::array<std::pair<short, short>,8ul> direction_ {{
     {0,-1}, {1,-1}, {1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}
   }};
-  
 
 class BoardBase {
 public:
