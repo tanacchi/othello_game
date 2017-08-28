@@ -26,6 +26,9 @@ public:
   bool is_inside(position pos) const;
   std::size_t get_access_num(position pos) const;
   std::size_t get_access_num(point x, point y) const;
+  void insert(point x, point y);
+  void insert(point x, point y, Stone&& stone);
+  void insert(position pos);
   Stone get_enemy_stone() const;
   int get_reversible_length(position pos, std::pair<short,short>) const;
   bool can_reverse(position pos) const;
@@ -70,14 +73,29 @@ inline position::second_type BoardBase::height() const
   return size_.second;
 }
 
+inline std::size_t BoardBase::get_access_num(point x, point y) const
+{
+  return (std::size_t)(x + width()*y);
+}
+
 inline std::size_t BoardBase::get_access_num(position pos) const
 {
   return get_access_num(pos.first, pos.second);
 }
 
-inline std::size_t BoardBase::get_access_num(point x, point y) const
+void BoardBase::insert(point x, point y)
 {
-  return (std::size_t)(x + width()*y);
+  board_[get_access_num(x, y)] = active_stone_;
+}
+
+void BoardBase::insert(point x, point y, Stone&& stone)
+{
+  board_[get_access_num(x, y)] = active_stone_;
+}
+  
+void BoardBase::insert(position pos)
+{
+  insert(pos.first, pos.second);
 }
 
 inline bool BoardBase::is_inside(position pos) const
