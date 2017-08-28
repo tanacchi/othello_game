@@ -1,5 +1,6 @@
 #include <iostream>
 #include "GameBoard.hpp"
+#include "../include/BoardMaster.hpp"
 
 int main()
 {
@@ -8,6 +9,7 @@ int main()
 
   std::cout << "sizeof(BoardBase) = " << sizeof(BoardBase) << ", "
             << "sizeof(GameBoard) = " << sizeof(GameBoard) << std::endl;
+  std::cout << "sizeof(BoardMaster) = " << sizeof(BoardMaster) << std::endl;
   
   // std::size_t width, height, length;
   // board.get_size(width, height, length);
