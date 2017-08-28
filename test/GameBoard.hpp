@@ -2,7 +2,7 @@
 
 #include "BoardBase.hpp"
 
-class GameBoard : private BoardBase {
+class GameBoard : public BoardBase {
 public:
   GameBoard(const position size = std::make_pair(8, 8));
   GameBoard(const GameBoard& src) = default;

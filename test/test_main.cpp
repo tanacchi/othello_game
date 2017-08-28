@@ -39,6 +39,10 @@ int main()
   // std::cout << c << std::endl;
   board.init();
   board.show();
-  
+
+  for (int i{0}; i < 10; std::cout.put('\n'), i++)
+    for (int j{0}; j < 10; std::cout.put(' '), j++)
+      for (int k{0}; k < 8; k++)
+        std::cout << board.get_reversible_length(std::make_pair(j,i), direction[k]);
   return 0;
 }
