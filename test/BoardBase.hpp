@@ -28,6 +28,7 @@ public:
   std::size_t get_access_num(point x, point y) const;
   Stone get_enemy_stone() const;
   int get_reversible_length(position pos, std::pair<short,short>) const;
+  bool can_reverse(position pos) const;
   //bool is_available_position(position pos) const;
   //bool cat_reverse(position) const;
   void switch_active_stone();
@@ -105,6 +106,13 @@ int BoardBase::get_reversible_length(position pos, std::pair<short,short>dr) con
     target.first += dr.first; target.second += dr.second;
   }
   return 0;
+}
+
+bool BoardBase::can_reverse(position pos) const
+{
+  for (auto dr : direction)
+    if (get_reversible_length(pos, dr) != 0) return true;
+  return false;
 }
 
 void BoardBase::switch_active_stone()
