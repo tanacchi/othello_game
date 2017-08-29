@@ -90,7 +90,7 @@ void BoardBase::insert(point x, point y)
 
 void BoardBase::insert(point x, point y, Stone&& stone)
 {
-  board_[get_access_num(x, y)] = active_stone_;
+  board_[get_access_num(x, y)] = stone;
 }
   
 void BoardBase::insert(position pos)
