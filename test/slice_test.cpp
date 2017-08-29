@@ -32,11 +32,11 @@ int main()
   data[std::gslice(start, length, stride)] = 0;
   std::cout << "Hey" << std::endl;  
 
-  for (int i = 0; i < size_y; std::cout.put('\n'), i++) {
+  // for (int i = 0; i < size_y; std::cout.put('\n'), i++) {
     // std::slice_array<int> sliced = data[std::slice(size_x*i, size_x, 1)];
     for (auto x : data)
       std::cout << x << '\t' << std::flush;
-  }
+    //  }
   std::cout << std::endl;
   
   return 0;
