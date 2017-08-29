@@ -11,6 +11,8 @@ public:
   void init();
   bool can_continue() const;
   int count_stone(BoardBase::Stone&& stone) const;
+  void put_dots();
+  void remove_dots();
 private:
   const GameBoard& operator=(const GameBoard& src);
   char to_char(BoardBase::Stone stone) const;
@@ -58,7 +60,8 @@ void GameBoard::init()
 
 bool GameBoard::can_continue() const // 「両方打つとこ無し」も調べたいx
 {
-  for (auto target : board_) if (target == BoardBase::Stone::Space) return true;
+  for (auto target : board_)
+    if (target == BoardBase::Stone::Space) return true;
   return false;
 }
 
@@ -67,4 +70,17 @@ int GameBoard::count_stone(BoardBase::Stone&& stone) const
   int count{0};
   for (auto s : board_) if (s == stone) count++;
   return count;
+}
+
+void GameBoard::put_dots()
+{
+  for (point row{0}; row < width(); row++)
+    for (point column{0}; column < height(); column++)
+      if (is_available_position(std::make_pair(row, column))) board_[get_access_num(row, column)] = BoardBase::Stone::Dot;
+}
+
+void GameBoard::remove_dots()
+{
+  for (auto& target : board_)
+    if (target == BoardBase::Stone::Dot) target = BoardBase::Stone::Space;
 }
