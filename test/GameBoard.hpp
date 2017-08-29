@@ -56,7 +56,7 @@ void GameBoard::init()
   board_[std::slice(get_access_num(width()/2  , height()/2-1), 2, width()-1)] = Stone::Black;
 }
 
-bool GameBoard::can_continue() const
+bool GameBoard::can_continue() const // 「両方打つとこ無し」も調べたいx
 {
   for (auto target : board_) if (target == BoardBase::Stone::Space) return true;
   return false;
