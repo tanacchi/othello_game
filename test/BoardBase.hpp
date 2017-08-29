@@ -1,3 +1,4 @@
+#include <vector>
 #include <valarray>
 
 #include <functional>
@@ -30,8 +31,9 @@ public:
   void insert(point x, point y, Stone&& stone);
   void insert(position pos);
   Stone get_enemy_stone() const;
-  int get_reversible_length(position pos, std::pair<short,short>) const;
+  std::size_t get_reversible_length(position pos, std::pair<short,short>) const;
   bool can_reverse(position pos) const;
+  void reverse(position pos);
   bool is_available_position(position pos) const;
   void switch_active_stone();
   // for Test
@@ -113,7 +115,7 @@ BoardBase::Stone BoardBase::get_enemy_stone() const
   return (active_stone_ == Stone::White) ? Stone::Black : Stone::White;
 }
 
-int BoardBase::get_reversible_length(position pos, std::pair<short,short>dr) const
+std::size_t BoardBase::get_reversible_length(position pos, std::pair<short,short>dr) const // REFACTORING REQUIRED
 {
   Stone enemy_stone{get_enemy_stone()};
   position target{std::make_pair(pos.first+dr.first, pos.second+dr.second)};
@@ -130,6 +132,15 @@ bool BoardBase::can_reverse(position pos) const
   for (auto dr : direction)
     if (get_reversible_length(pos, dr) != 0) return true;
   return false;
+}
+
+void BoardBase::reverse(position pos) // REFACTORING REQUIRED
+{
+  for (auto dr : direction) {
+    std::size_t reverse_length = get_reversible_length(pos, dr);
+    for (int j{1}; j <= reverse_length; j++)
+      insert(pos.first+j*dr.first, pos.second+j*dr.second);
+  }
 }
 
 bool BoardBase::is_available_position(position pos) const
