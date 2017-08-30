@@ -20,7 +20,7 @@ public:
   };
   BoardBase(const position size = std::make_pair(8, 8));
   BoardBase(const BoardBase& src);
-  ~BoardBase() = default;
+  virtual ~BoardBase() = default;
   position::first_type width() const;
   position::second_type height() const;
   bool is_inside(point x, point y) const;
