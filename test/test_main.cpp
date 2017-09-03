@@ -15,10 +15,10 @@ Task task_write();
 Task task_judge();
 Task task_switch();
 
-position size{std::make_pair(10, 10)};
+Position size{std::make_pair(10, 10)};
 GameBoard board{size};
 int turn;
-position current_pos;
+Position current_pos;
 
 Task run(Task task)
 {
