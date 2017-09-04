@@ -109,7 +109,7 @@ inline bool BoardBase::is_inside(Position pos) const
 
 inline bool BoardBase::is_inside(PlaneVector::Point x, PlaneVector::Point y) const
 {
-  return x < width() && y < height();
+  return (0 <= x && x < width()) && (0 <= y && y < height());
 }
 
 BoardBase::Stone BoardBase::get_enemy_stone() const
