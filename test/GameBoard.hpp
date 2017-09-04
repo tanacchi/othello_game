@@ -7,7 +7,7 @@
 
 class GameBoard : public BoardBase {
 public:
-  GameBoard(const Position size = std::make_pair(8, 8));
+  GameBoard(const BoardBase::Position size = BoardBase::Position{8, 8});
   GameBoard(const GameBoard& src) = default;
   ~GameBoard() = default;
   void show() const;
@@ -21,7 +21,7 @@ private:
   char to_char(BoardBase::Stone stone) const;
 };
 
-GameBoard::GameBoard(const Position size)
+GameBoard::GameBoard(const BoardBase::Position size)
   : BoardBase(size)
 {
 }
@@ -45,9 +45,9 @@ void GameBoard::show() const
   for (int i {0}; i < width(); std::cout.put(' '), i++)
     std::cout << i+1 << std::flush;
   std::cout << std::endl;
-  for (Point column {0}; column < height(); std::cout.put('\n'), column++) {
+  for (PlaneVector::Point column {0}; column < height(); std::cout.put('\n'), column++) {
     std::cout << column+1 << ' ' << std::flush;
-    for (Point row {0}; row < width(); std::cout.put(' '), row++)
+    for (PlaneVector::Point row {0}; row < width(); std::cout.put(' '), row++)
       std::cout.put(to_char(board_[get_access_num(row, column)]));
   }
   for (int i {0}; i < width()+1; i++) std::cout << "--";
@@ -77,9 +77,9 @@ int GameBoard::count_stone(BoardBase::Stone&& stone) const
 
 void GameBoard::put_dots()
 {
-  for (Point row{0}; row < width(); row++)
-    for (Point column{0}; column < height(); column++)
-      if (is_available_position(std::make_pair(row, column))) board_[get_access_num(row, column)] = BoardBase::Stone::Dot;
+  for (PlaneVector::Point row{0}; row < width(); row++)
+    for (PlaneVector::Point column{0}; column < height(); column++)
+      if (is_available_position(BoardBase::Position{row, column})) board_[get_access_num(row, column)] = BoardBase::Stone::Dot;
 }
 
 void GameBoard::remove_dots()
