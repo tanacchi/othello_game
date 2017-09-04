@@ -3,7 +3,7 @@
 
 struct PlaneVector {
 public:
-  using Point = unsigned char;
+  using Point = char;
   Point x, y;
   PlaneVector(Point init_x, Point init_y);
   PlaneVector operator+(const PlaneVector& src);
