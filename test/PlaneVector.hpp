@@ -1,5 +1,3 @@
-#include <iostream>
-
 struct PlaneVector {
 public:
   using Point = unsigned char;
@@ -31,24 +29,4 @@ const PlaneVector& PlaneVector::operator--()
 {
   --x; --y;
   return *this;
-}
-
-void show(PlaneVector src)
-{
-  std::cout << &src
-            << " : x = " << static_cast<int>(src.x)
-            << ", y = " << static_cast<int>(src.y) << std::endl;
-}
-
-int main()
-{
-  PlaneVector va{3, 5};
-  PlaneVector vb{2, 5};
-  show(va);
-  show(vb);
-  PlaneVector vc{va+vb};
-  show(vc);
-  --vc;
-  show(vc);
-  return 0;
 }
