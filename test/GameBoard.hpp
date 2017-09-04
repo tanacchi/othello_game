@@ -8,6 +8,7 @@
 class GameBoard : public BoardBase {
 public:
   GameBoard(const BoardBase::Position size = BoardBase::Position{8, 8});
+  const GameBoard& operator=(const GameBoard& src) = delete;
   void show() const;
   void init();
   bool can_continue() const;
@@ -15,7 +16,6 @@ public:
   void put_dots();
   void remove_dots();
 private:
-  const GameBoard& operator=(const GameBoard& src);
   char to_char(BoardBase::Stone stone) const;
 };
 
