@@ -21,6 +21,7 @@ public:
     Dot
   };
   BoardBase(const Position size = Position{8, 8});
+  const BoardBase& operator=(const BoardBase& src) = delete;
   virtual ~BoardBase() = default;
   PlaneVector::Point width() const;
   PlaneVector::Point height() const;
@@ -49,7 +50,6 @@ protected:
   const Position size_;
   Stone active_stone_;
 private:
-  const BoardBase& operator=(const BoardBase& src);
 };
 
 BoardBase::BoardBase(const Position size)
