@@ -27,13 +27,13 @@ public:
   PlaneVector::Point height() const;
   bool is_inside(PlaneVector::Point x, PlaneVector::Point y) const;
   bool is_inside(Position pos) const;
-  std::size_t get_access_num(Position pos) const;
-  std::size_t get_access_num(PlaneVector::Point x, PlaneVector::Point y) const;
+  PlaneVector::Point get_access_num(Position pos) const;
+  PlaneVector::Point get_access_num(PlaneVector::Point x, PlaneVector::Point y) const;
   void insert(PlaneVector::Point x, PlaneVector::Point y);
   void insert(PlaneVector::Point x, PlaneVector::Point y, Stone&& stone);
   void insert(Position pos);
   Stone get_enemy_stone() const;
-  std::size_t get_reversible_length(Position pos, PlaneVector dr) const;
+  int get_reversible_length(Position pos, PlaneVector dr) const;
   bool can_reverse(Position pos) const;
   void reverse(Position pos);
   bool is_available_position(Position pos) const;
@@ -69,12 +69,12 @@ inline PlaneVector::Point BoardBase::height() const
   return size_.y;
 }
 
-inline std::size_t BoardBase::get_access_num(PlaneVector::Point x, PlaneVector::Point y) const
+inline PlaneVector::Point BoardBase::get_access_num(PlaneVector::Point x, PlaneVector::Point y) const
 {
   return (std::size_t)(x + width()*y);
 }
 
-inline std::size_t BoardBase::get_access_num(Position pos) const
+inline PlaneVector::Point BoardBase::get_access_num(Position pos) const
 {
   return get_access_num(pos.x, pos.y);
 }
@@ -109,7 +109,7 @@ BoardBase::Stone BoardBase::get_enemy_stone() const
   return (active_stone_ == Stone::White) ? Stone::Black : Stone::White;
 }
 
-std::size_t BoardBase::get_reversible_length(Position pos, PlaneVector dr) const // REFACTORING REQUIRED
+int BoardBase::get_reversible_length(Position pos, PlaneVector dr) const // REFACTORING REQUIRED
 {
   Stone enemy_stone{get_enemy_stone()};
   Position target{pos+dr};
