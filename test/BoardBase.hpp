@@ -1,3 +1,6 @@
+#ifndef BOARD_BASE_H_
+#define BOARD_BASE_H_
+
 #include <vector>
 #include <valarray>
 
@@ -152,3 +155,5 @@ void BoardBase::switch_active_stone()
 {
   active_stone_ = get_enemy_stone();
 }
+
+#endif // BOARD_BASE_H_

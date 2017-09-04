@@ -1,3 +1,6 @@
+#ifndef GAME_BOARD_H_
+#define GAME_BOARD_H_
+
 #include <stdexcept>
 
 #include "BoardBase.hpp"
@@ -84,3 +87,5 @@ void GameBoard::remove_dots()
   for (auto& target : board_)
     if (target == BoardBase::Stone::Dot) target = BoardBase::Stone::Space;
 }
+
+#endif // GAME_BOARD_H_
