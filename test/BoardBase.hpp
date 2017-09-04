@@ -1,5 +1,6 @@
 #include <vector>
 #include <valarray>
+#include "PlaneVector.hpp"
 
 #include <functional>
 
