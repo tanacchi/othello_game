@@ -124,7 +124,7 @@ std::size_t BoardBase::get_reversible_length(Position pos, PlaneVector dr) const
   for (int length{0}; is_inside(target); length++) {
     if (board_[get_access_num(target)] == active_stone_) return length;
     else if (board_[get_access_num(target)] != enemy_stone) break;
-    target.x += dr.x; target.y += dr.y;
+    target += dr;
   }
   return 0;
 }
@@ -141,7 +141,7 @@ void BoardBase::reverse(Position pos) // REFACTORING REQUIRED
   for (auto dr : direction) {
     std::size_t reverse_length = get_reversible_length(pos, dr);
     for (int j{1}; j <= reverse_length; j++)
-      insert(pos.x+j*dr.x, pos.y+j*dr.y);
+      insert(pos+j*dr);
   }
 }
 
