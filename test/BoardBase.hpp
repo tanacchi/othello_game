@@ -141,7 +141,7 @@ void BoardBase::reverse(Position pos) // REFACTORING REQUIRED
   for (auto dr : direction) {
     std::size_t reverse_length = get_reversible_length(pos, dr);
     for (int j{1}; j <= reverse_length; j++)
-      insert(pos+j*dr);
+      insert(pos+dr*j);
   }
 }
 
