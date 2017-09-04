@@ -8,8 +8,6 @@
 class GameBoard : public BoardBase {
 public:
   GameBoard(const BoardBase::Position size = BoardBase::Position{8, 8});
-  GameBoard(const GameBoard& src) = default;
-  ~GameBoard() = default;
   void show() const;
   void init();
   bool can_continue() const;
