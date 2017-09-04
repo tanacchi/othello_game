@@ -15,10 +15,10 @@ Task task_judge();
 Task task_switch();
 
 Task phase{Task::Init};
-Position size{std::make_pair(10, 10)};
+BoardBase::Position size{10, 10};
 GameBoard board{size};
 int turn;
-Position current_pos{Position{0, 0}};
+BoardBase::Position current_pos{0, 0};
 
 Task run(Task task)
 {
@@ -53,12 +53,12 @@ Task task_op()
 Task task_set()
 {
   std::cout << "Input hand\n x = " << std::flush;
-  std::cin >> current_pos.first;
+  std::cin >> current_pos.x;
   std::cout << "\x1b[1A\x1b[8C" << std::flush;
   std::cout << "y = " << std::flush;
-  std::cin >> current_pos.second;
-  std::cout << current_pos.first << ' ' << current_pos.second << std::endl;
-  current_pos.first--; current_pos.second--;
+  std::cin >> current_pos.y;
+  std::cout << current_pos.x << ' ' << current_pos.y << std::endl;
+  current_pos.x--; current_pos.y--;
   return board.is_available_position(current_pos) ? Task::Insert : Task::Set;
 }
 
