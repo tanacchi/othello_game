@@ -21,7 +21,6 @@ public:
     Dot
   };
   BoardBase(const Position size = Position{8, 8});
-  BoardBase(const BoardBase& src);
   virtual ~BoardBase() = default;
   PlaneVector::Point width() const;
   PlaneVector::Point height() const;
@@ -57,13 +56,6 @@ BoardBase::BoardBase(const Position size)
   : board_{std::size_t(size.x * size.y)},
     size_{size},
     active_stone_{Stone::White}
-{
-}
-
-BoardBase::BoardBase(const BoardBase& src)
-  : board_{src.board_},
-    size_{src.size_},
-    active_stone_{src.active_stone_}
 {
 }
 
