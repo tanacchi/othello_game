@@ -1,3 +1,6 @@
+#ifndef PLANE_VECTOR_H_
+#define PLANE_VECTOR_H_
+
 struct PlaneVector {
 public:
   using Point = unsigned char;
@@ -30,3 +33,5 @@ const PlaneVector& PlaneVector::operator--()
   --x; --y;
   return *this;
 }
+
+#endif // PLANE_VECTOR_H_
