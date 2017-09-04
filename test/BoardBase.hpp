@@ -38,13 +38,6 @@ public:
   void reverse(Position pos);
   bool is_available_position(Position pos) const;
   void switch_active_stone();
-  // for Test
-  void get_size(std::size_t& width, std::size_t& height, std::size_t& length)
-  {
-    width = (std::size_t)size_.x;
-    height = (std::size_t)size_.y;
-    length = (std::size_t)board_.size();
-  }
 protected:
   std::valarray<Stone> board_;
   const Position size_;
