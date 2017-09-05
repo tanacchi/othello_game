@@ -71,9 +71,10 @@ int GameBoard::count_stone(BoardBase::Stone&& stone) const
 
 void GameBoard::put_dots()
 {
-  for (PlaneVector::Point row{0}; row < width(); row++)
-    for (PlaneVector::Point column{0}; column < height(); column++)
-      if (is_available_position(BoardBase::Position{row, column})) board_[get_access_num(row, column)] = BoardBase::Stone::Dot;
+  BoardBase::Position elem{0, 0};
+  for (elem.x = 0; elem.x < width(); ++elem.x)
+    for (elem.y = 0; elem.y < height(); ++elem.y)
+      if (is_available_position(elem)) board_[get_access_num(elem)] = BoardBase::Stone::Dot;
 }
 
 void GameBoard::remove_dots()
