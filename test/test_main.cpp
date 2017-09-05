@@ -1,5 +1,6 @@
 #include <iostream>
 #include "GameBoard.hpp"
+#include "AiBoard.hpp"
 
 int main()
 {
@@ -32,6 +33,9 @@ int main()
   y = static_cast<PlaneVector::Point>(y_buff-1);
   BoardBase::Position pos{x, y};
   board.insert(pos);
-  board.show();  
+  board.show();
+
+  AiBoard ai(board);
+  ai.get_status_score();
   return 0;
 }
