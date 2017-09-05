@@ -1,6 +1,7 @@
 #ifndef BOARD_BASE_H_
 #define BOARD_BASE_H_
 
+#include <algorithm>
 #include <vector>
 #include <valarray>
 #include "PlaneVector.hpp"
