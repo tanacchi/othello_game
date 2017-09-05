@@ -68,9 +68,7 @@ bool GameBoard::can_continue() const // 「両方打つとこ無し」も調べ�
 
 int GameBoard::count_stone(BoardBase::Stone&& stone) const
 {
-  int count{0};
-  for (auto s : board_) if (s == stone) count++;
-  return count;
+  return std::count(std::begin(board_), std::end(board_), stone);
 }
 
 void GameBoard::put_dots()
