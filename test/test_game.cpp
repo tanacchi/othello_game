@@ -52,18 +52,20 @@ Task task_op()
 
 Task task_set()
 {
+  short input_x, input_y;
   std::cout << "Input hand\n x = " << std::flush;
-  std::cin >> current_pos.x;
+  std::cin >> input_x;
   std::cout << "\x1b[1A\x1b[8C" << std::flush;
   std::cout << "y = " << std::flush;
-  std::cin >> current_pos.y;
-  std::cout << current_pos.x << ' ' << current_pos.y << std::endl;
-  current_pos.x--; current_pos.y--;
+  std::cin >> input_y;
+  current_pos.x = static_cast<PlaneVector::Point>(input_x-1);
+  current_pos.y = static_cast<PlaneVector::Point>(input_y-1);
   return board.is_available_position(current_pos) ? Task::Insert : Task::Set;
 }
 
 Task task_insert()
 {
+  board.insert(BoardBase::Position{5, 3});
   board.insert(current_pos);
   board.reverse(current_pos);
   board.show();
