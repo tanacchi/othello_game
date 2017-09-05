@@ -33,7 +33,7 @@ public:
   void insert(PlaneVector::Point x, PlaneVector::Point y);
   void insert(PlaneVector::Point x, PlaneVector::Point y, Stone&& stone);
   void insert(const Position& pos);
-  Stone get_enemy_stone() const;
+  BoardBase::Stone get_enemy_stone() const;
   int get_reversible_length(Position pos, PlaneVector dr) const;
   bool can_reverse(const Position& pos) const;
   void reverse(Position pos);
@@ -105,12 +105,11 @@ BoardBase::Stone BoardBase::get_enemy_stone() const
 
 int BoardBase::get_reversible_length(Position pos, PlaneVector dr) const // REFACTORING REQUIRED // Why ref-arg rejected ?
 {
-  Stone enemy_stone{get_enemy_stone()};
+  const Stone enemy_stone{get_enemy_stone()};
   Position target{pos+dr};
-  for (int length{0}; is_inside(target); target += dr, length++) {
+  for (int length{0}; is_inside(target); target += dr, length++)
     if (board_[get_access_num(target)] == active_stone_) return length;
     else if (board_[get_access_num(target)] != enemy_stone) break;
-  }
   return 0;
 }
 
