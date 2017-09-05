@@ -78,8 +78,7 @@ void GameBoard::put_dots()
 
 void GameBoard::remove_dots()
 {
-  for (auto& target : board_)
-    if (target == BoardBase::Stone::Dot) target = BoardBase::Stone::Space;
+  std::replace_if(std::begin(board_), std::end(board_), [](BoardBase::Stone target){ return target == BoardBase::Stone::Dot; }, BoardBase::Stone::Space);
 }
 
 #endif // GAME_BOARD_H_
