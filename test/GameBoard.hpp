@@ -61,9 +61,7 @@ void GameBoard::init()
 
 bool GameBoard::can_continue() const // 「両方打つとこ無し」も調べたいx
 {
-  for (auto target : board_)
-    if (target == BoardBase::Stone::Space) return true;
-  return false;
+  return std::any_of(std::begin(board_), std::end(board_), [](Stone target){ return target == BoardBase::Stone::Space; });
 }
 
 int GameBoard::count_stone(BoardBase::Stone&& stone) const
