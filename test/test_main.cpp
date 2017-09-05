@@ -3,7 +3,8 @@
 
 int main()
 {
-  GameBoard board;
+  BoardBase::Position size{10, 10};
+  GameBoard board{size};
 
   board.init();
   board.put_dots();
@@ -23,5 +24,14 @@ int main()
   board.reverse(BoardBase::Position{4, 2});
   board.show();
 
+  short x_buff, y_buff;
+  std::cin >> x_buff;
+  std::cin >> y_buff;
+  PlaneVector::Point x, y;
+  x = static_cast<PlaneVector::Point>(x_buff-1);
+  y = static_cast<PlaneVector::Point>(y_buff-1);
+  BoardBase::Position pos{x, y};
+  board.insert(pos);
+  board.show();  
   return 0;
 }
