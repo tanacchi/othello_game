@@ -37,5 +37,13 @@ int main()
 
   AiBoard ai(board);
   ai.get_status_score();
+  int ai_space{ai.count_stone(BoardBase::Stone::Space)};
+  int ai_white{ai.count_stone(BoardBase::Stone::White)};
+  int ai_black{ai.count_stone(BoardBase::Stone::Black)};
+
+  std::cout << ai_space << std::endl;
+  std::cout << ai_black << std::endl;
+  std::cout << ai_white << std::endl;
+
   return 0;
 }
