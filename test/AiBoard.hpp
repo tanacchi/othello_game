@@ -17,30 +17,42 @@ AiBoard::AiBoard(const BoardBase& src)
 }
 
 double AiBoard::get_status_score() const
-{ // とりあえず既存のやつ。gsliceがめっちゃ使えそう
+{ // とりあえず既存のやつ。gsliceもalgorithmもめっちゃ使えそう
   double status_score {0};
-  Stone enemy_stone {get_enemy()};
-  status_score = count_stone(active_stone_) - count_stone(enemy_stone);
-  const std::vector<int> edge_x = {0, 0, 7, 7};   // REFACT : 絶対まとめた方がいい
-  const std::vector<int> edge_y = {0, 7, 0, 7};
+  const Stone enemy_stone {get_enemy_stone()};
+  BoardBase::Stone target{BoardBase::Stone::Space};
+  const std::vector<Position> edge_pos = {
+    {0, 0}, {7, 0},
+    {0, 7}, {7, 7}
+  };
   for (int i = 0; i < 4; i++) {
-    Stone target = board_[edge_y[i]][edge_x[i]];
+    target = board_[get_access_num(edge_pos[i])];
     if (target == active_stone_) status_score += 15;
     else if (target == enemy_stone) status_score -= 15;
   }
-  const std::vector<int> adv_x = {0, 0, 2, 2, 5, 5, 7, 7};
-  const std::vector<int> adv_y = {2, 5, 0, 7, 0, 7, 2, 5};
-  for (int i = 0; i < 8; i++) {
-    Stone target = board_[adv_y[i]][adv_x[i]];
-    if (target == active_stone_) status_score += 5;
-    else if (target == enemy_stone) status_score -= 5;
-  }
-  const std::vector<int> pin_x = {0, 0, 1, 1, 1, 1, 6, 6, 6, 6, 7, 7};
-  const std::vector<int> pin_y = {1, 6, 0, 1, 6, 7, 0, 1, 6, 7, 1, 6};
+  const std::vector<Position> near_pos = {
+            {1, 0}, {6, 0},
+    {0, 1}, {1, 1}, {6, 1}, {7, 1},
+    {0, 6}, {1, 6}, {6, 6}, {7, 6},
+            {1, 7}, {6, 7}
+  };
   for (int i = 0; i < 12; i++) {
-    Stone target = board_[pin_y[i]][pin_x[i]];
+    target = board_[get_access_num(near_pos[i])];
     if (target == active_stone_) status_score -= 5;
     else if (target == enemy_stone) status_score += 5;
+  }
+  const std::vector<Position> reach_pos = {
+                    {2, 0}, {5, 0},
+                    {2, 1}, {5, 1},
+    {0, 2}, {1, 2}, {2, 2}, {5, 2}, {6, 2}, {7, 2},
+    {0, 5}, {1, 5}, {2, 5}, {5, 5}, {6, 5}, {7, 5},
+                    {2, 6}, {5, 6},
+                    {2, 7}, {5, 7}
+  };
+  for (int i = 0; i < 8; i++) {
+    target = board_[get_access_num(reach_pos[i])];
+    if (target == active_stone_) status_score += 5;
+    else if (target == enemy_stone) status_score -= 5;
   }
   return status_score;
 }
