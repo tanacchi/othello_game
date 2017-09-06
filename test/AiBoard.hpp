@@ -3,6 +3,7 @@
 
 #include "BoardBase.hpp"
 
+
 class AiBoard : public BoardBase {
 public:
   AiBoard(const BoardBase& src);
@@ -16,13 +17,31 @@ AiBoard::AiBoard(const BoardBase& src)
 }
 
 double AiBoard::get_status_score() const
-{
+{ // とりあえず既存のやつ。gsliceがめっちゃ使えそう
   double status_score {0};
-  std::valarray<std::size_t> edge_pos = {
-    0,                             get_access_num(width()-1, 0),
-    get_access_num(0, height()-1), width()*height()-1
-  };
-  std::valarray<BoardBase::Stone> edge{board_[edge_pos]};
+  Stone enemy_stone {get_enemy()};
+  status_score = count_stone(active_stone_) - count_stone(enemy_stone);
+  const std::vector<int> edge_x = {0, 0, 7, 7};   // REFACT : 絶対まとめた方がいい
+  const std::vector<int> edge_y = {0, 7, 0, 7};
+  for (int i = 0; i < 4; i++) {
+    Stone target = board_[edge_y[i]][edge_x[i]];
+    if (target == active_stone_) status_score += 15;
+    else if (target == enemy_stone) status_score -= 15;
+  }
+  const std::vector<int> adv_x = {0, 0, 2, 2, 5, 5, 7, 7};
+  const std::vector<int> adv_y = {2, 5, 0, 7, 0, 7, 2, 5};
+  for (int i = 0; i < 8; i++) {
+    Stone target = board_[adv_y[i]][adv_x[i]];
+    if (target == active_stone_) status_score += 5;
+    else if (target == enemy_stone) status_score -= 5;
+  }
+  const std::vector<int> pin_x = {0, 0, 1, 1, 1, 1, 6, 6, 6, 6, 7, 7};
+  const std::vector<int> pin_y = {1, 6, 0, 1, 6, 7, 0, 1, 6, 7, 1, 6};
+  for (int i = 0; i < 12; i++) {
+    Stone target = board_[pin_y[i]][pin_x[i]];
+    if (target == active_stone_) status_score -= 5;
+    else if (target == enemy_stone) status_score += 5;
+  }
   return status_score;
 }
 
