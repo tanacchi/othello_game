@@ -1,6 +1,6 @@
 #include <iostream>
-#include "../src/GameBoard.hpp"
-#include "../src/AiBoard.hpp"
+#include "../include/GameBoard.hpp"
+#include "../include/AiBoard.hpp"
 
 int main()
 {

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../src/GameBoard.hpp"
+#include "../include/GameBoard.hpp"
 #include "../include/BoardMaster.hpp"
 
 enum class Task {
