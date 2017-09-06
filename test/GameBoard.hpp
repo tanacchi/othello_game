@@ -12,7 +12,6 @@ public:
   void show() const;
   void init();
   bool can_continue() const;
-  int count_stone(BoardBase::Stone&& stone) const;
   void put_dots();
   void remove_dots();
 private:
@@ -62,11 +61,6 @@ void GameBoard::init()
 bool GameBoard::can_continue() const // 「両方打つとこ無し」も調べたいx
 {
   return std::any_of(std::begin(board_), std::end(board_), [](Stone target){ return target == BoardBase::Stone::Space; });
-}
-
-int GameBoard::count_stone(BoardBase::Stone&& stone) const
-{
-  return std::count(std::begin(board_), std::end(board_), stone);
 }
 
 void GameBoard::put_dots()
