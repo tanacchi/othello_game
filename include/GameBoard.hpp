@@ -1,0 +1,22 @@
+#ifndef GAME_BOARD_H_
+#define GAME_BOARD_H_
+
+#include <stdexcept>
+#include <iostream>
+
+#include "BoardBase.hpp"
+
+class GameBoard : public BoardBase {
+public:
+  GameBoard(const BoardBase::Position size = BoardBase::Position{8, 8});
+  const GameBoard& operator=(const GameBoard& src) = delete;
+  void show() const;
+  void init();
+  bool can_continue() const;
+  void put_dots();
+  void remove_dots();
+private:
+  char to_char(BoardBase::Stone stone) const;
+};
+
+#endif // GAME_BOARD_H_
