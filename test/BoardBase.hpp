@@ -35,7 +35,7 @@ public:
   void insert(const Position& pos);
   BoardBase::Stone get_enemy_stone() const;
   int get_reversible_length(Position pos, PlaneVector dr) const;
-  int count_stone(BoardBase::Stone stone) const;
+  int count_stone(BoardBase::Stone&& stone) const;
   bool can_reverse(const Position& pos) const;
   void reverse(Position pos);
   bool is_available_position(const Position& pos) const;
@@ -114,7 +114,7 @@ int BoardBase::get_reversible_length(Position pos, PlaneVector dr) const // REFA
   return 0;
 }
 
-int BoardBase::count_stone(BoardBase::Stone stone) const
+int GameBoard::count_stone(BoardBase::Stone&& stone) const
 {
   return std::count(std::begin(board_), std::end(board_), stone);
 }
