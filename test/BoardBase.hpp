@@ -114,7 +114,7 @@ int BoardBase::get_reversible_length(Position pos, PlaneVector dr) const // REFA
   return 0;
 }
 
-int BoardBase::count_stone(BoardBase::Stone&& stone) const
+int BoardBase::count_stone(BoardBase::Stone stone) const
 {
   return std::count(std::begin(board_), std::end(board_), stone);
 }
