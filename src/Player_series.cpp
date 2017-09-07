@@ -5,25 +5,23 @@
 Player::Player()
   : mystone_ {Stone::Space},
     myname_(),
-    hand_x_{-1},
-    hand_y_{-1}
+    hand_{BoardBase::Position{-1, -1}}
 {
 }
 
-void Player::set_mystone(Stone stone)
-{
-  mystone_ = stone;
-}
+// void Player::set_mystone(Stone stone)
+// {
+//   mystone_ = stone;
+// }
 
 Stone Player::get_mystone() const
 {
   return mystone_;
 }
 
-void Player::get_hand(int &x, int &y) const
+BoardBase::Position Player::get_hand() const
 {
-  x = hand_x_;
-  y = hand_y_;
+  return hand_;
 }
 
 void Player::set_myname(std::string src)
@@ -48,7 +46,7 @@ HumanPlayer::HumanPlayer()
   set_myname(myname);
 }
 
-bool HumanPlayer::set_hand(const BoardMaster game_board)
+bool HumanPlayer::set_hand(const GameBoard& game_board)
 {
   std::cout << "Set your hand !!" << std::endl;
   std::string input_str[2];
@@ -60,8 +58,8 @@ bool HumanPlayer::set_hand(const BoardMaster game_board)
   }
   int input_num[2];
   for (int i = 0; i < 2; i++) input_num[i] = std::atoi(input_str[i].c_str());
-  hand_x_ = input_num[0] - 1;
-  hand_y_ = input_num[1] - 1;
+  hand_.x = static_cast<BoardBase::Position::Point>(input_num[0] - 1);
+  hand_.y = static_cast<BoardBase::Position::Point>(input_num[1] - 1);
   return true;
 }
 
@@ -72,7 +70,7 @@ ComputerPlayer::ComputerPlayer()
   set_myname("Computer");
 }
 
-bool ComputerPlayer::set_hand(const BoardMaster game_board)
+bool ComputerPlayer::set_hand(const GameBoard& game_board)
 {
   // OthelloAI* p = new OthelloAI(game_board);
   // p->seek(4);
