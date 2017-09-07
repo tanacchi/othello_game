@@ -33,7 +33,7 @@ private:
   Player *participant_[2];
   Player *active_player_;
   short turn_;
-  BoardSeries::BordBase::Position pos_;
+  BoardSeries::Position pos_;
   std::vector<HandList> hand_list_;
   std::ofstream log_file_;
 };
