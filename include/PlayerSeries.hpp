@@ -6,33 +6,31 @@
 
 class Player {
 public:
-  Player();
+  Player(BoardBase::Stone mystone);
+  const Player& operator=(const Player& src) = delete;
   virtual ~Player() = default;
-  // void set_mystone(Stone stone);
   virtual bool set_hand(const BoardMaster game_board) = 0;
-  // Stone get_mystone() const;
+  BoardBase::Stone get_mystone() const;
   BoardBase::Position get_hand() const;
   void set_myname(std::string src);
   std::string get_myname() const;
 protected:
   BoardBase::Position hand_;
 private:
-  Player(const Player& src);
-  const Player& operator=(const Player& src);
-  // Stone mystone_;
+  BoardBase::Stone mystone_;
   std::string myname_;
 };
 
 class HumanPlayer : public Player {
 public:
-  HumanPlayer();
+  HumanPlayer(BoardBase::Stone mystone = BoardBase::Stone::Space);
   ~HumanPlayer() = default;
   bool set_hand(const GameBoard& game_board);
 };
 
 class ComputerPlayer : public Player{
 public:
-  ComputerPlayer();
+  ComputerPlayer(BoardBase::Stone mystone = BoardBase::Stone::Space);
   ~ComputerPlayer() = default;
   bool set_hand(const GameBoard& game_board);
 };
