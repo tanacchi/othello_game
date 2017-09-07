@@ -2,19 +2,14 @@
 
 // ------------------------- Player --------------------------------------------
 
-Player::Player()
-  : mystone_ {Stone::Space},
+Player::Player(BoardBase::Stone mystone)
+  : mystone_ {mystone},
     myname_(),
     hand_{BoardBase::Position{-1, -1}}
 {
 }
 
-// void Player::set_mystone(Stone stone)
-// {
-//   mystone_ = stone;
-// }
-
-Stone Player::get_mystone() const
+BoardBase::Stone Player::get_mystone() const
 {
   return mystone_;
 }
