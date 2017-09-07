@@ -1,5 +1,7 @@
 #include "../include/AiBoard.hpp"
 
+namespace BoardSeries
+{
 AiBoard::AiBoard(const BoardBase& src)
   : BoardBase(src)
 {
@@ -45,3 +47,4 @@ double AiBoard::get_status_score() const
   }
   return status_score;
 }
+};

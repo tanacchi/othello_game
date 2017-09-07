@@ -1,5 +1,7 @@
 #include "../include/GameBoard.hpp"
 
+namespace BoardSeries
+{
 GameBoard::GameBoard(const BoardBase::Position size)
   : BoardBase(size)
 {
@@ -57,3 +59,4 @@ void GameBoard::remove_dots()
 {
   std::replace_if(std::begin(board_), std::end(board_), [](BoardBase::Stone target){ return target == BoardBase::Stone::Dot; }, BoardBase::Stone::Space);
 }
+};
