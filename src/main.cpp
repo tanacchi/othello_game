@@ -96,8 +96,8 @@ int main(int argc, char** argv)
   // set_player(mode, player);
 
   Player* player[2];
-  player[0] = new ComputerPlayer;
-  player[1] = new ComputerPlayer;
+  player[0] = new HumanPlayer;
+  player[1] = new HumanPlayer;
 
   GameMaster master(player);
   Task task {Task::Init};

@@ -74,9 +74,9 @@ ComputerPlayer::ComputerPlayer()
 
 bool ComputerPlayer::set_hand(const BoardMaster game_board)
 {
-  OthelloAI* p = new OthelloAI(game_board);
-  p->seek(4);
-  p->get_conclusion(hand_x_, hand_y_);
-  delete p;
+  // OthelloAI* p = new OthelloAI(game_board);
+  // p->seek(4);
+  // // p->get_conclusion(hand_x_, hand_y_);
+  // delete p;
   return true;
 }
