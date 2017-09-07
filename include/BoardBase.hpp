@@ -14,15 +14,16 @@ static const std::array<PlaneVector,8ul> direction {{
     {1,-1}, {1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}, {0,-1}
   }};
 
+using Position = PlaneVector;
+enum class Stone {
+  Space,
+  White,
+  Black,
+  Dot
+};
+
 class BoardBase {
 public:
-  using Position = PlaneVector;
-  enum class Stone {
-    Space,
-    White,
-    Black,
-    Dot
-  };
   BoardBase(const Position& size = Position{8, 8});
   const BoardBase& operator=(const BoardBase& src) = delete;
   virtual ~BoardBase() = default;
@@ -46,7 +47,6 @@ protected:
   std::valarray<Stone> board_;
   const Position size_;
   Stone active_stone_;
-private:
 };
 };
 

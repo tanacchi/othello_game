@@ -2,19 +2,19 @@
 
 // ------------------------- Player --------------------------------------------
 
-Player::Player(BoardBase::Stone mystone)
+Player::Player(BoardSeries::Stone mystone)
   : mystone_ {mystone},
     myname_(),
-    hand_{BoardBase::Position{-1, -1}}
+    hand_{BoardSeries::Position{-1, -1}}
 {
 }
 
-BoardBase::Stone Player::get_mystone() const
+BoardSeries::Stone Player::get_mystone() const
 {
   return mystone_;
 }
 
-BoardBase::Position Player::get_hand() const
+BoardSeries::Position Player::get_hand() const
 {
   return hand_;
 }
@@ -53,8 +53,8 @@ bool HumanPlayer::set_hand(const GameBoard& game_board)
   }
   int input_num[2];
   for (int i = 0; i < 2; i++) input_num[i] = std::atoi(input_str[i].c_str());
-  hand_.x = static_cast<BoardBase::Position::Point>(input_num[0] - 1);
-  hand_.y = static_cast<BoardBase::Position::Point>(input_num[1] - 1);
+  hand_.x = static_cast<Position::Point>(input_num[0] - 1);
+  hand_.y = static_cast<Position::Point>(input_num[1] - 1);
   return true;
 }
 

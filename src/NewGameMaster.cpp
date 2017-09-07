@@ -43,7 +43,7 @@ Task NewGameMaster::task_op()
   board_.put_dots();
   board_.show();
   static int pass_turn;
-  if (!board_.count_stone(BoardSeries::BoardBase::Stone::Dot)) { std::cout << "PASS !!!" << std::endl; return (++pass_turn < 2) ? Task::Judge : Task::Ask; }
+  if (!board_.count_stone(BoardSeries::Stone::Dot)) { std::cout << "PASS !!!" << std::endl; return (++pass_turn < 2) ? Task::Judge : Task::Ask; }
   else pass_turn = 0;
   board_.remove_dots();
   return Task::Set;
@@ -93,8 +93,8 @@ Task NewGameMaster::task_switch()
 
 Task NewGameMaster::task_ask()
 {
-  std::cout << "WHITE STONE (O) : " << board_.count_stone(Stone::White) << '\n'
-            << "BLACK STONE (X) : " << board_.count_stone(Stone::Black) << '\n'
+  std::cout << "WHITE STONE (O) : " << board_.count_stone(BoardSeries::Stone::White) << '\n'
+            << "BLACK STONE (X) : " << board_.count_stone(BoardSeries::Stone::Black) << '\n'
             <<std::endl;
   std::cout << "Continue ?? (yes/no)\n > " << std::flush;
   std::string answer;
