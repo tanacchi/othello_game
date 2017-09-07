@@ -26,9 +26,9 @@ void GameBoard::show() const
   for (int i {0}; i < width(); std::cout.put(' '), i++)
     std::cout << i+1 << std::flush;
   std::cout << std::endl;
-  for (PlaneVector::Point column {0}; column < height(); std::cout.put('\n'), column++) {
+  for (Position::Point column {0}; column < height(); std::cout.put('\n'), column++) {
     std::cout << column+1 << ' ' << std::flush;
-    for (PlaneVector::Point row {0}; row < width(); std::cout.put(' '), row++)
+    for (Position::Point row {0}; row < width(); std::cout.put(' '), row++)
       std::cout.put(to_char(board_[get_access_num(row, column)]));
   }
   for (int i {0}; i < width()+1; i++) std::cout << "--";
