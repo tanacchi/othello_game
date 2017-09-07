@@ -6,6 +6,8 @@
 
 #include "BoardBase.hpp"
 
+namespace BoardSeries
+{
 class GameBoard : public BoardBase {
 public:
   GameBoard(const BoardBase::Position size = BoardBase::Position{8, 8});
@@ -15,8 +17,9 @@ public:
   bool can_continue() const;
   void put_dots();
   void remove_dots();
-private:
-  char to_char(BoardBase::Stone stone) const;
 };
-
+  
+char to_char(BoardBase::Stone stone) const;
+};
+  
 #endif // GAME_BOARD_H_

@@ -1,12 +1,14 @@
 #include "../include/BoardBase.hpp"
 
+namespace BoardSeries
+{
 BoardBase::BoardBase(const Position& size)
   : board_{std::size_t(size.x * size.y)},
     size_{size},
     active_stone_{Stone::White}
 {
 }
-
+  
 inline PlaneVector::Point BoardBase::width() const
 {
   return size_.x;
@@ -96,3 +98,4 @@ void BoardBase::switch_active_stone()
 {
   active_stone_ = get_enemy_stone();
 }
+};

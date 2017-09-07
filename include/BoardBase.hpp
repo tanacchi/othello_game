@@ -8,6 +8,8 @@
 
 #include <functional>
 
+namespace BoardSeries
+{
 static const std::array<PlaneVector,8ul> direction {{
     {1,-1}, {1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}, {0,-1}
   }};
@@ -45,6 +47,7 @@ protected:
   const Position size_;
   Stone active_stone_;
 private:
+};
 };
 
 #endif // BOARD_BASE_H_
