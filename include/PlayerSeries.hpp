@@ -2,6 +2,7 @@
 #define PLAYER_SERIES_H_
 
 #include "GameBoard.hpp"
+#include "OthelloAI.hpp"
 
 class Player {
 public:

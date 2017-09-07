@@ -1,10 +1,6 @@
 #ifndef NEW_GAME_MASTER_H_
 #define NEW_GAME_MASTER_H_
 
-#include "GameBoard.hpp"
-#include "AiBoard.hpp"
-#include "PlayerSeries.hpp"
-
 class NewGameMaster {
 public:
   enum class Task {
