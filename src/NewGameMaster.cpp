@@ -88,6 +88,7 @@ NewGameMaster::Task NewGameMaster::task_switch()
 {
   ++turn_;
   active_player_ = participant_[turn_ % 2];
+  board_.switch_active_stone();
   return Task::Op;
 }
 
