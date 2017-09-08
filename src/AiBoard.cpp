@@ -1,7 +1,5 @@
 #include "../include/AiBoard.hpp"
 
-namespace BoardSeries
-{
 AiBoard::AiBoard(const BoardBase& src)
   : BoardBase(src)
 {
@@ -11,7 +9,7 @@ double AiBoard::get_status_score() const
 { // とりあえず既存のやつ。gsliceもalgorithmもめっちゃ使えそう
   const Stone enemy_stone {get_enemy_stone()};
   double status_score {static_cast<double>(count_stone(active_stone_) - count_stone(enemy_stone))};
-  Stone target{Stone::Space};
+  BoardBase::Stone target{BoardBase::Stone::Space};
   static const std::vector<Position> edge_pos = {
     {0, 0}, {7, 0},
     {0, 7}, {7, 7}
@@ -47,4 +45,3 @@ double AiBoard::get_status_score() const
   }
   return status_score;
 }
-};
