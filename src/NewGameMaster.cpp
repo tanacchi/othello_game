@@ -9,7 +9,7 @@ HandList::HandList(short turn, BoardSeries::Stone stone, BoardSeries::Position p
 
 void HandList::rewrite(BoardSeries::GameBoard& game_board)
 {
-  game_board.insert(position_, stone_); // 二度手間？？
+  game_board.insert(position_, stone_);
   game_board.reverse(position_);
   game_board.switch_active_stone();   // ここで？
 }
@@ -70,8 +70,7 @@ NewGameMaster::Task NewGameMaster::task_op()
 
 NewGameMaster::Task NewGameMaster::task_set()
 {
-//  if (!active_player_->set_hand(board_)) return Task::Revert;
-  active_player_->set_hand(board_);
+  if (!active_player_->set_hand(board_)) return Task::Revert;
   pos_ = active_player_->get_hand();
   if (!board_.is_available_position(pos_)) {
     std::cout << "It's wrong hand !! Try again." << std::endl;
@@ -89,7 +88,20 @@ NewGameMaster::Task NewGameMaster::task_insert()
 
 NewGameMaster::Task NewGameMaster::task_revert()
 {
-  return Task::Ed;
+  std::string input_buff;
+  std::cout << "Set the turn you wanna play back !" << std::endl;
+  std::cout << " > " << std::flush;
+  std::cin >> input_buff;
+  short destination = std::atoi(input_buff.c_str()) - 1;
+  if (destination < 0 || turn_ < destination) {
+    std::cout << "Pardon ?" << std::endl; return Task::Set;
+  }
+  hand_list_.erase(hand_list_.begin() + destination, hand_list_.end());
+  board_.init();
+  for (auto hl : hand_list_) hl.rewrite(board_);
+  active_player_ = participant[destination%2];
+  turn_ = destination;
+  return Task::Op;
 }
 
 NewGameMaster::Task NewGameMaster::task_write()
