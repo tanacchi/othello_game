@@ -52,8 +52,8 @@ private:
   Player *active_player_;
   short turn_;
   BoardSeries::Position pos_;
-//  std::vector<HandList> hand_list_;
-//  std::ofstream log_file_;
+  std::vector<HandList> hand_list_;
+  std::ofstream log_file_;
 };
 
 #endif // NEW_GAME_MASTER_H_
