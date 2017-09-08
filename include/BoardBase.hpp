@@ -34,8 +34,9 @@ public:
   PlaneVector::Point get_access_num(const Position& pos) const;
   PlaneVector::Point get_access_num(PlaneVector::Point x, PlaneVector::Point y) const;
   void insert(PlaneVector::Point x, PlaneVector::Point y);
-  void insert(PlaneVector::Point x, PlaneVector::Point y, Stone&& stone);
+  void insert(PlaneVector::Point x, PlaneVector::Point y, Stone stone);
   void insert(const Position& pos);
+  void insert(const Position& pos, Stone stone);
   BoardSeries::Stone get_enemy_stone() const;
   int get_reversible_length(Position pos, PlaneVector dr) const;
   int count_stone(Stone stone) const;

@@ -5,6 +5,18 @@
 #include "AiBoard.hpp"
 #include "PlayerSeries.hpp"
 
+class HandList {
+public:
+  HandList(short turn, BoardSeries::Stone stone, BoardSeries::Position position);
+  ~HandList() = default;
+  void rewrite(BoardSeries::GameBoard& game_board);
+  void report(std::ofstream& log_file);
+private:
+  short turn_;
+  BoardSeries::Stone stone_;
+  BoardSeries::Position position_;
+};
+
 class NewGameMaster {
 public:
   enum class Task {

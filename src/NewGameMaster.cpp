@@ -1,5 +1,25 @@
 #include "../include/NewGameMaster.hpp"
 
+HandList::HandList(short turn, BoardSeries::Stone stone, BoardSeries::Position position)
+  : turn_{turn},
+    stone_{stone},
+    position_{position}
+{
+}
+
+void HandList::rewrite(BoardSeries::GameBoard& game_board)
+{
+  game_board.insert(position_, stone_); // 二度手間？？
+  game_board.reverse(position_);
+  game_board.switch_active_stone();   // ここで？
+}
+
+void HandList::report(std::ofstream& log_file)
+{
+  log_file << turn_ + 1 << ',' << static_cast<int>(stone_) << ',' << static_cast<short>(position.x) << ',' << static_cast<short>(position.x) << std::endl;
+
+}
+
 NewGameMaster::NewGameMaster(PlaneVector board_size, Player* player[])
   : board_{board_size},
     participant_{player[0], player[1]},

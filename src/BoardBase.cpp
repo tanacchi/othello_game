@@ -34,7 +34,7 @@ void BoardBase::insert(PlaneVector::Point x, PlaneVector::Point y)
   board_[get_access_num(x, y)] = active_stone_;
 }
 
-void BoardBase::insert(PlaneVector::Point x, PlaneVector::Point y, Stone&& stone)
+void BoardBase::insert(PlaneVector::Point x, PlaneVector::Point y, Stone stone)
 {
   board_[get_access_num(x, y)] = stone;
 }
@@ -42,6 +42,11 @@ void BoardBase::insert(PlaneVector::Point x, PlaneVector::Point y, Stone&& stone
 void BoardBase::insert(const Position& pos)
 {
   insert(pos.x, pos.y);
+}
+
+void BoardBase::insert(const Position& pos, Stone stone)
+{
+  insert(pos.x, pos.y, stone);
 }
 
 inline bool BoardBase::is_inside(const Position& pos) const
