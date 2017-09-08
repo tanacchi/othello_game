@@ -6,9 +6,11 @@
 
 #include "BoardBase.hpp"
 
+namespace BoardSeries
+{
 class GameBoard : public BoardBase {
 public:
-  GameBoard(const BoardBase::Position size = BoardBase::Position{8, 8});
+  GameBoard(const Position size = Position{8, 8});
   const GameBoard& operator=(const GameBoard& src) = delete;
   void show() const;
   void init();

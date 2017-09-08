@@ -10,14 +10,14 @@ public:
   const Player& operator=(const Player& src) = delete;
   virtual ~Player() = default;
   virtual bool set_hand(const BoardSeries::GameBoard& game_board) = 0;
-  BoardSeries::Stone get_mystone() const;
+  // BoardSeries::Stone get_mystone() const;
   BoardSeries::Position get_hand() const;
   void set_myname(std::string src);
   std::string get_myname() const;
 protected:
   BoardSeries::Position hand_;
 private:
-  BoardSeries::Stone mystone_;
+//  BoardSeries::Stone mystone_;
   std::string myname_;
 };
 
