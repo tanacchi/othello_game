@@ -52,7 +52,7 @@ inline bool BoardBase::is_inside(PlaneVector::Point x, PlaneVector::Point y) con
   return (0 <= x && x < width()) && (0 <= y && y < height());
 }
 
-BoardBase::Stone BoardBase::get_enemy_stone() const
+BoardSeries::Stone BoardBase::get_enemy_stone() const
 {
   return (active_stone_ == Stone::White) ? Stone::Black : Stone::White;
 }
@@ -67,7 +67,7 @@ int BoardBase::get_reversible_length(Position pos, PlaneVector dr) const // REFA
   return 0;
 }
 
-int BoardBase::count_stone(BoardBase::Stone stone) const
+int BoardBase::count_stone(BoardSeries::Stone stone) const
 {
   return std::count(std::begin(board_), std::end(board_), stone);
 }
