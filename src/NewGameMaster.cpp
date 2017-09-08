@@ -16,8 +16,7 @@ void HandList::rewrite(BoardSeries::GameBoard& game_board)
 
 void HandList::report(std::ofstream& log_file)
 {
-  log_file << turn_ + 1 << ',' << static_cast<int>(stone_) << ',' << static_cast<short>(position.x) << ',' << static_cast<short>(position.x) << std::endl;
-
+  // log_file << turn_ + 1 << ',' << static_cast<int>(stone_) << ',' << static_cast<short>(position.x) << ',' << static_cast<short>(position.x) << std::endl;
 }
 
 NewGameMaster::NewGameMaster(PlaneVector board_size, Player* player[])
