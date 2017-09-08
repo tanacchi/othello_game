@@ -1,17 +1,17 @@
 #include "../include/NewGameMaster.hpp"
 
-NewGameMaster(PlaneVector board_size, Player* player[])
-  : board_         {board_size},
-    participant_   {player[0], player[1]},
-    active_player_ {participant[0]},
-    turn_          {0},
-    pos_           {-1, -1},
-    hand_list_     {},
+NewGameMaster::NewGameMaster(PlaneVector board_size, Player* player[])
+  : board_{board_size},
+    participant_{player[0], player[1]},
+    active_player_{participant_[0]},
+    turn_{0},
+    pos_{-1, -1}
+//    hand_list_{}
 //    log_file_      {}
 {
 }
 
-Task NewGameMaster::run(Task mode)
+NewGameMaster::Task NewGameMaster::run(Task mode)
 {
   switch (mode) {
   case Task::Init:   return task_init();
@@ -28,18 +28,18 @@ Task NewGameMaster::run(Task mode)
   }
 }
 
-Task NewGameMaster::task_init()
+NewGameMaster::Task NewGameMaster::task_init()
 {
   board_.init();
   active_player_ = participant_[0];
-  turn = 0;
-  hand_list_.clear();
+  turn_ = 0;
+//  hand_list_.clear();
   return Task::Op;
 }
   
-Task NewGameMaster::task_op()
+NewGameMaster::Task NewGameMaster::task_op()
 {
-  std::cout << "turn : " << turn + 1 << std::endl;
+  std::cout << "turn : " << turn_ + 1 << std::endl;
   board_.put_dots();
   board_.show();
   static int pass_turn;
@@ -49,7 +49,7 @@ Task NewGameMaster::task_op()
   return Task::Set;
 }
 
-Task NewGameMaster::task_set()
+NewGameMaster::Task NewGameMaster::task_set()
 {
 //  if (!active_player_->set_hand(board_)) return Task::Revert;
   active_player_->set_hand(board_);
@@ -61,37 +61,37 @@ Task NewGameMaster::task_set()
   return Task::Insert;
 }
 
-Task NewGameMaster::task_insert()
+NewGameMaster::Task NewGameMaster::task_insert()
 {
   board_.insert(pos_);
-  board.reverse(pos_);
+  board_.reverse(pos_);
   return Task::Judge;
 }
 
-Task NewGameMaster::task_revert()
+NewGameMaster::Task NewGameMaster::task_revert()
 {
   return Task::Ed;
 }
 
-Task NewGameMaster::task_write()
+NewGameMaster::Task NewGameMaster::task_write()
 {
   return Task::Ed;
 }
 
-Task NewGameMaster::task_judge()
+NewGameMaster::Task NewGameMaster::task_judge()
 {
   board_.show();
   return (board_.can_continue()) ? Task::Switch : Task::Ask;
 }
 
-Task NewGameMaster::task_switch()
+NewGameMaster::Task NewGameMaster::task_switch()
 {
   ++turn_;
-  active_player_ = participant[turn_ % 2];
+  active_player_ = participant_[turn_ % 2];
   return Task::Op;
 }
 
-Task NewGameMaster::task_ask()
+NewGameMaster::Task NewGameMaster::task_ask()
 {
   std::cout << "WHITE STONE (O) : " << board_.count_stone(BoardSeries::Stone::White) << '\n'
             << "BLACK STONE (X) : " << board_.count_stone(BoardSeries::Stone::Black) << '\n'

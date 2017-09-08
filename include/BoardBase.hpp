@@ -33,9 +33,9 @@ public:
   void insert(PlaneVector::Point x, PlaneVector::Point y);
   void insert(PlaneVector::Point x, PlaneVector::Point y, Stone&& stone);
   void insert(const Position& pos);
-  BoardBase::Stone get_enemy_stone() const;
+  BoardSeries::Stone get_enemy_stone() const;
   int get_reversible_length(Position pos, PlaneVector dr) const;
-  int count_stone(BoardBase::Stone stone) const;
+  int count_stone(Stone stone) const;
   bool can_reverse(const Position& pos) const;
   void reverse(Position pos);
   bool is_available_position(const Position& pos) const;

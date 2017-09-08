@@ -19,7 +19,7 @@ public:
     Ask,
     Ed
   };
-  NewGameMaster(Player* player[]);
+  NewGameMaster(PlaneVector board_size, Player* player[]);
   ~NewGameMaster() = default;
   Task run(Task mode);
   Task task_init();
@@ -38,7 +38,7 @@ private:
   Player *active_player_;
   short turn_;
   BoardSeries::Position pos_;
-  std::vector<HandList> hand_list_;
+//  std::vector<HandList> hand_list_;
 //  std::ofstream log_file_;
 };
 

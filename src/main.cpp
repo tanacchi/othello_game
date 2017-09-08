@@ -7,10 +7,11 @@ int main(int argc, char** argv)
   Player* player[2];
   player[0] = new HumanPlayer;
   player[1] = new HumanPlayer;
-  
-  GameMaster master(player);
-  Task task {Task::Init};
-  while (task != Task::Ed) task = master.run(task);
+
+  PlaneVector board_size{10, 10};
+  NewGameMaster master(board_size, player);
+  NewGameMaster::Task task {NewGameMaster::Task::Init};
+  while (task != NewGameMaster::Task::Ed) task = master.run(task);
 
   std::cout << "See you~~" << std::endl;
   delete* player;
