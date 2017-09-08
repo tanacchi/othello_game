@@ -106,7 +106,7 @@ NewGameMaster::Task NewGameMaster::task_revert()
 
 NewGameMaster::Task NewGameMaster::task_write()
 {
-  hand_list_.push_back(HandList(turn_, BoardSeries::Stone::Space, pos_));
+  hand_list_.push_back(HandList(turn_, BoardSeries::Stone::Space, pos_)); // !!!
   return Task::Judge;
 }
 
@@ -129,6 +129,7 @@ NewGameMaster::Task NewGameMaster::task_ask()
   std::cout << "WHITE STONE (O) : " << board_.count_stone(BoardSeries::Stone::White) << '\n'
             << "BLACK STONE (X) : " << board_.count_stone(BoardSeries::Stone::Black) << '\n'
             <<std::endl;
+  record_hand_list();
   std::cout << "Continue ?? (yes/no)\n > " << std::flush;
   std::string answer;
   std::cin >> answer;
