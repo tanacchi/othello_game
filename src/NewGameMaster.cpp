@@ -99,7 +99,7 @@ NewGameMaster::Task NewGameMaster::task_revert()
   hand_list_.erase(hand_list_.begin() + destination, hand_list_.end());
   board_.init();
   for (auto hl : hand_list_) hl.rewrite(board_);
-  active_player_ = participant[destination%2];
+  active_player_ = participant_[destination%2];
   turn_ = destination;
   return Task::Op;
 }
