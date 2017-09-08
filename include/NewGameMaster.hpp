@@ -1,6 +1,8 @@
 #ifndef NEW_GAME_MASTER_H_
 #define NEW_GAME_MASTER_H_
 
+#include <fstream>
+
 #include "GameBoard.hpp"
 #include "AiBoard.hpp"
 #include "PlayerSeries.hpp"
