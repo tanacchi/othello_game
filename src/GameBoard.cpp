@@ -1,17 +1,19 @@
 #include "../include/GameBoard.hpp"
 
-GameBoard::GameBoard(const BoardBase::Position size)
+namespace BoardSeries
+{
+GameBoard::GameBoard(const Position size)
   : BoardBase(size)
 {
 }
 
-char GameBoard::to_char(BoardBase::Stone stone) const
+char GameBoard::to_char(Stone stone) const
 {
   switch (stone) {
-  case BoardBase::Stone::Space: return ' ';
-  case BoardBase::Stone::White: return 'O';
-  case BoardBase::Stone::Black: return 'X';
-  case BoardBase::Stone::Dot:   return '*';
+  case Stone::Space: return ' ';
+  case Stone::White: return 'O';
+  case Stone::Black: return 'X';
+  case Stone::Dot:   return '*';
   default: throw std::invalid_argument{"In to_char:Cannot convert"};
   }  
 }
@@ -42,18 +44,19 @@ void GameBoard::init()
 
 bool GameBoard::can_continue() const // 「両方打つとこ無し」も調べたいx
 {
-  return std::any_of(std::begin(board_), std::end(board_), [](Stone target){ return target == BoardBase::Stone::Space; });
+  return std::any_of(std::begin(board_), std::end(board_), [](Stone target){ return target == Stone::Space; });
 }
 
 void GameBoard::put_dots()
 {
-  BoardBase::Position elem{0, 0};
+  Position elem{0, 0};
   for (elem.x = 0; elem.x < width(); ++elem.x)
     for (elem.y = 0; elem.y < height(); ++elem.y)
-      if (is_available_position(elem)) board_[get_access_num(elem)] = BoardBase::Stone::Dot;
+      if (is_available_position(elem)) board_[get_access_num(elem)] = Stone::Dot;
 }
 
 void GameBoard::remove_dots()
 {
-  std::replace_if(std::begin(board_), std::end(board_), [](BoardBase::Stone target){ return target == BoardBase::Stone::Dot; }, BoardBase::Stone::Space);
+  std::replace_if(std::begin(board_), std::end(board_), [](Stone target){ return target == Stone::Dot; }, Stone::Space);
 }
+};
