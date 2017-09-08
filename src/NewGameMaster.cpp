@@ -24,9 +24,9 @@ NewGameMaster::NewGameMaster(PlaneVector board_size, Player* player[])
     participant_{player[0], player[1]},
     active_player_{participant_[0]},
     turn_{0},
-    pos_{-1, -1}
-//    hand_list_{}
-//    log_file_      {}
+    pos_{-1, -1},
+    hand_list_{},
+    log_file_{}
 {
 }
 
@@ -52,7 +52,7 @@ NewGameMaster::Task NewGameMaster::task_init()
   board_.init();
   active_player_ = participant_[0];
   turn_ = 0;
-//  hand_list_.clear();
+  hand_list_.clear();
   return Task::Op;
 }
   
@@ -84,7 +84,7 @@ NewGameMaster::Task NewGameMaster::task_insert()
 {
   board_.insert(pos_);
   board_.reverse(pos_);
-  return Task::Judge;
+  return Task::Write;
 }
 
 NewGameMaster::Task NewGameMaster::task_revert()
@@ -94,7 +94,8 @@ NewGameMaster::Task NewGameMaster::task_revert()
 
 NewGameMaster::Task NewGameMaster::task_write()
 {
-  return Task::Ed;
+  hand_list_.push_back(HandList(turn_, BoardSeries::Stone::Space, pos_));
+  return Task::Judge;
 }
 
 NewGameMaster::Task NewGameMaster::task_judge()
@@ -127,4 +128,16 @@ NewGameMaster::Task NewGameMaster::task_ask()
 
 void NewGameMaster::record_hand_list()
 {
+  const std::string participant_1 = participant_[0]->get_myname();
+  const std::string participant_2 = participant_[1]->get_myname();
+  log_file_.open("log/"+participant_1+"_vs_"+participant_2+".csv", std::ios::app);
+  log_file_ << participant_1 << ",O" << std::endl;
+  log_file_ << participant_2 << ",X" << std::endl;
+  log_file_ << "~~BEGIN~~" << std::endl;
+  for (auto hl : hand_list_) hl.report(log_file_); 
+  log_file_ << "~~END~~" << std::endl;
+  log_file_ << "WHITE," << board_.count_stone(BoardSeries::Stone::White) << std::endl;
+  log_file_ << "BLACK," << board_.count_stone(BoardSeries::Stone::Black) << '\n' << std::endl;
+  log_file_.close();
+
 }
