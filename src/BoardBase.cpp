@@ -1,38 +1,40 @@
 #include "../include/BoardBase.hpp"
 
+namespace BoardSeries
+{
 BoardBase::BoardBase(const Position& size)
   : board_{std::size_t(size.x * size.y)},
     size_{size},
     active_stone_{Stone::White}
 {
 }
-
-inline PlaneVector::Point BoardBase::width() const
+  
+inline Position::Point BoardBase::width() const
 {
   return size_.x;
 }
 
-inline PlaneVector::Point BoardBase::height() const
+inline Position::Point BoardBase::height() const
 {
   return size_.y;
 }
 
-inline PlaneVector::Point BoardBase::get_access_num(PlaneVector::Point x, PlaneVector::Point y) const
+inline Position::Point BoardBase::get_access_num(Position::Point x, Position::Point y) const
 {
   return (std::size_t)(x + width()*y);
 }
 
-inline PlaneVector::Point BoardBase::get_access_num(const Position& pos) const
+inline Position::Point BoardBase::get_access_num(const Position& pos) const
 {
   return get_access_num(pos.x, pos.y);
 }
 
-void BoardBase::insert(PlaneVector::Point x, PlaneVector::Point y)
+void BoardBase::insert(Position::Point x, Position::Point y)
 {
   board_[get_access_num(x, y)] = active_stone_;
 }
 
-void BoardBase::insert(PlaneVector::Point x, PlaneVector::Point y, Stone&& stone)
+void BoardBase::insert(Position::Point x, Position::Point y, Stone&& stone)
 {
   board_[get_access_num(x, y)] = stone;
 }
@@ -47,7 +49,7 @@ inline bool BoardBase::is_inside(const Position& pos) const
   return is_inside(pos.x, pos.y);
 }
 
-inline bool BoardBase::is_inside(PlaneVector::Point x, PlaneVector::Point y) const
+inline bool BoardBase::is_inside(Position::Point x, Position::Point y) const
 {
   return (0 <= x && x < width()) && (0 <= y && y < height());
 }
@@ -96,3 +98,4 @@ void BoardBase::switch_active_stone()
 {
   active_stone_ = get_enemy_stone();
 }
+};
