@@ -7,7 +7,7 @@ GameBoard::GameBoard(const Position size)
 {
 }
 
-char GameBoard::to_char(Stone stone) const
+char to_char(Stone stone)
 {
   switch (stone) {
   case Stone::Space: return ' ';

@@ -17,8 +17,8 @@ public:
   bool can_continue() const;
   void put_dots();
   void remove_dots();
-  char to_char(Stone stone) const;
 };
+char to_char(Stone stone);
 };
 
 #endif // GAME_BOARD_H_
