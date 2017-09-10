@@ -1,4 +1,4 @@
-#include "../include/NewGameMaster.hpp"
+#include "../include/GameMaster.hpp"
 
 HandList::HandList(short turn, BoardSeries::Stone stone, BoardSeries::Position position)
   : turn_{turn},
