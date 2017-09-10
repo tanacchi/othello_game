@@ -33,30 +33,31 @@ int ScoreList::get_score() const
   return score_;
 }
 
-OthelloAI::OthelloAI(Game game_board)
-  : dist_pos_{-1, -1}
-    rand_pos_ {std::random_device{}()},
-    virtual_board_{game_board},
-    serial_num_{++global}
+OthelloAI::OthelloAI(GameBoard game_board, unsigned short max_depth = 5)
+  : myboard_    {game_board},
+    branch_     {0},
+    score_list_ {},
+    max_depth_  {max_depth},
+    mydepth_    {0},
+    subAI_      {0},
+    dist_pos_   {-1, -1}
 {
 }
 
-OthelloAI::OthelloAI()
-  : mydepth_{0},
-    serial_num_{++global}
+OthelloAI::OthelloAI(const OthelloAI& src)
+  : myboard_    {src.myboard_},
+    branch_     {0},
+    score_list_ {},
+    max_depth_  {src.max_depth_},
+    mydepth_    {src.mydepth_},
+    subAI_      {0},
+    dist_pos_   {-1, -1}
 {
 }
 
 OthelloAI::~OthelloAI()
 {
   if (mydepth_ > 0 && branch_ > 0) delete[] subAI_;
-}
-
-
-OthelloAI& OthelloAI::operator=(OthelloAI& src)
-{
-  virtual_board_ = src.virtual_board_;
-  return *this;
 }
 
 void OthelloAI::set_subAI(int depth)
@@ -79,17 +80,8 @@ void OthelloAI::set_subAI(int depth)
   }
 }
 
-void OthelloAI::random_maker()
+BoardSeries::Position OthelloAI::get_conclusion() const
 {
-  std::uniform_int_distribution<int> rand100(0, 7);
-  dist_x_ = rand100(rand_pos_);
-  dist_y_ = rand100(rand_pos_);
-}
-
-void OthelloAI::get_conclusion(int &x, int &y) const
-{
-  x = dist_x_;
-  y = dist_y_;
 }
 
 void OthelloAI::seek(int max_depth)
@@ -115,11 +107,12 @@ void OthelloAI::seek(int max_depth)
   score_list_[0].get_coordinate(dist_x_, dist_y_);
 }
 
-void OthelloAI::record_dot_stone()
+inline void OthelloAI::set_score_list()
 {
-  for (int i = 0; i < BOARD_SIZE; i++)
-    for (int j = 0; j < BOARD_SIZE; j++)
-      if (virtual_board_.is_available_position(j, i)) score_list_.push_back(ScoreList(j, i));
+  BoardSeries::Position target{0, 0};
+  for (target.y = 0; target.y < myboard_.height(); ++target.y)
+    for (target.x = 0; target.x < myboard_.width(); ++target.x)
+      if (myboard_.is_available_position(target)) score_list_.push_back(ScoreList{target});
 }
 
 double OthelloAI::get_avarage_score()
