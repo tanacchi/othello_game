@@ -6,20 +6,16 @@
 
 class ScoreList {
  public:
-  ScoreList(int x, int y);
+  ScoreList(BoardSeries::Position pos);
   ~ScoreList() = default;
-  void set_total_score();
-  void get_coordinate(int &x, int &y) const;
-  void set_score(double s);
-  void set_score(int s);
+  void get_position() const;
+  void add_score(double score);
   void show_score_list() const;
   bool operator>(const ScoreList &right)const;
-  int get_total_score() const;
+  int get_score() const;
  private:
-  int hand_x_;
-  int hand_y_;
-  std::vector<double> score_;
-  double total_score_;
+  BoardSeries::Position pos_;
+  double score_;
 };
 
 class OthelloAI {
@@ -35,10 +31,10 @@ class OthelloAI {
   void set_subAI(int branch);
   double get_avarage_score();
  private:
-  int dist_x_, dist_y_;
+  BoardSeries::Position dist_pos_;
   std::mt19937 rand_pos_;
   std::vector<ScoreList> score_list_;
-  BoardMaster virtual_board_;
+  AiBoard virtual_board_;
   int mydepth_;
   OthelloAI* subAI_;
   int serial_num_;
