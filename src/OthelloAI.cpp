@@ -6,7 +6,7 @@ int global;
 
 // ------------------------- StoneList -----------------------------------------
 
-StoneScoreList::StoneScoreList(int x, int y)
+ScoreList::ScoreList(int x, int y)
   : hand_x_ {x},
     hand_y_ {y},
     score_(),
@@ -14,38 +14,38 @@ StoneScoreList::StoneScoreList(int x, int y)
 {
 }
  
-void StoneScoreList::set_total_score()
+void ScoreList::set_total_score()
 {
   for (size_t i {0}; i < score_.size(); i++) total_score_ += score_[i];
 }
 
-void StoneScoreList::get_coordinate(int &x, int &y) const
+void ScoreList::get_coordinate(int &x, int &y) const
 {
   x = hand_x_; y = hand_y_;
 }
 
-void StoneScoreList::set_score(double s)
+void ScoreList::set_score(double s)
 {
   score_.push_back(s);
 }
 
-void StoneScoreList::set_score(int s)
+void ScoreList::set_score(int s)
 {
   score_.push_back((double)s);
 }
 
-void StoneScoreList::show_score_list() const
+void ScoreList::show_score_list() const
 {
   std::cout << "x = " << hand_x_+1 << ", y = " << hand_y_+1 << ' ';
   std::cout << "Score : " << total_score_ << std::endl;
 }
 
-bool StoneScoreList::operator>(const StoneScoreList &right ) const
+bool ScoreList::operator>(const ScoreList &right ) const
 {
   return total_score_ > right.total_score_;
 }
 
-int StoneScoreList::get_total_score() const
+int ScoreList::get_total_score() const
 {
   return total_score_;
 }
@@ -121,10 +121,10 @@ void OthelloAI::seek(int max_depth)
     score_list_[i].set_score(subAI_[i].get_avarage_score());
     score_list_[i].set_total_score();
   }
-  std::sort(score_list_.begin(), score_list_.end(), std::greater<StoneScoreList>()); // REFACT : 要は最大値を取る奴の中でランダム参照したい
+  std::sort(score_list_.begin(), score_list_.end(), std::greater<ScoreList>()); // REFACT : 要は最大値を取る奴の中でランダム参照したい
   for (size_t i = 0; i < score_list_.size(); i++) score_list_[i].show_score_list();
   // double best_score = score_list_[0].get_total_score();
-  // std::vector<StoneScoreList>::iterator p = score_list_.begin();
+  // std::vector<ScoreList>::iterator p = score_list_.begin();
   // while (p->get_total_score() == best_score) p++;
   // score_list_.erase(p, score_list_.end());
   // std::cout << "Hey" << std::endl;
@@ -137,7 +137,7 @@ void OthelloAI::record_dot_stone()
 {
   for (int i = 0; i < BOARD_SIZE; i++)
     for (int j = 0; j < BOARD_SIZE; j++)
-      if (virtual_board_.is_available_position(j, i)) score_list_.push_back(StoneScoreList(j, i));
+      if (virtual_board_.is_available_position(j, i)) score_list_.push_back(ScoreList(j, i));
 }
 
 double OthelloAI::get_avarage_score()

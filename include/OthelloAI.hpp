@@ -4,16 +4,16 @@
 #include "AiBoard.hpp"
 #include <memory>
 
-class StoneScoreList {
+class ScoreList {
  public:
-  StoneScoreList(int x, int y);
-  ~StoneScoreList() = default;
+  ScoreList(int x, int y);
+  ~ScoreList() = default;
   void set_total_score();
   void get_coordinate(int &x, int &y) const;
   void set_score(double s);
   void set_score(int s);
   void show_score_list() const;
-  bool operator>(const StoneScoreList &right)const;
+  bool operator>(const ScoreList &right)const;
   int get_total_score() const;
  private:
   int hand_x_;
@@ -37,7 +37,7 @@ class OthelloAI {
  private:
   int dist_x_, dist_y_;
   std::mt19937 rand_pos_;
-  std::vector<StoneScoreList> score_list_;
+  std::vector<ScoreList> score_list_;
   BoardMaster virtual_board_;
   int mydepth_;
   OthelloAI* subAI_;
