@@ -34,7 +34,6 @@ class OthelloAI {
   const unsigned short max_depth_;
   unsigned short mydepth_;
   OthelloAI* sub_;
-  BoardSeries::Position dist_pos_;
 };
 
 #endif // OTHELLO_AI_H_

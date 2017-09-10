@@ -25,7 +25,7 @@ void ScoreList::show_score_list() const
 
 bool ScoreList::operator>(const ScoreList &right ) const
 {
-  return total_score_ > right.total_score_;
+  return score_ > right.score_;
 }
 
 double ScoreList::get_score() const
@@ -72,6 +72,9 @@ inline void OthelloAI::set_score_list()
 
 BoardSeries::Position OthelloAI::get_conclusion() const
 {
+  get_sub_score();
+  std::sort(score_list_.begin(), score_list_.end(), std::greater<ScoreList>());
+  return score_list_[0].get_position();
 }
 
 double OthelloAI::get_sub_score()
