@@ -72,11 +72,10 @@ NewGameMaster::Task NewGameMaster::task_set()
 {
   if (!active_player_->set_hand(board_)) return Task::Revert;
   pos_ = active_player_->get_hand();
-  if (!board_.is_available_position(pos_)) {
-    std::cout << "It's wrong hand !! Try again." << std::endl;
-    return Task::Set;
-  }
-  return Task::Insert;
+  if (board_.is_available_position(pos_)) return Task::Insert;
+  std::cout << "It's wrong hand !! Try again." << std::endl;
+  return Task::Set;
+
 }
 
 NewGameMaster::Task NewGameMaster::task_insert()
