@@ -20,25 +20,23 @@ class ScoreList {
 
 class OthelloAI {
  public:
-  OthelloAI();
-  OthelloAI(BoardMaster game_board);
-  OthelloAI& operator=(OthelloAI& src);
+  OthelloAI(const GameBoard& game_board, unsigned short max_depth = 5);
+  OthelloAI(const OthelloAI& src);
+  const OthelloAI& operator=(const OthelloAI& src) = delete;
   ~OthelloAI();
-  void get_conclusion(int &x, int &y) const;
-  void random_maker();
+  BoardSeries::Position get_conclusion();
   void seek(int max_depth);
-  void record_dot_stone();
+  void set_score_list();
   void set_subAI(int branch);
   double get_avarage_score();
  private:
-  BoardSeries::Position dist_pos_;
-  std::mt19937 rand_pos_;
+  AiBoard myboard_;
+  unsigned short branch_;
   std::vector<ScoreList> score_list_;
-  AiBoard virtual_board_;
-  int mydepth_;
+  const unsigned short max_depth_;
+  unsigned short mydepth_;
   OthelloAI* subAI_;
-  int serial_num_;
-  int branch_;
+  BoardSeries::Position dist_pos_;
 };
 
 #endif // OTHELLO_AI_H_
