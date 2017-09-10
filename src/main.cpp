@@ -1,4 +1,4 @@
-#include "../include/NewGameMaster.hpp"
+#include "../include/GameMaster.hpp"
 
 int main(int argc, char** argv)
 {
