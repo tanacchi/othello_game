@@ -2,7 +2,7 @@
 
 namespace BoardSeries
 {
-AiBoard::AiBoard(const BoardBase& src)
+AiBoard::AiBoard(BoardBase src)
   : BoardBase(src)
 {
 }

@@ -7,7 +7,7 @@ namespace BoardSeries
 {
 class AiBoard : public BoardBase {
 public:
-  AiBoard(const BoardBase& src);
+  AiBoard(BoardBase src);
   const AiBoard& operator=(const AiBoard& src) = delete;
   double get_status_score() const;
 };
