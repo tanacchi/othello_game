@@ -61,7 +61,7 @@ ComputerPlayer::ComputerPlayer()
 
 bool ComputerPlayer::set_hand(const BoardSeries::GameBoard& game_board)
 {
-  OthelloAI seeker{game_board, 5};
+  OthelloAI seeker{game_board, 4};
   hand_ = seeker.get_conclusion();
   return true;
 }
