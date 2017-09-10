@@ -1,11 +1,5 @@
 #include "../include/OthelloAI.hpp"
 
-#define EDGE_SCORE 5
-
-int global;
-
-// ------------------------- StoneList -----------------------------------------
-
 ScoreList::ScoreList(BoardSeries::Position pos)
   : pos_  {pos},
     score_{0.0}
@@ -38,8 +32,6 @@ int ScoreList::get_score() const
 {
   return score_;
 }
-
-// ------------------------- OthelloAI -----------------------------------------
 
 OthelloAI::OthelloAI(Game game_board)
   : dist_pos_{-1, -1}
