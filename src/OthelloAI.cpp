@@ -6,7 +6,7 @@ ScoreList::ScoreList(BoardSeries::Position pos)
 {
 }
 
-void ScoreList::get_position() const
+BoardSeries::Position ScoreList::get_position() const
 {
   return pos_;
 }
@@ -33,14 +33,13 @@ double ScoreList::get_score() const
   return score_;
 }
 
-OthelloAI::OthelloAI(GameBoard game_board, unsigned short max_depth = 5)
+OthelloAI::OthelloAI(const BoardSeries::GameBoard& game_board, unsigned short max_depth)
   : myboard_    {game_board},
     branch_     {0},
     score_list_ {},
     max_depth_  {max_depth},
     mydepth_    {0},
-    sub_      {0},
-    dist_pos_   {-1, -1}
+    sub_        {0}
 {
   set_score_list();
 }
@@ -51,15 +50,14 @@ OthelloAI::OthelloAI(const OthelloAI& src)
     score_list_ {},
     max_depth_  {src.max_depth_},
     mydepth_    {src.mydepth_},
-    sub_      {0},
-    dist_pos_   {-1, -1}
+    sub_        {0}
 {
   set_score_list();
 }
 
 OthelloAI::~OthelloAI()
 {
-  if (mydepth_ > 0 && branch_ > 0) delete[] subAI_;
+  if (mydepth_ > 0 && branch_ > 0) delete[] sub_;
 }
 
 inline void OthelloAI::set_score_list()
@@ -70,26 +68,26 @@ inline void OthelloAI::set_score_list()
       if (myboard_.is_available_position(target)) score_list_.push_back(ScoreList{target});
 }
 
-BoardSeries::Position OthelloAI::get_conclusion() const
+BoardSeries::Position OthelloAI::get_conclusion()
 {
   get_sub_score();
   std::sort(score_list_.begin(), score_list_.end(), std::greater<ScoreList>());
+  for (auto sl : score_list_) sl.show_score_list();
   return score_list_[0].get_position();
 }
 
 double OthelloAI::get_sub_score()
 {
-  if ((max_depth_ - mydepth) < 0 || score_list_.empty())
-    return myboard_.get_status_score();
-  for (int i{0}; i < score_list.size(); ++i) {
+  if ((max_depth_ - mydepth_) < 0 || score_list_.empty()) return myboard_.get_status_score();
+  for (std::size_t i{0}; i < score_list_.size(); ++i) {
     sub_ = new OthelloAI(*this);
-    sub_->mydepth++;
+    sub_->mydepth_++;
     sub_->myboard_.insert(score_list_[i].get_position());
     sub_->myboard_.switch_active_stone();
     score_list_[i].add_score(sub_->get_sub_score());
     delete sub_;
   }
   double sum{0};
-  for (int i{0}; i < score_list_.size(); ++i) sum += score_list_[i].get_score();
+  for (std::size_t i{0}; i < score_list_.size(); ++i) sum += score_list_[i].get_score();
   return sum / score_list_.size();
 }

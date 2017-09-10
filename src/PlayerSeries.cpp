@@ -2,17 +2,11 @@
 
 // ------------------------- Player --------------------------------------------
 
-Player::Player(/*BoardSeries::Stone mystone*/)
-  : //mystone_ {mystone},
-    myname_(),
-    hand_{BoardSeries::Position{-1, -1}}
+Player::Player()
+  : hand_{BoardSeries::Position{-1, -1}},
+    myname_{} 
 {
 }
-
-// BoardSeries::Stone Player::get_mystone() const
-// {
-//   return mystone_;
-// }
 
 BoardSeries::Position Player::get_hand() const
 {
