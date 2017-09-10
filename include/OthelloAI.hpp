@@ -24,17 +24,16 @@ class OthelloAI {
   OthelloAI(const OthelloAI& src);
   const OthelloAI& operator=(const OthelloAI& src) = delete;
   ~OthelloAI();
-  BoardSeries::Position get_conclusion();
-  void seek();
   void set_score_list();
-  double get_avarage_score();
+  BoardSeries::Position get_conclusion();
+  double get_sub_score();
  private:
   AiBoard myboard_;
   unsigned short branch_;
   std::vector<ScoreList> score_list_;
   const unsigned short max_depth_;
   unsigned short mydepth_;
-  OthelloAI* subAI_;
+  OthelloAI* sub_;
   BoardSeries::Position dist_pos_;
 };
 

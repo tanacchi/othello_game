@@ -39,9 +39,10 @@ OthelloAI::OthelloAI(GameBoard game_board, unsigned short max_depth = 5)
     score_list_ {},
     max_depth_  {max_depth},
     mydepth_    {0},
-    subAI_      {0},
+    sub_      {0},
     dist_pos_   {-1, -1}
 {
+  set_score_list();
 }
 
 OthelloAI::OthelloAI(const OthelloAI& src)
@@ -50,22 +51,15 @@ OthelloAI::OthelloAI(const OthelloAI& src)
     score_list_ {},
     max_depth_  {src.max_depth_},
     mydepth_    {src.mydepth_},
-    subAI_      {0},
+    sub_      {0},
     dist_pos_   {-1, -1}
 {
+  set_score_list();
 }
 
 OthelloAI::~OthelloAI()
 {
   if (mydepth_ > 0 && branch_ > 0) delete[] subAI_;
-}
-
-BoardSeries::Position OthelloAI::get_conclusion() const
-{
-}
-
-void OthelloAI::seek(int max_depth)
-{
 }
 
 inline void OthelloAI::set_score_list()
@@ -76,14 +70,10 @@ inline void OthelloAI::set_score_list()
       if (myboard_.is_available_position(target)) score_list_.push_back(ScoreList{target});
 }
 
-double OthelloAI::get_avarage_score()
+BoardSeries::Position OthelloAI::get_conclusion() const
 {
-  if (mydepth_ < 1 || branch_ < 1) { 
-    return virtual_board_.get_status_score();
-  }
-  double sum = 0;
-  for (int i = 0; i < branch_; i++) {
-    sum += subAI_[i].get_avarage_score();
-  }
-  return sum / (double)branch_;    
+}
+
+double OthelloAI::get_sub_score()
+{
 }
