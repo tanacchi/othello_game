@@ -14,6 +14,7 @@ public:
   const GameBoard& operator=(const GameBoard& src) = delete;
   void show() const;
   void init();
+  Stone get_active_stone() const;
   bool can_continue() const;
   void put_dots();
   void remove_dots();
