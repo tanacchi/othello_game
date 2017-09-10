@@ -12,7 +12,7 @@ class ScoreList {
   void add_score(double score);
   void show_score_list() const;
   bool operator>(const ScoreList &right)const;
-  int get_score() const;
+  double get_score() const;
  private:
   BoardSeries::Position pos_;
   double score_;
