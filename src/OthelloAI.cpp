@@ -60,51 +60,12 @@ OthelloAI::~OthelloAI()
   if (mydepth_ > 0 && branch_ > 0) delete[] subAI_;
 }
 
-void OthelloAI::set_subAI(int depth)
-{
-  mydepth_ = depth;
-  record_dot_stone();
-  branch_ = score_list_.size();
-  if (mydepth_ < 1 || branch_ < 1) return;
-  subAI_ = new OthelloAI[branch_];
-  for (int i = 0; i < branch_; i++)  {
-    subAI_[i] = *this;
-    int x, y;
-    score_list_[i].get_coordinate(x, y);
-    score_list_[i].add_Score(virtual_board_.count_reversible_stone(x, y));
-    subAI_[i].virtual_board_.insert(x, y);
-    subAI_[i].virtual_board_.reverse_stone(x, y);
-    score_list_[i].add_Score(virtual_board_.get_status_score());
-    subAI_[i].virtual_board_.switch_active_stone();
-    subAI_[i].set_subAI(mydepth_-1);      
-  }
-}
-
 BoardSeries::Position OthelloAI::get_conclusion() const
 {
 }
 
 void OthelloAI::seek(int max_depth)
 {
-  set_subAI(max_depth);
-  for (size_t i = 0; i < score_list_.size(); i++) {
-    int x, y;
-    score_list_[i].get_coordinate(x, y);
-    score_list_[i].add_Score(virtual_board_.count_reversible_stone(x, y));
-    score_list_[i].add_Score(virtual_board_.get_status_score());
-    score_list_[i].add_Score(subAI_[i].get_avarage_score());
-    score_list_[i].set_total_score();
-  }
-  std::sort(score_list_.begin(), score_list_.end(), std::greater<ScoreList>()); // REFACT : 要は最大値を取る奴の中でランダム参照したい
-  for (size_t i = 0; i < score_list_.size(); i++) score_list_[i].show_score_list();
-  // double best_score = score_list_[0].get_score();
-  // std::vector<ScoreList>::iterator p = score_list_.begin();
-  // while (p->get_score() == best_score) p++;
-  // score_list_.erase(p, score_list_.end());
-  // std::cout << "Hey" << std::endl;
-  // for (size_t i = 0; i < score_list_.size(); i++) score_list_[i].show_score_list_();
-  // std::shuffle(score_list_.begin(), score_list_.end(), rand_pos);
-  score_list_[0].get_coordinate(dist_x_, dist_y_);
 }
 
 inline void OthelloAI::set_score_list()
@@ -122,8 +83,6 @@ double OthelloAI::get_avarage_score()
   }
   double sum = 0;
   for (int i = 0; i < branch_; i++) {
-    // score_list_[i].set_total_score();
-    // sum += score_list_[i].get_score();
     sum += subAI_[i].get_avarage_score();
   }
   return sum / (double)branch_;    

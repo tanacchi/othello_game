@@ -25,9 +25,8 @@ class OthelloAI {
   const OthelloAI& operator=(const OthelloAI& src) = delete;
   ~OthelloAI();
   BoardSeries::Position get_conclusion();
-  void seek(int max_depth);
+  void seek();
   void set_score_list();
-  void set_subAI(int branch);
   double get_avarage_score();
  private:
   AiBoard myboard_;
