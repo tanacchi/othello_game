@@ -19,7 +19,7 @@ private:
   BoardSeries::Position position_;
 };
 
-class NewGameMaster {
+class GameMaster {
 public:
   enum class Task {
     Init,
@@ -33,8 +33,8 @@ public:
     Ask,
     Ed
   };
-  NewGameMaster(PlaneVector board_size, Player* player[]);
-  ~NewGameMaster() = default;
+  GameMaster(PlaneVector board_size, Player* player[]);
+  ~GameMaster() = default;
   Task run(Task mode);
   Task task_init();
   Task task_op();
