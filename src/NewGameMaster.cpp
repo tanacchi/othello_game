@@ -108,7 +108,7 @@ NewGameMaster::Task NewGameMaster::task_revert()
 
 NewGameMaster::Task NewGameMaster::task_write()
 {
-  hand_list_.push_back(HandList(turn_, BoardSeries::Stone::Space, pos_)); // !!!
+  hand_list_.push_back(HandList(turn_, board_.get_active_stone(), pos_)); // !!!
   return Task::Judge;
 }
 
