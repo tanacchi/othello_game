@@ -16,17 +16,20 @@ void HandList::rewrite(BoardSeries::GameBoard& game_board)
 
 void HandList::report(std::ofstream& log_file)
 {
-  log_file << turn_ + 1 << ',' << BoardSeries::to_char(stone_) << ',' << static_cast<short>(position_.x + 1) << ',' << static_cast<short>(position_.y + 1) << std::endl;
+  log_file << turn_ + 1 << ','
+           << BoardSeries::to_char(stone_) << ','
+           << static_cast<short>(position_.x + 1) << ','
+           << static_cast<short>(position_.y + 1) << std::endl;
 }
 
 NewGameMaster::NewGameMaster(PlaneVector board_size, Player* player[])
-  : board_{board_size},
-    participant_{player[0], player[1]},
+  : board_        {board_size},
+    participant_  {player[0], player[1]},
     active_player_{participant_[0]},
-    turn_{0},
-    pos_{-1, -1},
-    hand_list_{},
-    log_file_{}
+    turn_         {0},
+    pos_          {-1, -1},
+    hand_list_    {},
+    log_file_     {}
 {
 }
 
