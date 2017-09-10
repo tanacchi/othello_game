@@ -1,47 +1,40 @@
-#ifndef GAME_MASTER_H_
-#define GAME_MASTER_H_
+#ifndef NEW_GAME_MASTER_H_
+#define NEW_GAME_MASTER_H_
 
-#include "../include/Player_series.hpp"
+#include <fstream>
 
-enum class Task {
-  Init,
-  Op,
-  Set,
-  Insert,
-  Revert,
-  Write,
-  Judge,
-  Switch,
-  Ask,
-  Ed
-};
-
-enum class Mode {
-  Normal_h,
-  Normal_c,
-  Personal,
-  Auto,
-  False
-};
+#include "GameBoard.hpp"
+#include "AiBoard.hpp"
+#include "PlayerSeries.hpp"
 
 class HandList {
 public:
-  HandList(int t, Stone s, int x, int y);
+  HandList(short turn, BoardSeries::Stone stone, BoardSeries::Position position);
   ~HandList() = default;
-  void replay(BoardMaster& board);
+  void rewrite(BoardSeries::GameBoard& game_board);
   void report(std::ofstream& log_file);
-  Stone convert_char_to_stone(char stone_type);
 private:
-  int turn_;
-  char stone_type_;
-  int hand_x_;
-  int hand_y_;
+  short turn_;
+  BoardSeries::Stone stone_;
+  BoardSeries::Position position_;
 };
 
-class GameMaster {
+class NewGameMaster {
 public:
-  GameMaster(Player* player[]);
-  ~GameMaster() = default;
+  enum class Task {
+    Init,
+    Op,
+    Set,
+    Insert,
+    Revert,
+    Write,
+    Judge,
+    Switch,
+    Ask,
+    Ed
+  };
+  NewGameMaster(PlaneVector board_size, Player* player[]);
+  ~NewGameMaster() = default;
   Task run(Task mode);
   Task task_init();
   Task task_op();
@@ -54,13 +47,13 @@ public:
   Task task_ask();
   void record_hand_list();
 private:
-  BoardMaster board_;
+  BoardSeries::GameBoard board_;
   Player *participant_[2];
   Player *active_player_;
-  int turn_;
-  int x_, y_;
+  short turn_;
+  BoardSeries::Position pos_;
   std::vector<HandList> hand_list_;
   std::ofstream log_file_;
 };
 
-#endif // GAME_MASTER_H_
+#endif // NEW_GAME_MASTER_H_

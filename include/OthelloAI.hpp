@@ -1,7 +1,7 @@
 #ifndef OTHELLO_AI_H_
 #define OTHELLO_AI_H_
 
-#include "BoardMaster.hpp"
+#include "BoardBase.hpp"
 #include <memory>
 
 class StoneScoreList {
