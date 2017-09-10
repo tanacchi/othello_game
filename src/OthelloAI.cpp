@@ -28,7 +28,7 @@ bool ScoreList::operator>(const ScoreList &right ) const
   return total_score_ > right.total_score_;
 }
 
-int ScoreList::get_score() const
+double ScoreList::get_score() const
 {
   return score_;
 }
@@ -76,4 +76,17 @@ BoardSeries::Position OthelloAI::get_conclusion() const
 
 double OthelloAI::get_sub_score()
 {
+  if ((max_depth_ - mydepth) < 0 || score_list_.empty())
+    return myboard_.get_status_score();
+  for (int i{0}; i < score_list.size(); ++i) {
+    sub_ = new OthelloAI(*this);
+    sub_->mydepth++;
+    sub_->myboard_.insert(score_list_[i].get_position());
+    sub_->myboard_.switch_active_stone();
+    score_list_[i].add_score(sub_->get_sub_score());
+    delete sub_;
+  }
+  double sum{0};
+  for (int i{0}; i < score_list_.size(); ++i) sum += score_list_[i].get_score();
+  return sum / score_list_.size();
 }
