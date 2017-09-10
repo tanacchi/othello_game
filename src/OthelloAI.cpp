@@ -78,7 +78,10 @@ BoardSeries::Position OthelloAI::get_conclusion()
 
 double OthelloAI::get_sub_score()
 {
-  if ((max_depth_ - mydepth_) < 0 || score_list_.empty()) return myboard_.get_status_score();
+  if ((max_depth_ - mydepth_) < 0 || score_list_.empty()) {
+    if ((mydepth_ % 2) != 0) myboard_.switch_active_stone();
+    return myboard_.get_status_score();
+  }
   for (std::size_t i{0}; i < score_list_.size(); ++i) {
     sub_ = new OthelloAI(*this);
     sub_->mydepth_++;
