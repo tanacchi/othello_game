@@ -61,9 +61,7 @@ ComputerPlayer::ComputerPlayer()
 
 bool ComputerPlayer::set_hand(const BoardSeries::GameBoard& game_board)
 {
-  // OthelloAI* p = new OthelloAI(game_board);
-  // p->seek(4);
-  // // p->get_conclusion(hand_x_, hand_y_);
-  // delete p;
+  OthelloAI seeker{game_board, 5};
+  hand_ = seeker.get_conclusion();
   return true;
 }
