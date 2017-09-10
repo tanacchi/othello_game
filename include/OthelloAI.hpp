@@ -2,13 +2,13 @@
 #define OTHELLO_AI_H_
 
 #include "AiBoard.hpp"
+#include "GameBoard.hpp"
 #include <memory>
 
 class ScoreList {
  public:
   ScoreList(BoardSeries::Position pos);
-  ~ScoreList() = default;
-  void get_position() const;
+  BoardSeries::Position get_position() const;
   void add_score(double score);
   void show_score_list() const;
   bool operator>(const ScoreList &right)const;
@@ -20,7 +20,7 @@ class ScoreList {
 
 class OthelloAI {
  public:
-  OthelloAI(const GameBoard& game_board, unsigned short max_depth = 5);
+  OthelloAI(const BoardSeries::GameBoard& game_board, unsigned short max_depth = 5);
   OthelloAI(const OthelloAI& src);
   const OthelloAI& operator=(const OthelloAI& src) = delete;
   ~OthelloAI();
@@ -28,7 +28,7 @@ class OthelloAI {
   BoardSeries::Position get_conclusion();
   double get_sub_score();
  private:
-  AiBoard myboard_;
+  BoardSeries::AiBoard myboard_;
   unsigned short branch_;
   std::vector<ScoreList> score_list_;
   const unsigned short max_depth_;
