@@ -9,9 +9,9 @@ int main(int argc, char** argv)
   player[1] = new HumanPlayer;
 
   PlaneVector board_size{6, 6};
-  NewGameMaster master(board_size, player);
-  NewGameMaster::Task task {NewGameMaster::Task::Init};
-  while (task != NewGameMaster::Task::Ed) task = master.run(task);
+  GameMaster master(board_size, player);
+  GameMaster::Task task {GameMaster::Task::Init};
+  while (task != GameMaster::Task::Ed) task = master.run(task);
 
   std::cout << "See you~~" << std::endl;
   delete* player;
