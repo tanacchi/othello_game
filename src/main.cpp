@@ -8,7 +8,7 @@ int main(int argc, char** argv)
   player[0] = new HumanPlayer;
   player[1] = new ComputerPlayer;
 
-  PlaneVector board_size{6, 6};
+  PlaneVector board_size{8, 8};
   GameMaster master(board_size, player);
   GameMaster::Task task {GameMaster::Task::Init};
   while (task != GameMaster::Task::Ed) task = master.run(task);
