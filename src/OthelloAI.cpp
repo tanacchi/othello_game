@@ -92,5 +92,5 @@ double OthelloAI::get_sub_score()
   }
   double sum{0};
   for (std::size_t i{0}; i < score_list_.size(); ++i) sum += score_list_[i].get_score();
-  return sum / score_list_.size();
+  return sum * (myedpth + 1) / score_list_.size();
 }
