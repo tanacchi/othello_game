@@ -131,4 +131,32 @@ void BoardBase::switch_active_stone()
 {
   active_stone_ = get_enemy_stone();
 }
+
+char to_char(Stone stone)
+{
+  switch (stone) {
+  case Stone::Space: return ' ';
+  case Stone::White: return 'O';
+  case Stone::Black: return 'X';
+  case Stone::Dot:   return '*';
+  default: throw std::invalid_argument{"In to_char:Cannot convert"};
+  }  
+}
+
+void show(const BoardBase& src)
+{
+  for (int i {0}; i < src.width()+1; i++) std::cout << "--";
+  std::cout << std::endl;
+  std::cout << "  " << std::flush;
+  for (int i {0}; i < src.width(); std::cout.put(' '), i++)
+    std::cout << i+1 << std::flush;
+  std::cout << std::endl;
+  for (PlaneVector::Point column {0}; column < src.height(); std::cout.put('\n'), column++) {
+    std::cout << column+1 << ' ' << std::flush;
+    for (PlaneVector::Point row {0}; row < src.width(); std::cout.put(' '), row++)
+      std::cout.put(to_char(src.board_[src.get_access_num(row, column)]));
+  }
+  for (int i {0}; i < src.width()+1; i++) std::cout << "--";
+  std::cout << std::endl;
+}
 };

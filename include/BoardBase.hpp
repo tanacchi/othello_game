@@ -2,6 +2,7 @@
 #define BOARD_BASE_H_
 
 #include <algorithm>
+#include <iostream>
 #include <vector>
 #include <valarray>
 
@@ -54,12 +55,13 @@ public:
   void reverse(Position pos);
   bool is_available_position(const Position& pos) const;
   void switch_active_stone();
+  friend void show(const BoardBase& src);
 protected:
   std::valarray<Stone> board_;
   const Position size_;
   Stone active_stone_;
-private:
 };
+char to_char(Stone stone);
 };
 
 #endif // BOARD_BASE_H_
