@@ -1,31 +1,32 @@
-#include "../include/Player_series.h"
+#include "../include/PlayerSeries.hpp"
 
 // ------------------------- Player --------------------------------------------
 
-void Player::set_mystone(Stone stone) {
-  mystone = stone;
+Player::Player()
+  : hand_{BoardSeries::Position{-1, -1}},
+    myname_{} 
+{
 }
 
-Stone Player::get_mystone() {
-  return mystone;
+BoardSeries::Position Player::get_hand() const
+{
+  return hand_;
 }
 
-void Player::get_hand(int &x, int &y) {
-  x = hand_x;
-  y = hand_y;
+void Player::set_myname(std::string src)
+{
+  myname_ = src;
 }
 
-void Player::set_myname(std::string src) {
-  myname = src;
-}
-
-std::string Player::get_myname() {
-  return myname;
+std::string Player::get_myname() const
+{
+  return myname_;
 }
 
 // ------------------------- HumanPlayer ---------------------------------------
 
-HumanPlayer::HumanPlayer() {
+HumanPlayer::HumanPlayer()
+{
   std::cout << "What is your name ?\n"
             << " > "<< std::flush;
   std::string myname;
@@ -34,7 +35,8 @@ HumanPlayer::HumanPlayer() {
   set_myname(myname);
 }
 
-bool HumanPlayer::set_hand(const BoardMaster game_board) {
+bool HumanPlayer::set_hand(const BoardSeries::GameBoard& game_board)
+{
   std::cout << "Set your hand !!" << std::endl;
   std::string input_str[2];
   for (int i = 0; i < 2; i++) {
@@ -45,21 +47,21 @@ bool HumanPlayer::set_hand(const BoardMaster game_board) {
   }
   int input_num[2];
   for (int i = 0; i < 2; i++) input_num[i] = std::atoi(input_str[i].c_str());
-  hand_x = input_num[0] - 1;
-  hand_y = input_num[1] - 1;
+  hand_.x = static_cast<BoardSeries::Position::Point>(input_num[0] - 1);
+  hand_.y = static_cast<BoardSeries::Position::Point>(input_num[1] - 1);
   return true;
 }
 
 // ------------------------- ComputerPlayer ------------------------------------
 
-ComputerPlayer::ComputerPlayer() {
+ComputerPlayer::ComputerPlayer()
+{
   set_myname("Computer");
 }
 
-bool ComputerPlayer::set_hand(const BoardMaster game_board) {
-  OthelloAI* p = new OthelloAI(game_board);
-  p->seek(4);
-  p->get_conclusion(hand_x, hand_y);
-  delete p;
+bool ComputerPlayer::set_hand(const BoardSeries::GameBoard& game_board)
+{
+  OthelloAI seeker{game_board, 5};
+  hand_ = seeker.get_conclusion();
   return true;
 }
