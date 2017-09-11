@@ -20,9 +20,9 @@ public:
 
 namespace BoardSeries
 {
-static const std::array<PlaneVector,8ul> direction {{
-    {1,-1}, {1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}, {0,-1}
-  }};
+static const std::array<PlaneVector,8ul> direction {
+  {{1,-1}, {1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}, {0,-1}}
+};
 
 using Position = PlaneVector;
 enum class Stone {
