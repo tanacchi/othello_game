@@ -63,7 +63,7 @@ GameMaster::Task GameMaster::task_op()
 {
   std::cout << "turn : " << turn_ + 1 << std::endl;
   board_.put_dots();
-  board_.show();
+  show(board_);
   static int pass_turn;
   if (!board_.count_stone(BoardSeries::Stone::Dot)) { std::cout << "PASS !!!" << std::endl; return (++pass_turn < 2) ? Task::Judge : Task::Ask; }
   else pass_turn = 0;
@@ -114,7 +114,7 @@ GameMaster::Task GameMaster::task_write()
 
 GameMaster::Task GameMaster::task_judge()
 {
-  board_.show();
+  show(board_);
   return (board_.can_continue()) ? Task::Switch : Task::Ask;
 }
 
