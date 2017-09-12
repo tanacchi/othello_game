@@ -96,7 +96,7 @@ int BoardBase::get_reversible_length(Position pos, PlaneVector dr) const // REFA
 {
   const Stone enemy_stone{get_enemy_stone()};
   Position target{pos+dr};
-  for (int length{0}; is_inside(target); target += dr, length++)
+  for (int length{0}; is_inside(target); target += dr, ++length)
     if (board_[get_access_num(target)] == active_stone_) return length;
     else if (board_[get_access_num(target)] != enemy_stone) break;
   return 0;
@@ -145,18 +145,18 @@ char to_char(Stone stone)
 
 void show(const BoardBase& src)
 {
-  for (int i {0}; i < src.width()+1; i++) std::cout << "--";
+  for (int i {0}; i < src.width()+1; ++i) std::cout << "--";
   std::cout << std::endl;
   std::cout << "  " << std::flush;
-  for (int i {0}; i < src.width(); std::cout.put(' '), i++)
+  for (int i {0}; i < src.width(); std::cout.put(' '), ++i)
     std::cout << i+1 << std::flush;
   std::cout << std::endl;
-  for (PlaneVector::Point column {0}; column < src.height(); std::cout.put('\n'), column++) {
-    std::cout << column+1 << ' ' << std::flush;
-    for (PlaneVector::Point row {0}; row < src.width(); std::cout.put(' '), row++)
-      std::cout.put(to_char(src.board_[src.get_access_num(row, column)]));
+  for (PlaneVector::Point y{0}; y < src.height(); std::cout.put('\n'), ++y) {
+    std::cout << y+1 << ' ' << std::flush;
+    for (PlaneVector::Point x {0}; x < src.width(); std::cout.put(' '), ++x)
+      std::cout.put(to_char(src.board_[src.get_access_num(x, y)]));
   }
-  for (int i {0}; i < src.width()+1; i++) std::cout << "--";
+  for (int i {0}; i < src.width()+1; ++i) std::cout << "--";
   std::cout << std::endl;
 }
 };

@@ -16,10 +16,10 @@ double AiBoard::get_status_score() const
     {0, 0}, {7, 0},
     {0, 7}, {7, 7}
   };
-  for (int i{0}; i < 4; i++) {
+  for (int i{0}; i < 4; ++i) {
     target = board_[get_access_num(edge_pos[i])];
     if (target == active_stone_) status_score += 15;
-    else if (target == enemy_stone) status_score -= 15;
+    else if (target == enemy_stone) status_score += -15;
   }
   static const std::vector<Position> near_pos = {
             {1, 0}, {6, 0},
@@ -27,9 +27,9 @@ double AiBoard::get_status_score() const
     {0, 6}, {1, 6}, {6, 6}, {7, 6},
             {1, 7}, {6, 7}
   };
-  for (int i{0}; i < 12; i++) {
+  for (int i{0}; i < 12; ++i) {
     target = board_[get_access_num(near_pos[i])];
-    if (target == active_stone_) status_score -= 5;
+    if (target == active_stone_) status_score += -5;
     else if (target == enemy_stone) status_score += 5;
   }
   static const std::vector<Position> reach_pos = {
@@ -40,10 +40,10 @@ double AiBoard::get_status_score() const
                     {2, 6}, {5, 6},
                     {2, 7}, {5, 7}
   };
-  for (int i{0}; i < 8; i++) {
+  for (int i{0}; i < 8; ++i) {
     target = board_[get_access_num(reach_pos[i])];
     if (target == active_stone_) status_score += 5;
-    else if (target == enemy_stone) status_score -= 5;
+    else if (target == enemy_stone) status_score += -5;
   }
   return status_score;
 }
