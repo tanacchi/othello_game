@@ -93,7 +93,7 @@ double OthelloAI::get_sub_score()
     score_list_[i].add_score(sub_->get_sub_score());
     delete sub_;
   }
-  double sum{0};
+  double sum{myboard_.get_status_score()};
   for (std::size_t i{0}; i < score_list_.size(); ++i) sum += score_list_[i].get_score();
-  return (sum * (mydepth_ + 1)) / score_list_.size();
+  return (sum * (mydepth_ + 1)) / score_list_.size() / 10;
 }
