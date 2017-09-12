@@ -75,11 +75,6 @@ BoardSeries::Position OthelloAI::get_conclusion()
   get_sub_score();
   std::sort(score_list_.begin(), score_list_.end(), std::greater<ScoreList>());
   for (auto sl : score_list_) sl.show_score_list();
-  // const double best_score{score_list_[0].get_score()};
-  // auto best_list_end{std::find_if_not(score_list_.begin(), score_list_.end(), [&](ScoreList sl){ return sl.get_score() == best_score; })};
-  // std::vector<ScoreList>best_list{score_list_.begin(), best_list_end};
-  // std::cout << "size : " << best_list.size() << std::endl;
-  // for (auto sl : best_list) sl.show_score_list();
   return score_list_[0].get_position();
 }
 
