@@ -13,7 +13,7 @@ BoardSeries::Position ScoreList::get_position() const
   return pos_;
 }
 
-void ScoreList::add_score(double score)
+void ScoreList::add_score(float score)
 {
   score_ += score;
 }
@@ -30,7 +30,7 @@ bool ScoreList::operator>(const ScoreList &right ) const
   return score_ > right.score_;
 }
 
-double ScoreList::get_score() const
+float ScoreList::get_score() const
 {
   return score_;
 }
@@ -78,7 +78,7 @@ BoardSeries::Position OthelloAI::get_conclusion()
   return score_list_[0].get_position();
 }
 
-double OthelloAI::get_sub_score()
+float OthelloAI::get_sub_score()
 {
   if ((max_depth_ - mydepth_) < 0 || score_list_.empty()) {
     if ((mydepth_ % 2) != 0) myboard_.switch_active_stone();
@@ -93,7 +93,7 @@ double OthelloAI::get_sub_score()
     score_list_[i].add_score(sub_->get_sub_score());
     delete sub_;
   }
-  double sum{myboard_.get_status_score()};
+  float sum{myboard_.get_status_score()};
   for (std::size_t i{0}; i < score_list_.size(); ++i) sum += score_list_[i].get_score();
   return (sum * (mydepth_ + 1)) / score_list_.size() / 10;
 }

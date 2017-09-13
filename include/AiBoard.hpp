@@ -9,7 +9,7 @@ class AiBoard : public BoardBase {
 public:
   AiBoard(BoardBase src);
   const AiBoard& operator=(const AiBoard& src) = delete;
-  double get_status_score() const;
+  float get_status_score() const;
 };
 };
 
