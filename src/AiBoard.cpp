@@ -13,8 +13,8 @@ double AiBoard::get_status_score() const
   double status_score {static_cast<double>(count_stone(active_stone_) - count_stone(enemy_stone))};
   Stone target{Stone::Space};
   static const std::vector<Position> edge_pos = {
-    {0,          0}, {width()-1,          0},
-    {0, height()-1}, {width()-1, height()-1}
+    {0, 0}, {7, 0},
+    {0, 7}, {7, 7}
   };
   for (int i{0}; i < 4; ++i) {
     target = board_[get_access_num(edge_pos[i])];
@@ -22,10 +22,10 @@ double AiBoard::get_status_score() const
     else if (target == enemy_stone) status_score += -15;
   }
   static const std::vector<Position> near_pos = {
-                     {1,          0}, {width()-2,          0},
-    {0,          1}, {1,          1}, {width()-2,          1}, {width()-1,          1},
-    {0, height()-2}, {1, height()-2}, {width()-2, height()-2}, {width()-1, height()-2},
-                     {1, height()-1}, {width()-2, height()-1}
+            {1, 0}, {6, 0},
+    {0, 1}, {1, 1}, {6, 1}, {7, 1},
+    {0, 6}, {1, 6}, {6, 6}, {7, 6},
+            {1, 7}, {6, 7}
   };
   for (int i{0}; i < 12; ++i) {
     target = board_[get_access_num(near_pos[i])];
@@ -33,12 +33,12 @@ double AiBoard::get_status_score() const
     else if (target == enemy_stone) status_score += 5;
   }
   static const std::vector<Position> reach_pos = {
-                                      {2,          0}, {width()-3,          0},
-                                      {2,          1}, {width()-3,          1},
-    {0,          2}, {1,          2}, {2,          2}, {width()-3,          2}, {width()-2,          2}, {width()-1,          2},
-    {0, height()-3}, {1, height()-3}, {2, height()-3}, {width()-3, height()-3}, {width()-2, height()-3}, {width()-1, height()-3},
-                                      {2, height()-2}, {width()-3, height()-2},
-                                      {2, height()-1}, {width()-3, height()-1}
+                    {2, 0}, {5, 0},
+                    {2, 1}, {5, 1},
+    {0, 2}, {1, 2}, {2, 2}, {5, 2}, {6, 2}, {7, 2},
+    {0, 5}, {1, 5}, {2, 5}, {5, 5}, {6, 5}, {7, 5},
+                    {2, 6}, {5, 6},
+                    {2, 7}, {5, 7}
   };
   for (int i{0}; i < 8; ++i) {
     target = board_[get_access_num(reach_pos[i])];
