@@ -89,7 +89,7 @@ double OthelloAI::get_sub_score()
     sub_->mydepth_++;
     sub_->myboard_.insert(score_list_[i].get_position());
     sub_->myboard_.switch_active_stone();
-    show(myboard_);
+    // show(myboard_);
     score_list_[i].add_score(sub_->get_sub_score());
     delete sub_;
   }
