@@ -78,8 +78,6 @@ GameMaster::Task GameMaster::task_set()
   }
   catch (std::string src) {
     if (src == "revert") return Task::Revert;
-    std::cout << "It's wrong input !! Try again." << std::endl;
-    return Task::Set;
   }
   pos_ = active_player_->get_hand();
   if (board_.is_available_position(pos_)) return Task::Insert;
