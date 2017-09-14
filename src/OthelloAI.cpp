@@ -57,11 +57,6 @@ OthelloAI::OthelloAI(const OthelloAI& src)
   set_score_list();
 }
 
-OthelloAI::~OthelloAI()
-{
-  if (mydepth_ > 0 && branch_ > 0) delete[] sub_;
-}
-
 inline void OthelloAI::set_score_list()
 {
   BoardSeries::Position target{0, 0};

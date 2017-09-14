@@ -23,7 +23,6 @@ public:
   OthelloAI(const BoardSeries::GameBoard& game_board, unsigned short max_depth = 5);
   OthelloAI(const OthelloAI& src);
   const OthelloAI& operator=(const OthelloAI& src) = delete;
-  ~OthelloAI();
   void set_score_list();
   BoardSeries::Position get_conclusion();
   float get_sub_score();
