@@ -36,7 +36,7 @@ HumanPlayer::HumanPlayer()
   set_myname(myname);
 }
 
-bool HumanPlayer::set_hand(const BoardSeries::GameBoard& game_board)
+void HumanPlayer::set_hand(const BoardSeries::GameBoard& game_board)
 {
   std::cout << "Set your hand !!" << std::endl;
   std::string input_str[2];
@@ -52,7 +52,6 @@ bool HumanPlayer::set_hand(const BoardSeries::GameBoard& game_board)
   }
   hand_.x = static_cast<BoardSeries::Position::Point>(input_num[0] - 1);
   hand_.y = static_cast<BoardSeries::Position::Point>(input_num[1] - 1);
-  return true;
 }
 
 // ------------------------- ComputerPlayer ------------------------------------
@@ -62,7 +61,7 @@ ComputerPlayer::ComputerPlayer()
   set_myname("Computer");
 }
 
-bool ComputerPlayer::set_hand(const BoardSeries::GameBoard& game_board)
+void ComputerPlayer::set_hand(const BoardSeries::GameBoard& game_board)
 {
   auto start{std::chrono::system_clock::now()};
   OthelloAI seeker{game_board, 5};
@@ -70,5 +69,4 @@ bool ComputerPlayer::set_hand(const BoardSeries::GameBoard& game_board)
   auto end{std::chrono::system_clock::now()};
   auto msec{std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()};
   std::cout << "time : " << msec << "(millisecond)" << std::endl;
-  return true;
 }
