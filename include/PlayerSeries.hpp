@@ -9,7 +9,7 @@ public:
   Player();
   const Player& operator=(const Player& src) = delete;
   virtual ~Player() = default;
-  virtual bool set_hand(const BoardSeries::GameBoard& game_board) = 0;
+  virtual void set_hand(const BoardSeries::GameBoard& game_board) = 0;
   BoardSeries::Position get_hand() const;
   void set_myname(std::string src);
   std::string get_myname() const;
@@ -23,14 +23,14 @@ class HumanPlayer : public Player {
 public:
   HumanPlayer();
   ~HumanPlayer() = default;
-  bool set_hand(const BoardSeries::GameBoard& game_board);
+  void set_hand(const BoardSeries::GameBoard& game_board);
 };
 
 class ComputerPlayer : public Player{
 public:
   ComputerPlayer();
   ~ComputerPlayer() = default;
-  bool set_hand(const BoardSeries::GameBoard& game_board);
+  void set_hand(const BoardSeries::GameBoard& game_board);
 };
 
 #endif // PLAYER_SERIES_H_
