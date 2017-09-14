@@ -73,12 +73,18 @@ GameMaster::Task GameMaster::task_op()
 
 GameMaster::Task GameMaster::task_set()
 {
-  if (!active_player_->set_hand(board_)) return Task::Revert;
+  try {
+    active_player_->set_hand(board_);
+  }
+  catch (std::string src) {
+    if (src == "revert") return Task::Revert;
+    std::cout << "It's wrong input !! Try again." << std::endl;
+    return Task::Set;
+  }
   pos_ = active_player_->get_hand();
   if (board_.is_available_position(pos_)) return Task::Insert;
-  std::cout << "It's wrong hand !! Try again." << std::endl;
+  std::cout << "It's invalid hand !! Try again." << std::endl;
   return Task::Set;
-
 }
 
 GameMaster::Task GameMaster::task_insert()

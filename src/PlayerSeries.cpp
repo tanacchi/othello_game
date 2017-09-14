@@ -44,10 +44,12 @@ bool HumanPlayer::set_hand(const BoardSeries::GameBoard& game_board)
     (!i) ? std::cout << "x" : std::cout << "y";
     std::cout << " = " << std::flush;
     std::cin >> input_str[i];
-    if (input_str[i] == "revert") return false;
   }
   int input_num[2];
-  for (int i = 0; i < 2; ++i) input_num[i] = std::atoi(input_str[i].c_str());
+  for (int i = 0; i < 2; ++i) {
+    input_num[i] = std::atoi(input_str[i].c_str());
+    if (input_num[i] == 0) throw input_str[i];
+  }
   hand_.x = static_cast<BoardSeries::Position::Point>(input_num[0] - 1);
   hand_.y = static_cast<BoardSeries::Position::Point>(input_num[1] - 1);
   return true;
