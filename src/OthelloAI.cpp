@@ -41,7 +41,7 @@ OthelloAI::OthelloAI(const BoardSeries::GameBoard& game_board, unsigned short ma
     score_list_ {},
     max_depth_  {max_depth},
     mydepth_    {0},
-    sub_        {0}
+    sub_        {nullptr}
 {
   set_score_list();
 }
@@ -52,7 +52,7 @@ OthelloAI::OthelloAI(const OthelloAI& src)
     score_list_ {},
     max_depth_  {src.max_depth_},
     mydepth_    {src.mydepth_},
-    sub_        {0}
+    sub_        {nullptr}
 {
   set_score_list();
 }
