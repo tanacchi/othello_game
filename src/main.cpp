@@ -5,7 +5,7 @@ int main(int argc, char** argv)
   // std::vector<std::string> user_message{argv, argv + argc};
 
   Player* player[2];
-  player[0] = new ComputerPlayer;
+  player[0] = new HumanPlayer;
   player[1] = new ComputerPlayer;
 
   PlaneVector board_size{8, 8};
