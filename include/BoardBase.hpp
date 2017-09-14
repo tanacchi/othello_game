@@ -2,11 +2,10 @@
 #define BOARD_BASE_H_
 
 #include <algorithm>
+#include <array>
 #include <iostream>
-#include <vector>
 #include <valarray>
 
-#include <functional>
 
 struct PlaneVector {
 public:
