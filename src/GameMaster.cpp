@@ -104,7 +104,7 @@ GameMaster::Task GameMaster::task_revert()
   }
   hand_list_.erase(hand_list_.begin() + destination, hand_list_.end());
   board_.init();
-  for (auto hl : hand_list_) hl.rewrite(board_);
+  for (const auto& hl : hand_list_) hl.rewrite(board_);
   active_player_ = participant_[destination%2];
   turn_ = destination;
   return Task::Op;
@@ -153,7 +153,7 @@ void GameMaster::record_hand_list()
   log_file_ << participant_1 << ",O" << std::endl;
   log_file_ << participant_2 << ",X" << std::endl;
   log_file_ << "~~BEGIN~~" << std::endl;
-  for (auto hl : hand_list_) hl.report(log_file_); 
+  for (const auto& hl : hand_list_) hl.report(log_file_); 
   log_file_ << "~~END~~" << std::endl;
   log_file_ << "WHITE," << board_.count_stone(BoardSeries::Stone::White) << std::endl;
   log_file_ << "BLACK," << board_.count_stone(BoardSeries::Stone::Black) << '\n' << std::endl;

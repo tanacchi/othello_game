@@ -109,14 +109,14 @@ int BoardBase::count_stone(BoardSeries::Stone stone) const
 
 bool BoardBase::can_reverse(const Position& pos) const
 {
-  for (auto dr : direction)
+  for (const auto& dr : direction)
     if (get_reversible_length(pos, dr) != 0) return true;
   return false;
 }
 
 void BoardBase::reverse(Position pos) // REFACTORING REQUIRED // Why ref-arg rejected ?
 {
-  for (auto dr : direction) {
+  for (const auto& dr : direction) {
     int reverse_length = get_reversible_length(pos, dr);
     for (int j{1}; j <= reverse_length; j++) insert(pos+dr*j);
   }

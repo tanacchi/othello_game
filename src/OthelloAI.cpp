@@ -69,7 +69,7 @@ BoardSeries::Position OthelloAI::get_conclusion()
 {
   get_sub_score();
   std::sort(score_list_.begin(), score_list_.end(), std::greater<ScoreList>());
-  for (auto sl : score_list_) sl.show_score_list();
+  for (const auto& sl : score_list_) sl.show_score_list();
   return score_list_[0].get_position();
 }
 
@@ -79,7 +79,7 @@ float OthelloAI::get_sub_score()
     if ((mydepth_ % 2) != 0) myboard_.switch_active_stone();
     return myboard_.get_status_score();
   }
-  for (std::size_t i{0}; i < score_list_.size(); ++i) {
+  for (auto i{0}; i < score_list_.size(); ++i) {
     sub_ = new OthelloAI(*this);
     sub_->mydepth_++;
     sub_->myboard_.insert(score_list_[i].get_position());
