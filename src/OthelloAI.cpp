@@ -89,6 +89,6 @@ float OthelloAI::get_sub_score()
     delete sub_;
   }
   float sum{myboard_.get_status_score()};
-  for (std::size_t i{0}; i < score_list_.size(); ++i) sum += score_list_[i].get_score();
-  return (sum * (mydepth_ + 1)) / score_list_.size() / 10;
+  for (const auto& sl : score_list_) sum += sl.get_score();
+  return (sum * (mydepth_ + 1)) / score_list_.size();
 }
