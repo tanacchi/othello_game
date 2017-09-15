@@ -48,10 +48,10 @@ public:
   void insert(const Position& pos);
   void insert(const Position& pos, Stone stone);
   BoardSeries::Stone get_enemy_stone() const;
-  int get_reversible_length(Position pos, PlaneVector dr) const;
+  int get_reversible_length(const Position& pos, const PlaneVector& dr) const;
   int count_stone(Stone stone) const;
   bool can_reverse(const Position& pos) const;
-  void reverse(Position pos);
+  void reverse(const Position& pos);
   bool is_available_position(const Position& pos) const;
   void switch_active_stone();
   friend void show(const BoardBase& src);

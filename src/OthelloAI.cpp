@@ -2,7 +2,7 @@
 
 #include "../include/OthelloAI.hpp"
 
-ScoreList::ScoreList(BoardSeries::Position pos)
+ScoreList::ScoreList(const BoardSeries::Position& pos)
   : pos_  {pos},
     score_{0.0}
 {

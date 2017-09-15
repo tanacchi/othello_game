@@ -92,7 +92,7 @@ BoardSeries::Stone BoardBase::get_enemy_stone() const
   return (active_stone_ == Stone::White) ? Stone::Black : Stone::White;
 }
 
-int BoardBase::get_reversible_length(Position pos, PlaneVector dr) const // REFACTORING REQUIRED // Why ref-arg rejected ?
+int BoardBase::get_reversible_length(const Position& pos, const PlaneVector& dr) const // REFACTORING REQUIRED
 {
   const Stone enemy_stone{get_enemy_stone()};
   Position target{pos+dr};
@@ -114,7 +114,7 @@ bool BoardBase::can_reverse(const Position& pos) const
   return false;
 }
 
-void BoardBase::reverse(Position pos) // REFACTORING REQUIRED // Why ref-arg rejected ?
+void BoardBase::reverse(const Position& pos) // REFACTORING REQUIRED
 {
   for (const auto& dr : direction) {
     int reverse_length = get_reversible_length(pos, dr);

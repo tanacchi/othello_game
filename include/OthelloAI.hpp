@@ -7,7 +7,7 @@
 
 class ScoreList {
 public:
-  ScoreList(BoardSeries::Position pos);
+  ScoreList(const BoardSeries::Position& pos);
   BoardSeries::Position get_position() const;
   void add_score(float score);
   void show_score_list() const;
