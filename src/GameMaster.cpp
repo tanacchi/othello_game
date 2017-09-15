@@ -7,14 +7,14 @@ HandList::HandList(short turn, BoardSeries::Stone stone, BoardSeries::Position p
 {
 }
 
-void HandList::rewrite(BoardSeries::GameBoard& game_board)
+void HandList::rewrite(BoardSeries::GameBoard& game_board) const
 {
   game_board.insert(position_, stone_);
   game_board.reverse(position_);
   game_board.switch_active_stone();   // ここで？
 }
 
-void HandList::report(std::ofstream& log_file)
+void HandList::report(std::ofstream& log_file) const
 {
   log_file << turn_ + 1 << ','
            << BoardSeries::to_char(stone_) << ','

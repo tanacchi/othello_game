@@ -6,12 +6,12 @@ PlaneVector::PlaneVector(Point init_x, Point init_y)
 {
 }
 
-PlaneVector PlaneVector::operator+(const PlaneVector& src)
+PlaneVector PlaneVector::operator+(const PlaneVector& src) const
 {
   return PlaneVector(x + src.x, y + src.y);
 }
 
-PlaneVector PlaneVector::operator*(int n)
+PlaneVector PlaneVector::operator*(int n) const
 {
   return PlaneVector(x * n, y * n);
 }
