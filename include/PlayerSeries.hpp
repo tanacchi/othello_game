@@ -28,9 +28,11 @@ public:
 
 class ComputerPlayer : public Player{
 public:
-  ComputerPlayer();
+  ComputerPlayer(unsigned short seek_depth = 3);
   ~ComputerPlayer() = default;
   void set_hand(const BoardSeries::GameBoard& game_board);
+private:
+  unsigned short seek_depth_;
 };
 
 #endif // PLAYER_SERIES_H_

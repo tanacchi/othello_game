@@ -56,7 +56,8 @@ void HumanPlayer::set_hand(const BoardSeries::GameBoard& game_board)
 
 // ------------------------- ComputerPlayer ------------------------------------
 
-ComputerPlayer::ComputerPlayer()
+ComputerPlayer::ComputerPlayer(unsigned short seek_depth)
+  : seek_depth_{seek_depth}
 {
   set_myname("Computer");
 }
@@ -64,7 +65,7 @@ ComputerPlayer::ComputerPlayer()
 void ComputerPlayer::set_hand(const BoardSeries::GameBoard& game_board)
 {
   auto start{std::chrono::system_clock::now()};
-  OthelloAI seeker{game_board, 5};
+  OthelloAI seeker{game_board, seek_depth_};
   hand_ = seeker.get_conclusion();
   auto end{std::chrono::system_clock::now()};
   auto msec{std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()};
