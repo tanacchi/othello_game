@@ -25,7 +25,7 @@ public:
   const OthelloAI& operator=(const OthelloAI& src) = delete;
   void set_score_list();
   BoardSeries::Position get_conclusion();
-  float get_sub_score();
+  float gen_sub_score();
 private:
   BoardSeries::AiBoard myboard_;
   unsigned short branch_;
