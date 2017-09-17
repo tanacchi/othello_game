@@ -90,5 +90,5 @@ float OthelloAI::gen_sub_score()
   }
   float sum{myboard_.get_status_score()};
   for (const auto& sl : score_list_) sum += sl.get_score();
-  return (sum * (mydepth_ + 1)) / score_list_.size();
+  return sum  * (max_depth_ - mydepth_) / score_list_.size();
 }
