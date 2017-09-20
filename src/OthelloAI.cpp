@@ -37,22 +37,16 @@ float ScoreList::get_score() const
 
 OthelloAI::OthelloAI(const BoardSeries::GameBoard& game_board, unsigned short max_depth)
   : myboard_    {game_board},
-    branch_     {0},
-    score_list_ {},
     max_depth_  {max_depth},
-    mydepth_    {0},
-    sub_        {nullptr}
+    mydepth_    {0}
 {
   set_score_list();
 }
 
 OthelloAI::OthelloAI(const OthelloAI& src)
   : myboard_    {src.myboard_},
-    branch_     {0},
-    score_list_ {},
     max_depth_  {src.max_depth_},
-    mydepth_    {src.mydepth_},
-    sub_        {nullptr}
+    mydepth_    {src.mydepth_}
 {
   set_score_list();
 }

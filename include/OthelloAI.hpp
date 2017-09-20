@@ -28,11 +28,11 @@ public:
   float gen_sub_score();
 private:
   BoardSeries::AiBoard myboard_;
-  unsigned short branch_;
-  std::vector<ScoreList> score_list_;
+  unsigned short branch_{0};
+  std::vector<ScoreList> score_list_{};
   const unsigned short max_depth_;
   unsigned short mydepth_;
-  OthelloAI* sub_;
+  OthelloAI* sub_{nullptr};
 };
 
 #endif // OTHELLO_AI_H_
