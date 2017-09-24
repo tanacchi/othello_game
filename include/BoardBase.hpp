@@ -5,18 +5,7 @@
 #include <array>
 #include <iostream>
 #include <valarray>
-
-
-struct PlaneVector {
-public:
-  using Point = char;
-  Point x, y;
-  PlaneVector(Point init_x, Point init_y);
-  PlaneVector operator+(const PlaneVector& src) const;
-  PlaneVector operator*(int n) const;
-  const PlaneVector& operator+=(const PlaneVector& src);
-  const PlaneVector& operator--();
-};
+#include "Vector2D.hpp"
 
 namespace BoardSeries
 {
