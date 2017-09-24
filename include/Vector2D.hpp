@@ -1,15 +1,15 @@
 #ifndef VECTOR_2D_H_
 #define VECTOR_2D_H_
 
-struct PlaneVector {
+struct Vector2D {
 public:
   using Point = char;
   Point x, y;
-  PlaneVector(Point init_x, Point init_y);
-  PlaneVector operator+(const PlaneVector& src) const;
-  PlaneVector operator*(int n) const;
-  const PlaneVector& operator+=(const PlaneVector& src);
-  const PlaneVector& operator--();
+  Vector2D(Point init_x, Point init_y);
+  Vector2D operator+(const Vector2D& src) const;
+  Vector2D operator*(int n) const;
+  const Vector2D& operator+=(const Vector2D& src);
+  const Vector2D& operator--();
 };
 
 #endif // VECTOR_2D_H_

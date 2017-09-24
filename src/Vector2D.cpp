@@ -1,28 +1,28 @@
 #include "../include/Vector2D.hpp"
 
-PlaneVector::PlaneVector(Point init_x, Point init_y)
+Vector2D::Vector2D(Point init_x, Point init_y)
   : x{init_x},
     y{init_y}
 {
 }
 
-PlaneVector PlaneVector::operator+(const PlaneVector& src) const
+Vector2D Vector2D::operator+(const Vector2D& src) const
 {
-  return PlaneVector(x + src.x, y + src.y);
+  return Vector2D(x + src.x, y + src.y);
 }
 
-PlaneVector PlaneVector::operator*(int n) const
+Vector2D Vector2D::operator*(int n) const
 {
-  return PlaneVector(x * n, y * n);
+  return Vector2D(x * n, y * n);
 }
 
-const PlaneVector& PlaneVector::operator+=(const PlaneVector& src)
+const Vector2D& Vector2D::operator+=(const Vector2D& src)
 {
   x += src.x; y += src.y;
   return *this;
 }
 
-const PlaneVector& PlaneVector::operator--()
+const Vector2D& Vector2D::operator--()
 {
   --x; --y;
   return *this;

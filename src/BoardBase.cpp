@@ -9,32 +9,32 @@ BoardBase::BoardBase(const Position& size)
 {
 }
 
-inline PlaneVector::Point BoardBase::width() const
+inline Position::Point BoardBase::width() const
 {
   return size_.x;
 }
 
-inline PlaneVector::Point BoardBase::height() const
+inline Position::Point BoardBase::height() const
 {
   return size_.y;
 }
 
-inline PlaneVector::Point BoardBase::get_access_num(PlaneVector::Point x, PlaneVector::Point y) const
+inline Position::Point BoardBase::get_access_num(Position::Point x, Position::Point y) const
 {
   return (std::size_t)(x + width()*y);
 }
 
-inline PlaneVector::Point BoardBase::get_access_num(const Position& pos) const
+inline Position::Point BoardBase::get_access_num(const Position& pos) const
 {
   return get_access_num(pos.x, pos.y);
 }
 
-void BoardBase::insert(PlaneVector::Point x, PlaneVector::Point y)
+void BoardBase::insert(Position::Point x, Position::Point y)
 {
   board_[get_access_num(x, y)] = active_stone_;
 }
 
-void BoardBase::insert(PlaneVector::Point x, PlaneVector::Point y, Stone stone)
+void BoardBase::insert(Position::Point x, Position::Point y, Stone stone)
 {
   board_[get_access_num(x, y)] = stone;
 }
@@ -54,7 +54,7 @@ inline bool BoardBase::is_inside(const Position& pos) const
   return is_inside(pos.x, pos.y);
 }
 
-inline bool BoardBase::is_inside(PlaneVector::Point x, PlaneVector::Point y) const
+inline bool BoardBase::is_inside(Position::Point x, Position::Point y) const
 {
   return (0 <= x && x < width()) && (0 <= y && y < height());
 }
@@ -64,7 +64,7 @@ BoardSeries::Stone BoardBase::get_enemy_stone() const
   return (active_stone_ == Stone::White) ? Stone::Black : Stone::White;
 }
 
-int BoardBase::get_reversible_length(const Position& pos, const PlaneVector& dr) const // REFACTORING REQUIRED
+int BoardBase::get_reversible_length(const Position& pos, const Position& dr) const // REFACTORING REQUIRED
 {
   const Stone enemy_stone{get_enemy_stone()};
   Position target{pos+dr};
@@ -123,9 +123,9 @@ void show(const BoardBase& src)
   for (int i {0}; i < src.width(); std::cout.put(' '), ++i)
     std::cout << i+1 << std::flush;
   std::cout << std::endl;
-  for (PlaneVector::Point y{0}; y < src.height(); std::cout.put('\n'), ++y) {
+  for (Position::Point y{0}; y < src.height(); std::cout.put('\n'), ++y) {
     std::cout << y+1 << ' ' << std::flush;
-    for (PlaneVector::Point x {0}; x < src.width(); std::cout.put(' '), ++x)
+    for (Position::Point x {0}; x < src.width(); std::cout.put(' '), ++x)
       std::cout.put(to_char(src.board_[src.get_access_num(x, y)]));
   }
   for (int i {0}; i < src.width()+1; ++i) std::cout << "--";

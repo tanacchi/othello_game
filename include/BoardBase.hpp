@@ -9,11 +9,11 @@
 
 namespace BoardSeries
 {
-static const std::array<PlaneVector,8ul> direction {
+static const std::array<Vector2D,8ul> direction {
   {{1,-1}, {1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}, {0,-1}}
 };
 
-using Position = PlaneVector;
+using Position = Vector2D;
 enum class Stone {
   Space,
   White,
@@ -37,7 +37,7 @@ public:
   void insert(const Position& pos);
   void insert(const Position& pos, Stone stone);
   BoardSeries::Stone get_enemy_stone() const;
-  int get_reversible_length(const Position& pos, const PlaneVector& dr) const;
+  int get_reversible_length(const Position& pos, const Vector2D& dr) const;
   int count_stone(Stone stone) const;
   bool can_reverse(const Position& pos) const;
   void reverse(const Position& pos);
