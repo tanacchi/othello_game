@@ -32,7 +32,6 @@ private:
   std::vector<ScoreList> score_list_{};
   const unsigned short max_depth_;
   unsigned short mydepth_;
-  OthelloAI* sub_{nullptr};
 };
 
 #endif // OTHELLO_AI_H_

@@ -74,13 +74,13 @@ float OthelloAI::gen_sub_score()
     return myboard_.get_status_score();
   }
   for (auto i{0u}; i < score_list_.size(); ++i) {
-    sub_ = new OthelloAI(*this);
-    sub_->mydepth_++;
-    sub_->myboard_.insert(score_list_[i].get_position());
-    sub_->myboard_.switch_active_stone();
+    OthelloAI* sub = new OthelloAI(*this);
+    sub->mydepth_++;
+    sub->myboard_.insert(score_list_[i].get_position());
+    sub->myboard_.switch_active_stone();
     // show(myboard_);
-    score_list_[i].add_score(sub_->gen_sub_score());
-    delete sub_;
+    score_list_[i].add_score(sub->gen_sub_score());
+    delete sub;
   }
   float sum{myboard_.get_status_score()};
   for (const auto& sl : score_list_) sum += sl.get_score();
