@@ -10,4 +10,5 @@ add_executable(othello_game.out
   src/GameMaster.cpp
   src/OthelloAI.cpp
   src/PlayerSeries.cpp
+  src/Vector2D.cpp
 )

@@ -32,7 +32,7 @@ public:
     Ask,
     Ed
   };
-  GameMaster(PlaneVector board_size, Player* player[]);
+  GameMaster(Vector2D board_size, Player* player[]);
   ~GameMaster() = default;
   Task run(Task mode);
   Task task_init();

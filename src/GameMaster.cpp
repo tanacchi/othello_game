@@ -22,7 +22,7 @@ void HandList::report(std::ofstream& log_file) const
            << static_cast<short>(position_.y + 1) << std::endl;
 }
 
-GameMaster::GameMaster(PlaneVector board_size, Player* player[])
+GameMaster::GameMaster(Vector2D board_size, Player* player[])
   : board_        {board_size},
     participant_  {player[0], player[1]},
     active_player_{participant_[0]},
