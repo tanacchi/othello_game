@@ -117,18 +117,19 @@ char to_char(Stone stone)
 
 void show(const BoardBase& src)
 {
-  for (int i {0}; i < src.width()+1; ++i) std::cout << "--";
-  std::cout << std::endl;
-  std::cout << "  " << std::flush;
-  for (int i {0}; i < src.width(); std::cout.put(' '), ++i)
-    std::cout << i+1 << std::flush;
-  std::cout << std::endl;
-  for (Position::Point y{0}; y < src.height(); std::cout.put('\n'), ++y) {
-    std::cout << y+1 << ' ' << std::flush;
-    for (Position::Point x {0}; x < src.width(); std::cout.put(' '), ++x)
-      std::cout.put(to_char(src.board_[src.get_access_num(x, y)]));
+  std::stringstream ss;
+  for (int i {0}; i < src.width()+1; ++i) ss << "--";
+  ss << std::endl;
+  ss << "  " << std::flush;
+  for (int i {0}; i < src.width(); ss.put(' '), ++i)
+    ss << i+1 << std::flush;
+  ss << std::endl;
+  for (Position::Point y{0}; y < src.height(); ss.put('\n'), ++y) {
+    ss << y+1 << ' ' << std::flush;
+    for (Position::Point x {0}; x < src.width(); ss.put(' '), ++x)
+      ss.put(to_char(src.board_[src.get_access_num(x, y)]));
   }
-  for (int i {0}; i < src.width()+1; ++i) std::cout << "--";
-  std::cout << std::endl;
+  for (int i {0}; i < src.width()+1; ++i) ss << "--";
+  std::cout << ss.str() << std::endl;
 }
 };

@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <array>
 #include <iostream>
+#include <sstream>
 #include <valarray>
 #include "Vector2D.hpp"
 
