@@ -15,6 +15,7 @@ static const std::array<Vector2D,8ul> direction {
 };
 
 using Position = Vector2D;
+
 enum class Stone {
   Space,
   White,

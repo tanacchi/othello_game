@@ -158,5 +158,4 @@ void GameMaster::record_hand_list()
   log_file_ << "WHITE," << board_.count_stone(BoardSeries::Stone::White) << std::endl;
   log_file_ << "BLACK," << board_.count_stone(BoardSeries::Stone::Black) << '\n' << std::endl;
   log_file_.close();
-
 }
