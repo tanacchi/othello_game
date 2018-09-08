@@ -2,30 +2,20 @@
 #define BOARD_BASE_H_
 
 #include <algorithm>
+#include <array>
 #include <iostream>
-#include <vector>
+#include <sstream>
 #include <valarray>
-
-#include <functional>
-
-struct PlaneVector {
-public:
-  using Point = char;
-  Point x, y;
-  PlaneVector(Point init_x, Point init_y);
-  PlaneVector operator+(const PlaneVector& src);
-  PlaneVector operator*(int n);
-  const PlaneVector& operator+=(const PlaneVector& src);
-  const PlaneVector& operator--();
-};
+#include "Vector2D.hpp"
 
 namespace BoardSeries
 {
-static const std::array<PlaneVector,8ul> direction {
+static const std::array<Vector2D,8ul> direction {
   {{1,-1}, {1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}, {0,-1}}
 };
 
-using Position = PlaneVector;
+using Position = Vector2D;
+
 enum class Stone {
   Space,
   White,
@@ -49,10 +39,10 @@ public:
   void insert(const Position& pos);
   void insert(const Position& pos, Stone stone);
   BoardSeries::Stone get_enemy_stone() const;
-  int get_reversible_length(Position pos, PlaneVector dr) const;
+  int get_reversible_length(const Position& pos, const Vector2D& dr) const;
   int count_stone(Stone stone) const;
   bool can_reverse(const Position& pos) const;
-  void reverse(Position pos);
+  void reverse(const Position& pos);
   bool is_available_position(const Position& pos) const;
   void switch_active_stone();
   friend void show(const BoardBase& src);

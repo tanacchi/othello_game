@@ -10,9 +10,8 @@
 class HandList {
 public:
   HandList(short turn, BoardSeries::Stone stone, BoardSeries::Position position);
-  ~HandList() = default;
-  void rewrite(BoardSeries::GameBoard& game_board);
-  void report(std::ofstream& log_file);
+  void rewrite(BoardSeries::GameBoard& game_board) const;
+  void report(std::ofstream& log_file) const;
 private:
   short turn_;
   BoardSeries::Stone stone_;
@@ -33,7 +32,7 @@ public:
     Ask,
     Ed
   };
-  GameMaster(PlaneVector board_size, Player* player[]);
+  GameMaster(Vector2D board_size, Player* player[]);
   ~GameMaster() = default;
   Task run(Task mode);
   Task task_init();

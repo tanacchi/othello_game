@@ -7,3 +7,10 @@ Computer_Computer.csv
 
 *temp*
 *tmp*
+
+*CMake*
+*cmake*
+Makefile*
+
+!CMakeList*s*.txt
+

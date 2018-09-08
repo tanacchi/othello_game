@@ -7,14 +7,14 @@ HandList::HandList(short turn, BoardSeries::Stone stone, BoardSeries::Position p
 {
 }
 
-void HandList::rewrite(BoardSeries::GameBoard& game_board)
+void HandList::rewrite(BoardSeries::GameBoard& game_board) const
 {
   game_board.insert(position_, stone_);
   game_board.reverse(position_);
   game_board.switch_active_stone();   // ここで？
 }
 
-void HandList::report(std::ofstream& log_file)
+void HandList::report(std::ofstream& log_file) const
 {
   log_file << turn_ + 1 << ','
            << BoardSeries::to_char(stone_) << ','
@@ -22,7 +22,7 @@ void HandList::report(std::ofstream& log_file)
            << static_cast<short>(position_.y + 1) << std::endl;
 }
 
-GameMaster::GameMaster(PlaneVector board_size, Player* player[])
+GameMaster::GameMaster(Vector2D board_size, Player* player[])
   : board_        {board_size},
     participant_  {player[0], player[1]},
     active_player_{participant_[0]},
@@ -73,12 +73,16 @@ GameMaster::Task GameMaster::task_op()
 
 GameMaster::Task GameMaster::task_set()
 {
-  if (!active_player_->set_hand(board_)) return Task::Revert;
+  try {
+    active_player_->set_hand(board_);
+  }
+  catch (std::string src) {
+    if (src == "revert") return Task::Revert;
+  }
   pos_ = active_player_->get_hand();
   if (board_.is_available_position(pos_)) return Task::Insert;
-  std::cout << "It's wrong hand !! Try again." << std::endl;
+  std::cout << "It's invalid hand !! Try again." << std::endl;
   return Task::Set;
-
 }
 
 GameMaster::Task GameMaster::task_insert()
@@ -100,7 +104,7 @@ GameMaster::Task GameMaster::task_revert()
   }
   hand_list_.erase(hand_list_.begin() + destination, hand_list_.end());
   board_.init();
-  for (auto hl : hand_list_) hl.rewrite(board_);
+  for (const auto& hl : hand_list_) hl.rewrite(board_);
   active_player_ = participant_[destination%2];
   turn_ = destination;
   return Task::Op;
@@ -149,10 +153,9 @@ void GameMaster::record_hand_list()
   log_file_ << participant_1 << ",O" << std::endl;
   log_file_ << participant_2 << ",X" << std::endl;
   log_file_ << "~~BEGIN~~" << std::endl;
-  for (auto hl : hand_list_) hl.report(log_file_); 
+  for (const auto& hl : hand_list_) hl.report(log_file_); 
   log_file_ << "~~END~~" << std::endl;
   log_file_ << "WHITE," << board_.count_stone(BoardSeries::Stone::White) << std::endl;
   log_file_ << "BLACK," << board_.count_stone(BoardSeries::Stone::Black) << '\n' << std::endl;
   log_file_.close();
-
 }
