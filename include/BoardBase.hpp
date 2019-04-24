@@ -5,6 +5,7 @@
 #include <array>
 #include <iostream>
 #include <sstream>
+#include <vector>
 #include <valarray>
 #include "Vector2D.hpp"
 
